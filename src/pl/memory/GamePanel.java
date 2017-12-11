@@ -89,7 +89,7 @@ public class GamePanel extends JPanel {
         public void mousePressed(MouseEvent e) {
             if (guessed == 0) timer.start();        //uruchamia zegar gry przy pierwszym kliknięciu myszą
             current = find(e.getPoint());           //sprawdza czy karta zawiera w sobie punkt z event
-            
+
             if (current != null && current.getGuessed() == false ) {
                 if (current.getGuessed() == false && firstCardPair == null) {
                     firstCardPair = current;
@@ -113,7 +113,8 @@ public class GamePanel extends JPanel {
                     firstCardPair = null;
                     secondCardPair = null;
                 }
-            } else if (firstCardPair != null && secondCardPair != null) {
+            }
+            else if (firstCardPair != null && secondCardPair != null) {
                 if(firstCardPair.getGuessed() == false && secondCardPair.getGuessed() == false) {
                     firstCardPair.turnCard();
                     secondCardPair.turnCard();
