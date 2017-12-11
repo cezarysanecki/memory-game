@@ -10,7 +10,7 @@ public class Card extends JLabel {
     private ImageIcon activeIcon;
     private boolean guessed = false;
 
-    public Card(String name, String reverse, String observe) {
+    public Card(String name, String reverse, String observe) {          //Tworzy kartę z rewersem i awersem
         setPreferredSize(new Dimension(100,100));
         this.name = name;
         this.reverse = new ImageIcon(reverse);
@@ -21,13 +21,13 @@ public class Card extends JLabel {
 
     public void setGuessed(boolean guessed) {
         this.guessed = guessed;
-    }
+    }   //ustawia kartę czy jest zgadnięta
 
     public boolean getGuessed() {
         return this.guessed;
-    }
+    }   //zwraca zgadnięcie karty
 
-    public void turnCard() {
+    public void turnCard() {                            //odwraca rewers karty na awers i odwrotnie
         if(this.activeIcon == this.reverse)
             this.activeIcon = this.observe;
         else
@@ -42,7 +42,7 @@ public class Card extends JLabel {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) {                 //porównanie czy obiekty są równe
         if (obj == null) return false;
         if (this == obj) return true;
         if (this.getClass() != obj.getClass()) return false;

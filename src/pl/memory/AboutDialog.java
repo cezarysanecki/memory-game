@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-public class AboutDialog extends JDialog {
+public class AboutDialog extends JDialog {              //Do wyświetlania informacji o projekcie
     public AboutDialog(JFrame owner) {
         super(owner, "O programie", true);
         setSize(400,200);
