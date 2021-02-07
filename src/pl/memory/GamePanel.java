@@ -48,7 +48,7 @@ public class GamePanel extends JPanel {
 
         //dodawanie kart do gry
         for (int i = 0; i < numberOfCards; i++) {
-            Card card = new Card("" + number, "ziemia.png", "" + number + ".png");
+            Card card = new Card("" + number, "img/ziemia.png", "img/" + number + ".png");
             cards.add(card);
             add(card, BorderLayout.CENTER);
 
