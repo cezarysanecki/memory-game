@@ -7,15 +7,15 @@ public class MemoryFrame extends JFrame {
     private AboutDialog aboutDialog;
     private JMenuBar menuBar;
 
-    public MemoryFrame() {                      //tworzy główną ramkę
+    public MemoryFrame() {
         menuBar = new JMenuBar();
         menuConfig(menuBar);
 
-        int widthScreen = Toolkit.getDefaultToolkit().getScreenSize().width;        //pobiera szerokość i długość ekrranu
+        int widthScreen = Toolkit.getDefaultToolkit().getScreenSize().width;
         int heightScreen = Toolkit.getDefaultToolkit().getScreenSize().height;
 
-        add(new GamePanel(), BorderLayout.CENTER);          //dodaje głowny panel gry
-        setJMenuBar(menuBar);                               //ustawia menu
+        add(new GamePanel(), BorderLayout.CENTER);
+        setJMenuBar(menuBar);
 
         pack();
         setBounds((widthScreen - getWidth()) / 2, (heightScreen - getHeight()) / 2, getWidth(), getHeight());   //ustawia ramkę na środku ekranu
@@ -24,7 +24,7 @@ public class MemoryFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void menuConfig(JMenuBar menuBar) {          //wygląd menu
+    public void menuConfig(JMenuBar menuBar) {
         JMenu main = new JMenu("Plik");
 
         JMenuItem aboutItem = new JMenuItem("O programie");
@@ -43,5 +43,5 @@ public class MemoryFrame extends JFrame {
 
     public static void main(String[] args) {
         new MemoryFrame();
-    }       //test
+    }
 }

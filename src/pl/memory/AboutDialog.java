@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-public class AboutDialog extends JDialog {              //Do wyświetlania informacji o projekcie
+public class AboutDialog extends JDialog {
+
     public AboutDialog(JFrame owner) {
         super(owner, "O programie", true);
-        setSize(400,200);
-        setLayout(new GridLayout(4,1));
+        setSize(400, 200);
+        setLayout(new GridLayout(4, 1));
 
         JPanel panelName = new JPanel();
         Font font = new Font("Serif", Font.BOLD, 25);
@@ -31,21 +32,22 @@ public class AboutDialog extends JDialog {              //Do wyświetlania infor
         JPanel panel = new JPanel();
         panel.add(buttonOk);
         add(panel);
-        setLocation(owner.getLocation().x + (owner.getWidth() - getWidth()) / 2, owner.getLocation().y +
-                (owner.getHeight() - getHeight()) / 2);
+        setLocation(
+            owner.getLocation().x + (owner.getWidth() - getWidth()) / 2,
+            owner.getLocation().y + (owner.getHeight() - getHeight()) / 2);
         setResizable(false);
         setVisible(true);
     }
 
-    private class ComponentLine extends JComponent {
+    private static class ComponentLine extends JComponent {
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
-            Line2D line = new Line2D.Double(0,20,getWidth(),20);
-            String text = new String("Memory: Premier League");
+            Line2D line = new Line2D.Double(0, 20, getWidth(), 20);
+            String text = "Memory: Premier League";
             Font font = new Font("Serif", Font.BOLD, 25);
             g2.setFont(font);
-            g2.drawString(text,0,110);
+            g2.drawString(text, 0, 110);
             g2.draw(line);
         }
     }
