@@ -95,8 +95,8 @@ public class GamePanel extends JPanel {
                     secondCardPair = current;
                     secondCardPair.turnCard();
                     if (firstCardPair.equals(secondCardPair)) {
-                        firstCardPair.setGuessed(true);
-                        secondCardPair.setGuessed(true);
+                        firstCardPair.markAsGuessed();
+                        secondCardPair.markAsGuessed();
                         guessed++;
                         if (guessed == 20) timer.stop();
                         resetSelectedCards();
