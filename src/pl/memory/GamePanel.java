@@ -99,25 +99,27 @@ public class GamePanel extends JPanel {
                         secondCardPair.setGuessed(true);
                         guessed++;
                         if (guessed == 20) timer.stop();
-                        firstCardPair = null;
-                        secondCardPair = null;
+                        resetSelectedCards();
                     }
                 } else if (firstCardPair != null && secondCardPair != null) {
                     if (!firstCardPair.getGuessed() && !secondCardPair.getGuessed()) {
                         firstCardPair.turnCard();
                         secondCardPair.turnCard();
                     }
-                    firstCardPair = null;
-                    secondCardPair = null;
+                    resetSelectedCards();
                 }
             } else if (firstCardPair != null && secondCardPair != null) {
                 if (!firstCardPair.getGuessed() && !secondCardPair.getGuessed()) {
                     firstCardPair.turnCard();
                     secondCardPair.turnCard();
                 }
-                firstCardPair = null;
-                secondCardPair = null;
+                resetSelectedCards();
             }
         }
+    }
+
+    private void resetSelectedCards() {
+        firstCardPair = null;
+        secondCardPair = null;
     }
 }
