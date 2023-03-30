@@ -87,11 +87,11 @@ public class GamePanel extends JPanel {
             }
             current = find(e.getPoint());
 
-            if (current != null && !current.getGuessed()) {
-                if (!current.getGuessed() && firstCardPair == null) {
+            if (current != null && current.isNotGuessed()) {
+                if (current.isNotGuessed() && firstCardPair == null) {
                     firstCardPair = current;
                     firstCardPair.turnCard();
-                } else if (!current.getGuessed() && secondCardPair == null && firstCardPair != current) {
+                } else if (current.isNotGuessed() && secondCardPair == null && firstCardPair != current) {
                     secondCardPair = current;
                     secondCardPair.turnCard();
                     if (firstCardPair.equals(secondCardPair)) {
@@ -102,14 +102,14 @@ public class GamePanel extends JPanel {
                         resetSelectedCards();
                     }
                 } else if (firstCardPair != null && secondCardPair != null) {
-                    if (!firstCardPair.getGuessed() && !secondCardPair.getGuessed()) {
+                    if (firstCardPair.isNotGuessed() && secondCardPair.isNotGuessed()) {
                         firstCardPair.turnCard();
                         secondCardPair.turnCard();
                     }
                     resetSelectedCards();
                 }
             } else if (firstCardPair != null && secondCardPair != null) {
-                if (!firstCardPair.getGuessed() && !secondCardPair.getGuessed()) {
+                if (firstCardPair.isNotGuessed() && secondCardPair.isNotGuessed()) {
                     firstCardPair.turnCard();
                     secondCardPair.turnCard();
                 }

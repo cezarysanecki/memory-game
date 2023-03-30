@@ -20,10 +20,6 @@ public class Card extends JLabel {
         setIcon(this.activeIcon);
     }
 
-    public boolean getGuessed() {
-        return this.guessed;
-    }
-
     public void turnCard() {
         if (this.activeIcon == this.reverse) {
             this.activeIcon = this.observe;
@@ -35,6 +31,10 @@ public class Card extends JLabel {
 
     void markAsGuessed() {
         this.guessed = true;
+    }
+
+    boolean isNotGuessed() {
+        return !this.guessed;
     }
 
     @Override
