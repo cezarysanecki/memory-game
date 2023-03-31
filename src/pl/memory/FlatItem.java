@@ -3,20 +3,24 @@ package pl.memory;
 import javax.swing.*;
 import java.io.Serializable;
 
-public class CardLogic implements Serializable {
+public class FlatItem implements Serializable {
+
+    enum Side {
+        REVERSE, AVERSE
+    }
 
     String filename;
     ImageIcon reverse;
     ImageIcon observe;
     ImageIcon activeIcon;
+    boolean guessed;
 
     int id;
-    boolean guessed;
-    private CardPosition cardPosition;
+    private Side side;
 
-    public CardLogic(int id) {
+    public FlatItem(int id) {
         this.id = id;
-        this.cardPosition = CardPosition.REVERSE;
+        this.side = Side.REVERSE;
         this.guessed = false;
     }
 
@@ -27,13 +31,11 @@ public class CardLogic implements Serializable {
         return this.reverse;
     }
 
-    CardPosition turnCard() {
-        if (cardPosition == CardPosition.AVERSE) {
-            cardPosition = CardPosition.REVERSE;
-        } else {
-            cardPosition = CardPosition.AVERSE;
+    void turnCard() {
+        if (side == Side.AVERSE) {
+            side = Side.REVERSE;
         }
-        return cardPosition;
+        side = Side.AVERSE;
     }
 
     void markAsGuessed() {

@@ -87,29 +87,29 @@ public class GamePanel extends JPanel {
             }
             current = find(e.getPoint());
 
-            if (current != null && current.cardLogic.isNotGuessed()) {
-                if (current.cardLogic.isNotGuessed() && firstGraphicCardPair == null) {
+            if (current != null && current.flatItem.isNotGuessed()) {
+                if (current.flatItem.isNotGuessed() && firstGraphicCardPair == null) {
                     firstGraphicCardPair = current;
                     firstGraphicCardPair.turnCard();
-                } else if (current.cardLogic.isNotGuessed() && secondGraphicCardPair == null && firstGraphicCardPair != current) {
+                } else if (current.flatItem.isNotGuessed() && secondGraphicCardPair == null && firstGraphicCardPair != current) {
                     secondGraphicCardPair = current;
                     secondGraphicCardPair.turnCard();
                     if (firstGraphicCardPair.equals(secondGraphicCardPair)) {
-                        firstGraphicCardPair.cardLogic.markAsGuessed();
-                        secondGraphicCardPair.cardLogic.markAsGuessed();
+                        firstGraphicCardPair.flatItem.markAsGuessed();
+                        secondGraphicCardPair.flatItem.markAsGuessed();
                         guessed++;
                         if (guessed == 20) timer.stop();
                         resetSelectedCards();
                     }
                 } else if (firstGraphicCardPair != null && secondGraphicCardPair != null) {
-                    if (firstGraphicCardPair.cardLogic.isNotGuessed() && secondGraphicCardPair.cardLogic.isNotGuessed()) {
+                    if (firstGraphicCardPair.flatItem.isNotGuessed() && secondGraphicCardPair.flatItem.isNotGuessed()) {
                         firstGraphicCardPair.turnCard();
                         secondGraphicCardPair.turnCard();
                     }
                     resetSelectedCards();
                 }
             } else if (firstGraphicCardPair != null && secondGraphicCardPair != null) {
-                if (firstGraphicCardPair.cardLogic.isNotGuessed() && secondGraphicCardPair.cardLogic.isNotGuessed()) {
+                if (firstGraphicCardPair.flatItem.isNotGuessed() && secondGraphicCardPair.flatItem.isNotGuessed()) {
                     firstGraphicCardPair.turnCard();
                     secondGraphicCardPair.turnCard();
                 }
