@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class Card extends JLabel {
 
-    final CardLogic cardLogic = new CardLogic();
+    final CardLogic cardLogic = new CardLogic(1);
 
     public Card(String name, String reverse, String observe) {
         setPreferredSize(new Dimension(100, 100));
