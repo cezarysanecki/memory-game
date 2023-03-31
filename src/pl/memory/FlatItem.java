@@ -32,10 +32,7 @@ public class FlatItem implements Serializable {
     }
 
     void turnCard() {
-        if (side == Side.AVERSE) {
-            side = Side.REVERSE;
-        }
-        side = Side.AVERSE;
+        side = side == Side.AVERSE ? Side.REVERSE : Side.AVERSE;
     }
 
     void markAsGuessed() {
