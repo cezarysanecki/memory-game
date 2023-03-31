@@ -9,12 +9,15 @@ public class CardLogic implements Serializable {
     ImageIcon reverse;
     ImageIcon observe;
     ImageIcon activeIcon;
+
+    int id;
     boolean guessed;
     private CardPosition cardPosition;
 
-    public CardLogic() {
-        cardPosition = CardPosition.REVERSE;
-        guessed = false;
+    public CardLogic(int id) {
+        this.id = id;
+        this.cardPosition = CardPosition.REVERSE;
+        this.guessed = false;
     }
 
     ImageIcon resolveTurnedCard() {
