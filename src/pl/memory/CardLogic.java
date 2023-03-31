@@ -5,18 +5,16 @@ import java.io.Serializable;
 
 public class CardLogic implements Serializable {
 
-    private enum CardPosition {
-        REVERSE, AVERSE
-    }
-
     String name;
     ImageIcon reverse;
     ImageIcon observe;
     ImageIcon activeIcon;
-    boolean guessed = false;
-    private CardPosition averse;
+    boolean guessed;
+    private CardPosition cardPosition;
 
     public CardLogic() {
+        cardPosition = CardPosition.REVERSE;
+        guessed = false;
     }
 
     ImageIcon resolveTurnedCard() {
@@ -24,6 +22,15 @@ public class CardLogic implements Serializable {
             return this.observe;
         }
         return this.reverse;
+    }
+
+    CardPosition turnCard() {
+        if (cardPosition == CardPosition.AVERSE) {
+            cardPosition = CardPosition.REVERSE;
+        } else {
+            cardPosition = CardPosition.AVERSE;
+        }
+        return cardPosition;
     }
 
     void markAsGuessed() {
