@@ -9,7 +9,7 @@ public class Card extends JLabel {
 
     public Card(String name, String reverse, String observe) {
         setPreferredSize(new Dimension(100, 100));
-        this.cardLogic.name = name;
+        this.cardLogic.filename = name;
         this.cardLogic.reverse = new ImageIcon(reverse);
         this.cardLogic.observe = new ImageIcon(observe);
         this.cardLogic.activeIcon = this.cardLogic.reverse;
@@ -33,6 +33,6 @@ public class Card extends JLabel {
         if (this == obj) return true;
         if (this.getClass() != obj.getClass()) return false;
         Card card = (Card) obj;
-        return this.cardLogic.name.equals(card.cardLogic.name);
+        return this.cardLogic.filename.equals(card.cardLogic.filename);
     }
 }

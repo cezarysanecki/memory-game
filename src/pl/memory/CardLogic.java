@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class CardLogic implements Serializable {
 
-    String name;
+    String filename;
     ImageIcon reverse;
     ImageIcon observe;
     ImageIcon activeIcon;
