@@ -87,29 +87,29 @@ public class GamePanel extends JPanel {
             }
             current = find(e.getPoint());
 
-            if (current != null && current.isNotGuessed()) {
-                if (current.isNotGuessed() && firstCardPair == null) {
+            if (current != null && current.cardLogic.isNotGuessed()) {
+                if (current.cardLogic.isNotGuessed() && firstCardPair == null) {
                     firstCardPair = current;
                     firstCardPair.turnCard();
-                } else if (current.isNotGuessed() && secondCardPair == null && firstCardPair != current) {
+                } else if (current.cardLogic.isNotGuessed() && secondCardPair == null && firstCardPair != current) {
                     secondCardPair = current;
                     secondCardPair.turnCard();
                     if (firstCardPair.equals(secondCardPair)) {
-                        firstCardPair.markAsGuessed();
-                        secondCardPair.markAsGuessed();
+                        firstCardPair.cardLogic.markAsGuessed();
+                        secondCardPair.cardLogic.markAsGuessed();
                         guessed++;
                         if (guessed == 20) timer.stop();
                         resetSelectedCards();
                     }
                 } else if (firstCardPair != null && secondCardPair != null) {
-                    if (firstCardPair.isNotGuessed() && secondCardPair.isNotGuessed()) {
+                    if (firstCardPair.cardLogic.isNotGuessed() && secondCardPair.cardLogic.isNotGuessed()) {
                         firstCardPair.turnCard();
                         secondCardPair.turnCard();
                     }
                     resetSelectedCards();
                 }
             } else if (firstCardPair != null && secondCardPair != null) {
-                if (firstCardPair.isNotGuessed() && secondCardPair.isNotGuessed()) {
+                if (firstCardPair.cardLogic.isNotGuessed() && secondCardPair.cardLogic.isNotGuessed()) {
                     firstCardPair.turnCard();
                     secondCardPair.turnCard();
                 }

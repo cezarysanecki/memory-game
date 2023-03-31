@@ -5,42 +5,26 @@ import java.awt.*;
 
 public class Card extends JLabel {
 
-    private String name;
-    private ImageIcon reverse;
-    private ImageIcon observe;
-    private ImageIcon activeIcon;
-    private boolean guessed = false;
+    final CardLogic cardLogic = new CardLogic();
 
     public Card(String name, String reverse, String observe) {
         setPreferredSize(new Dimension(100, 100));
-        this.name = name;
-        this.reverse = new ImageIcon(reverse);
-        this.observe = new ImageIcon(observe);
-        this.activeIcon = this.reverse;
-        setIcon(this.activeIcon);
+        this.cardLogic.name = name;
+        this.cardLogic.reverse = new ImageIcon(reverse);
+        this.cardLogic.observe = new ImageIcon(observe);
+        this.cardLogic.activeIcon = this.cardLogic.reverse;
+        setIcon(this.cardLogic.activeIcon);
     }
 
     public void turnCard() {
-        if (this.activeIcon == this.reverse) {
-            this.activeIcon = this.observe;
-        } else {
-            this.activeIcon = this.reverse;
-        }
-        setIcon(this.activeIcon);
-    }
-
-    void markAsGuessed() {
-        this.guessed = true;
-    }
-
-    boolean isNotGuessed() {
-        return !this.guessed;
+        this.cardLogic.activeIcon = cardLogic.resolveTurnedCard();
+        setIcon(this.cardLogic.activeIcon);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(activeIcon.getImage(), 0, 0, null);
+        g2.drawImage(cardLogic.activeIcon.getImage(), 0, 0, null);
     }
 
     @Override
@@ -49,6 +33,6 @@ public class Card extends JLabel {
         if (this == obj) return true;
         if (this.getClass() != obj.getClass()) return false;
         Card card = (Card) obj;
-        return this.name.equals(card.name);
+        return this.cardLogic.name.equals(card.cardLogic.name);
     }
 }
