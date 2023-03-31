@@ -3,11 +3,11 @@ package pl.memory;
 import javax.swing.*;
 import java.awt.*;
 
-public class Card extends JLabel {
+public class GraphicCard extends JLabel {
 
     final CardLogic cardLogic = new CardLogic(1);
 
-    public Card(String name, String reverse, String observe) {
+    public GraphicCard(String name, String reverse, String observe) {
         setPreferredSize(new Dimension(100, 100));
         this.cardLogic.filename = name;
         this.cardLogic.reverse = new ImageIcon(reverse);
@@ -32,7 +32,7 @@ public class Card extends JLabel {
         if (obj == null) return false;
         if (this == obj) return true;
         if (this.getClass() != obj.getClass()) return false;
-        Card card = (Card) obj;
-        return this.cardLogic.filename.equals(card.cardLogic.filename);
+        GraphicCard graphicCard = (GraphicCard) obj;
+        return this.cardLogic.filename.equals(graphicCard.cardLogic.filename);
     }
 }

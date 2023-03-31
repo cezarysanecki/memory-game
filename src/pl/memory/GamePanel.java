@@ -15,10 +15,10 @@ public class GamePanel extends JPanel {
     private int widthGamePanel = columns * 110 + 10;
     private int heightGamePanel = rows * 110 + 40;
 
-    private ArrayList<Card> cards = new ArrayList<>();
-    private Card current;
-    private Card firstCardPair;
-    private Card secondCardPair;
+    private ArrayList<GraphicCard> graphicCards = new ArrayList<>();
+    private GraphicCard current;
+    private GraphicCard firstGraphicCardPair;
+    private GraphicCard secondGraphicCardPair;
 
     private int guessed = 0;
     private int seconds;
@@ -41,24 +41,24 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseClick());
 
         for (int i = 0; i < numberOfCards; i++) {
-            Card card = new Card("" + number, "img/ziemia.png", "img/" + number + ".png");
-            cards.add(card);
-            add(card, BorderLayout.CENTER);
+            GraphicCard graphicCard = new GraphicCard("" + number, "img/ziemia.png", "img/" + number + ".png");
+            graphicCards.add(graphicCard);
+            add(graphicCard, BorderLayout.CENTER);
 
             if (i % 2 == 1) {
                 number++;
             }
         }
 
-        int sizeCards = cards.size();
-        Collections.shuffle(cards);
+        int sizeCards = graphicCards.size();
+        Collections.shuffle(graphicCards);
 
         for (int r = 0; r < rows; r++)
             for (int c = 0; c < columns; c++) {
                 sizeCards--;
-                Card card = cards.get(sizeCards);
-                card.setBounds(c * 110 + 10, r * 110 + labelScore.getHeight(), 100, 100);
-                add(card, BorderLayout.CENTER);
+                GraphicCard graphicCard = graphicCards.get(sizeCards);
+                graphicCard.setBounds(c * 110 + 10, r * 110 + labelScore.getHeight(), 100, 100);
+                add(graphicCard, BorderLayout.CENTER);
             }
 
         setPreferredSize(new Dimension(widthGamePanel, heightGamePanel));
@@ -67,14 +67,14 @@ public class GamePanel extends JPanel {
 
     private class MouseClick extends MouseAdapter {
 
-        public Card find(Point2D p) {
-            for (Card card : cards) {
+        public GraphicCard find(Point2D p) {
+            for (GraphicCard graphicCard : graphicCards) {
                 Rectangle rectangle = new Rectangle(
-                    card.getLocation().x, card.getLocation().y,
-                    card.getWidth(), card.getHeight());
+                    graphicCard.getLocation().x, graphicCard.getLocation().y,
+                    graphicCard.getWidth(), graphicCard.getHeight());
 
                 if (rectangle.contains(p)) {
-                    return card;
+                    return graphicCard;
                 }
             }
             return null;
@@ -88,30 +88,30 @@ public class GamePanel extends JPanel {
             current = find(e.getPoint());
 
             if (current != null && current.cardLogic.isNotGuessed()) {
-                if (current.cardLogic.isNotGuessed() && firstCardPair == null) {
-                    firstCardPair = current;
-                    firstCardPair.turnCard();
-                } else if (current.cardLogic.isNotGuessed() && secondCardPair == null && firstCardPair != current) {
-                    secondCardPair = current;
-                    secondCardPair.turnCard();
-                    if (firstCardPair.equals(secondCardPair)) {
-                        firstCardPair.cardLogic.markAsGuessed();
-                        secondCardPair.cardLogic.markAsGuessed();
+                if (current.cardLogic.isNotGuessed() && firstGraphicCardPair == null) {
+                    firstGraphicCardPair = current;
+                    firstGraphicCardPair.turnCard();
+                } else if (current.cardLogic.isNotGuessed() && secondGraphicCardPair == null && firstGraphicCardPair != current) {
+                    secondGraphicCardPair = current;
+                    secondGraphicCardPair.turnCard();
+                    if (firstGraphicCardPair.equals(secondGraphicCardPair)) {
+                        firstGraphicCardPair.cardLogic.markAsGuessed();
+                        secondGraphicCardPair.cardLogic.markAsGuessed();
                         guessed++;
                         if (guessed == 20) timer.stop();
                         resetSelectedCards();
                     }
-                } else if (firstCardPair != null && secondCardPair != null) {
-                    if (firstCardPair.cardLogic.isNotGuessed() && secondCardPair.cardLogic.isNotGuessed()) {
-                        firstCardPair.turnCard();
-                        secondCardPair.turnCard();
+                } else if (firstGraphicCardPair != null && secondGraphicCardPair != null) {
+                    if (firstGraphicCardPair.cardLogic.isNotGuessed() && secondGraphicCardPair.cardLogic.isNotGuessed()) {
+                        firstGraphicCardPair.turnCard();
+                        secondGraphicCardPair.turnCard();
                     }
                     resetSelectedCards();
                 }
-            } else if (firstCardPair != null && secondCardPair != null) {
-                if (firstCardPair.cardLogic.isNotGuessed() && secondCardPair.cardLogic.isNotGuessed()) {
-                    firstCardPair.turnCard();
-                    secondCardPair.turnCard();
+            } else if (firstGraphicCardPair != null && secondGraphicCardPair != null) {
+                if (firstGraphicCardPair.cardLogic.isNotGuessed() && secondGraphicCardPair.cardLogic.isNotGuessed()) {
+                    firstGraphicCardPair.turnCard();
+                    secondGraphicCardPair.turnCard();
                 }
                 resetSelectedCards();
             }
@@ -119,7 +119,7 @@ public class GamePanel extends JPanel {
     }
 
     private void resetSelectedCards() {
-        firstCardPair = null;
-        secondCardPair = null;
+        firstGraphicCardPair = null;
+        secondGraphicCardPair = null;
     }
 }
