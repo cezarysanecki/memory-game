@@ -10,8 +10,8 @@ public class GraphicCard extends JLabel {
     public GraphicCard(String name, String reverse, String observe) {
         setPreferredSize(new Dimension(100, 100));
         this.flatItem.filename = name;
-        this.flatItem.reverse = new ImageIcon(reverse);
-        this.flatItem.observe = new ImageIcon(observe);
+        this.flatItem.reverse = new ImageIcon(getClass().getResource(reverse));
+        this.flatItem.observe = new ImageIcon(getClass().getResource(observe));
         this.flatItem.activeIcon = this.flatItem.reverse;
         setIcon(this.flatItem.activeIcon);
     }

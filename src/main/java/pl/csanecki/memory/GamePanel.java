@@ -41,7 +41,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseClick());
 
         for (int i = 0; i < numberOfCards; i++) {
-            GraphicCard graphicCard = new GraphicCard("" + number, "img/ziemia.png", "img/" + number + ".png");
+            GraphicCard graphicCard = new GraphicCard("" + number, "/img/ziemia.png", "/img/" + number + ".png");
             graphicCards.add(graphicCard);
             add(graphicCard, BorderLayout.CENTER);
 
