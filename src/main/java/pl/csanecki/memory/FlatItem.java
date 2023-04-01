@@ -24,31 +24,31 @@ public class FlatItem implements Serializable {
         this.guessed = false;
     }
 
-    public static FlatItem averse(FlatItemId flatItemId) {
+    public static FlatItem averseUp(FlatItemId flatItemId) {
         return new FlatItem(flatItemId, Side.AVERSE);
     }
 
-    public static FlatItem reverse(FlatItemId flatItemId) {
+    public static FlatItem reverseUp(FlatItemId flatItemId) {
         return new FlatItem(flatItemId, Side.REVERSE);
     }
 
-    public void turnCard() {
+    public void turnAround() {
         side = side == Side.AVERSE ? Side.REVERSE : Side.AVERSE;
     }
 
-    public void turnToAverse() {
+    public void turnAverseUp() {
         side = Side.AVERSE;
     }
 
-    public void turnToReverse() {
+    public void turnReverseUp() {
         side = Side.REVERSE;
     }
 
-    public boolean isAverseSided() {
+    public boolean isAverseUp() {
         return side == Side.AVERSE;
     }
 
-    public boolean isReverseSided() {
+    public boolean isReverseUp() {
         return side == Side.REVERSE;
     }
 

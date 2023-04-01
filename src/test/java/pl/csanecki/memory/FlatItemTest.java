@@ -7,38 +7,38 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FlatItemTest {
 
     @Test
-    void turning_around_reverse_side_makes_it_averse_side() {
-        FlatItem flatItem = FlatItem.reverse(FlatItemId.of(1));
+    void turning_around_reverse_up_makes_it_averse_up() {
+        FlatItem flatItem = FlatItem.reverseUp(FlatItemId.of(1));
 
-        flatItem.turnCard();
+        flatItem.turnAround();
 
-        assertTrue(flatItem.isAverseSided());
+        assertTrue(flatItem.isAverseUp());
     }
 
     @Test
-    void turning_around_averse_side_makes_it_reverse_side() {
-        FlatItem flatItem = FlatItem.averse(FlatItemId.of(1));
+    void turning_around_averse_up_makes_it_reverse_up() {
+        FlatItem flatItem = FlatItem.averseUp(FlatItemId.of(1));
 
-        flatItem.turnCard();
+        flatItem.turnAround();
 
-        assertTrue(flatItem.isReverseSided());
+        assertTrue(flatItem.isReverseUp());
     }
 
     @Test
-    void turn_to_averse_no_matter_what() {
-        FlatItem flatItem = FlatItem.reverse(FlatItemId.of(1));
+    void turn_averse_up_no_matter_what() {
+        FlatItem flatItem = FlatItem.reverseUp(FlatItemId.of(1));
 
-        flatItem.turnToAverse();
+        flatItem.turnAverseUp();
 
-        assertTrue(flatItem.isAverseSided());
+        assertTrue(flatItem.isAverseUp());
     }
 
     @Test
-    void turn_to_reverse_no_matter_what() {
-        FlatItem flatItem = FlatItem.averse(FlatItemId.of(1));
+    void turn_reverse_up_no_matter_what() {
+        FlatItem flatItem = FlatItem.averseUp(FlatItemId.of(1));
 
-        flatItem.turnToReverse();
+        flatItem.turnReverseUp();
 
-        assertTrue(flatItem.isReverseSided());
+        assertTrue(flatItem.isReverseUp());
     }
 }
