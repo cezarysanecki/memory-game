@@ -1,4 +1,4 @@
-package pl.memory;
+package pl.csanecki.memory;
 
 import javax.swing.*;
 import java.io.Serializable;
