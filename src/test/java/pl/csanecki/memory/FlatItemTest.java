@@ -7,15 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FlatItemTest {
 
     @Test
-    void by_default_flat_item_is_placed_reverse_side() {
-        FlatItem flatItem = new FlatItem(FlatItemId.of(1));
-
-        assertTrue(flatItem.isReverseSided());
-    }
-
-    @Test
-    void first_turn_around_of_flat_item_placed_it_averse_side() {
-        FlatItem flatItem = new FlatItem(FlatItemId.of(1));
+    void turning_around_reverse_side_makes_it_averse_side() {
+        FlatItem flatItem = FlatItem.reverse(FlatItemId.of(1));
 
         flatItem.turnCard();
 
@@ -23,8 +16,17 @@ class FlatItemTest {
     }
 
     @Test
+    void turning_around_averse_side_makes_it_reverse_side() {
+        FlatItem flatItem = FlatItem.averse(FlatItemId.of(1));
+
+        flatItem.turnCard();
+
+        assertTrue(flatItem.isReverseSided());
+    }
+
+    @Test
     void turn_to_averse_no_matter_what() {
-        FlatItem flatItem = new FlatItem(FlatItemId.of(1));
+        FlatItem flatItem = FlatItem.reverse(FlatItemId.of(1));
 
         flatItem.turnToAverse();
 
@@ -33,8 +35,7 @@ class FlatItemTest {
 
     @Test
     void turn_to_reverse_no_matter_what() {
-        FlatItem flatItem = new FlatItem(FlatItemId.of(1));
-        flatItem.turnToAverse();
+        FlatItem flatItem = FlatItem.averse(FlatItemId.of(1));
 
         flatItem.turnToReverse();
 

@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class FlatItem implements Serializable {
 
-    enum Side {
+    private enum Side {
         REVERSE, AVERSE
     }
 
@@ -15,13 +15,45 @@ public class FlatItem implements Serializable {
     ImageIcon activeIcon;
     boolean guessed;
 
-    private FlatItemId flatItemId;
+    private final FlatItemId flatItemId;
     private Side side;
 
-    public FlatItem(FlatItemId flatItemId) {
+    private FlatItem(FlatItemId flatItemId, Side side) {
         this.flatItemId = flatItemId;
-        this.side = Side.REVERSE;
+        this.side = side;
         this.guessed = false;
+    }
+
+    public static FlatItem averse(FlatItemId flatItemId) {
+        return new FlatItem(flatItemId, Side.AVERSE);
+    }
+
+    public static FlatItem reverse(FlatItemId flatItemId) {
+        return new FlatItem(flatItemId, Side.REVERSE);
+    }
+
+    public void turnCard() {
+        side = side == Side.AVERSE ? Side.REVERSE : Side.AVERSE;
+    }
+
+    public void turnToAverse() {
+        side = Side.AVERSE;
+    }
+
+    public void turnToReverse() {
+        side = Side.REVERSE;
+    }
+
+    public boolean isAverseSided() {
+        return side == Side.AVERSE;
+    }
+
+    public boolean isReverseSided() {
+        return side == Side.REVERSE;
+    }
+
+    public FlatItemId getFlatItemId() {
+        return flatItemId;
     }
 
     ImageIcon resolveTurnedCard() {
@@ -29,26 +61,6 @@ public class FlatItem implements Serializable {
             return this.observe;
         }
         return this.reverse;
-    }
-
-    void turnCard() {
-        side = side == Side.AVERSE ? Side.REVERSE : Side.AVERSE;
-    }
-
-    void turnToAverse() {
-        side = Side.AVERSE;
-    }
-
-    void turnToReverse() {
-        side = Side.REVERSE;
-    }
-
-    boolean isAverseSided() {
-        return side == Side.AVERSE;
-    }
-
-    boolean isReverseSided() {
-        return side == Side.REVERSE;
     }
 
     void markAsGuessed() {
