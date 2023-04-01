@@ -11,4 +11,4 @@ wymieszany z logiką biznesową. Jednak było to programowanie w myśli: *"Aby p
 Po wielu latach można zauważyć różnice jak wzrosły własne umiejętności oraz od czego się wyszło. Posiada się 
 pewien punkt odniesienia.
 
-![Wygląd aplikacji MemoryGame](/assets/images/memory.png)
+![Wygląd aplikacji MemoryGame](/doc/memory.png)
