@@ -1,8 +1,8 @@
 plugins {
     id 'java'
 }
-sourceCompatibility = 18
-targetCompatibility = 18
+sourceCompatibility = 16
+targetCompatibility = 16
 
 group 'pl.csanecki'
 version '1.0-SNAPSHOT'
