@@ -39,6 +39,10 @@ public class FlatItem implements Serializable {
         return side == Side.AVERSE;
     }
 
+    boolean isReverseSided() {
+        return side == Side.REVERSE;
+    }
+
     void markAsGuessed() {
         this.guessed = true;
     }
