@@ -35,6 +35,14 @@ public class FlatItem implements Serializable {
         side = side == Side.AVERSE ? Side.REVERSE : Side.AVERSE;
     }
 
+    void turnToAverse() {
+        side = Side.AVERSE;
+    }
+
+    void turnToReverse() {
+        side = Side.REVERSE;
+    }
+
     boolean isAverseSided() {
         return side == Side.AVERSE;
     }

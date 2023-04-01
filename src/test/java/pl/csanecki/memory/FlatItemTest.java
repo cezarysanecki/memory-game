@@ -21,4 +21,23 @@ class FlatItemTest {
 
         assertTrue(flatItem.isAverseSided());
     }
+
+    @Test
+    void turn_to_averse_no_matter_what() {
+        FlatItem flatItem = new FlatItem(FlatItemId.of(1));
+
+        flatItem.turnToAverse();
+
+        assertTrue(flatItem.isAverseSided());
+    }
+
+    @Test
+    void turn_to_reverse_no_matter_what() {
+        FlatItem flatItem = new FlatItem(FlatItemId.of(1));
+        flatItem.turnToAverse();
+
+        flatItem.turnToReverse();
+
+        assertTrue(flatItem.isReverseSided());
+    }
 }
