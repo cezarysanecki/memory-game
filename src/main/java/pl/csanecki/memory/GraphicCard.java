@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class GraphicCard extends JLabel {
 
-    final FlatItem flatItem = new FlatItem(CardId.of(1));
+    final FlatItem flatItem = new FlatItem(FlatItemId.of(1));
 
     public GraphicCard(String name, String reverse, String observe) {
         setPreferredSize(new Dimension(100, 100));

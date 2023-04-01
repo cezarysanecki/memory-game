@@ -1,0 +1,14 @@
+package pl.csanecki.memory;
+
+public class FlatItemId {
+
+    private final int id;
+
+    private FlatItemId(int id) {
+        this.id = id;
+    }
+
+    public static FlatItemId of(int id) {
+        return new FlatItemId(id);
+    }
+}

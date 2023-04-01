@@ -15,11 +15,11 @@ public class FlatItem implements Serializable {
     ImageIcon activeIcon;
     boolean guessed;
 
-    private CardId cardId;
+    private FlatItemId flatItemId;
     private Side side;
 
-    public FlatItem(CardId cardId) {
-        this.cardId = cardId;
+    public FlatItem(FlatItemId flatItemId) {
+        this.flatItemId = flatItemId;
         this.side = Side.REVERSE;
         this.guessed = false;
     }
