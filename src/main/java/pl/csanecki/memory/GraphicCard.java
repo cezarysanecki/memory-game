@@ -6,32 +6,24 @@ import java.awt.*;
 public class GraphicCard extends JLabel {
 
     String filename;
-    ImageIcon reverse;
-    ImageIcon observe;
-    ImageIcon activeIcon;
+    ImageIcon reverseIcon;
+    ImageIcon averseIcon;
     boolean guessed = false;
 
-    final FlatItem flatItem = FlatItem.reverseUp(FlatItemId.of(1));
+    final FlatItem flatItem;
 
-    public GraphicCard(String name, String reverse, String observe) {
+    public GraphicCard(String name, String reverseIcon, String averseIcon) {
         setPreferredSize(new Dimension(100, 100));
         this.filename = name;
-        this.reverse = new ImageIcon(getClass().getResource(reverse));
-        this.observe = new ImageIcon(getClass().getResource(observe));
-        this.activeIcon = this.reverse;
-        setIcon(this.activeIcon);
+        this.reverseIcon = new ImageIcon(getClass().getResource(reverseIcon));
+        this.averseIcon = new ImageIcon(getClass().getResource(averseIcon));
+        this.flatItem = FlatItem.reverseUp(FlatItemId.of(1));
+        setIcon(currentIcon());
     }
 
     public void turnCard() {
-        this.activeIcon = resolveTurnedCard();
-        setIcon(this.activeIcon);
-    }
-
-    ImageIcon resolveTurnedCard() {
-        if (this.activeIcon == this.reverse) {
-            return this.observe;
-        }
-        return this.reverse;
+        flatItem.flip();
+        setIcon(currentIcon());
     }
 
     void markAsGuessed() {
@@ -42,10 +34,14 @@ public class GraphicCard extends JLabel {
         return !this.guessed;
     }
 
+    private ImageIcon currentIcon() {
+        return flatItem.isAverseUp() ? this.averseIcon : this.reverseIcon;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(this.activeIcon.getImage(), 0, 0, null);
+        g2.drawImage(currentIcon().getImage(), 0, 0, null);
     }
 
     @Override

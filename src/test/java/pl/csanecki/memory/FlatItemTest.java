@@ -10,7 +10,7 @@ class FlatItemTest {
     void turning_around_reverse_up_makes_it_averse_up() {
         FlatItem flatItem = FlatItem.reverseUp(FlatItemId.of(1));
 
-        flatItem.turnAround();
+        flatItem.flip();
 
         assertTrue(flatItem.isAverseUp());
     }
@@ -19,7 +19,7 @@ class FlatItemTest {
     void turning_around_averse_up_makes_it_reverse_up() {
         FlatItem flatItem = FlatItem.averseUp(FlatItemId.of(1));
 
-        flatItem.turnAround();
+        flatItem.flip();
 
         assertTrue(flatItem.isReverseUp());
     }

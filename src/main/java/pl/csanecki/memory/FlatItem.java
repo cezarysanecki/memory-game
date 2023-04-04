@@ -24,7 +24,7 @@ public class FlatItem implements Serializable {
         return new FlatItem(flatItemId, Side.REVERSE);
     }
 
-    public void turnAround() {
+    public void flip() {
         side = side == Side.AVERSE ? Side.REVERSE : Side.AVERSE;
     }
 
