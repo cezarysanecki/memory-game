@@ -22,16 +22,12 @@ public class GroupOfFlatItems {
         flatItems.forEach(FlatItem::turnReverseUp);
     }
 
-    public Result turnToAverse(FlatItemId flatItemId) {
-        return flatItems.stream()
+    public void turnToAverse(FlatItemId flatItemId) {
+        flatItems.stream()
                 .filter(flatItem -> flatItem.getFlatItemId().equals(flatItemId))
                 .filter(FlatItem::isReverseUp)
                 .findFirst()
-                .map(flatItem -> {
-                    flatItem.turnAverseUp();
-                    return Result.Success;
-                })
-                .orElse(Result.Failure);
+                .ifPresent(FlatItem::turnAverseUp);
     }
 
     public boolean isAllReverseUp() {

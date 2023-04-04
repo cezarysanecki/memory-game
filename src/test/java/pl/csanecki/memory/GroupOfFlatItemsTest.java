@@ -52,4 +52,15 @@ class GroupOfFlatItemsTest {
         assertTrue(groupOfFlatItems.isAllReverseUp());
     }
 
+    @Test
+    void cannot() {
+        GroupOfFlatItems groupOfFlatItems = GroupOfFlatItems.allReversed(
+                Set.of(firstFlatItemId, secondFlatItemId));
+
+        groupOfFlatItems.turnToAverse(firstFlatItemId);
+        groupOfFlatItems.turnAllToReverseUp();
+
+        assertTrue(groupOfFlatItems.isAllReverseUp());
+    }
+
 }
