@@ -70,8 +70,8 @@ public class GamePanel extends JPanel {
         public GraphicCard find(Point2D p) {
             for (GraphicCard graphicCard : graphicCards) {
                 Rectangle rectangle = new Rectangle(
-                    graphicCard.getLocation().x, graphicCard.getLocation().y,
-                    graphicCard.getWidth(), graphicCard.getHeight());
+                        graphicCard.getLocation().x, graphicCard.getLocation().y,
+                        graphicCard.getWidth(), graphicCard.getHeight());
 
                 if (rectangle.contains(p)) {
                     return graphicCard;
@@ -87,29 +87,29 @@ public class GamePanel extends JPanel {
             }
             current = find(e.getPoint());
 
-            if (current != null && current.flatItem.isNotGuessed()) {
-                if (current.flatItem.isNotGuessed() && firstGraphicCardPair == null) {
+            if (current != null && current.isNotGuessed()) {
+                if (current.isNotGuessed() && firstGraphicCardPair == null) {
                     firstGraphicCardPair = current;
                     firstGraphicCardPair.turnCard();
-                } else if (current.flatItem.isNotGuessed() && secondGraphicCardPair == null && firstGraphicCardPair != current) {
+                } else if (current.isNotGuessed() && secondGraphicCardPair == null && firstGraphicCardPair != current) {
                     secondGraphicCardPair = current;
                     secondGraphicCardPair.turnCard();
                     if (firstGraphicCardPair.equals(secondGraphicCardPair)) {
-                        firstGraphicCardPair.flatItem.markAsGuessed();
-                        secondGraphicCardPair.flatItem.markAsGuessed();
+                        firstGraphicCardPair.markAsGuessed();
+                        secondGraphicCardPair.markAsGuessed();
                         guessed++;
                         if (guessed == 20) timer.stop();
                         resetSelectedCards();
                     }
                 } else if (firstGraphicCardPair != null && secondGraphicCardPair != null) {
-                    if (firstGraphicCardPair.flatItem.isNotGuessed() && secondGraphicCardPair.flatItem.isNotGuessed()) {
+                    if (firstGraphicCardPair.isNotGuessed() && secondGraphicCardPair.isNotGuessed()) {
                         firstGraphicCardPair.turnCard();
                         secondGraphicCardPair.turnCard();
                     }
                     resetSelectedCards();
                 }
             } else if (firstGraphicCardPair != null && secondGraphicCardPair != null) {
-                if (firstGraphicCardPair.flatItem.isNotGuessed() && secondGraphicCardPair.flatItem.isNotGuessed()) {
+                if (firstGraphicCardPair.isNotGuessed() && secondGraphicCardPair.isNotGuessed()) {
                     firstGraphicCardPair.turnCard();
                     secondGraphicCardPair.turnCard();
                 }
