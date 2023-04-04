@@ -19,4 +19,37 @@ class GroupOfFlatItemsTest {
         assertTrue(groupOfFlatItems.isAllReverseUp());
     }
 
+    @Test
+    void all_are_not_averse_up_and_reserve_up_when_one_of_items_is_averse_up_from_all() {
+        GroupOfFlatItems groupOfFlatItems = GroupOfFlatItems.allReversed(
+                Set.of(firstFlatItemId, secondFlatItemId));
+
+        groupOfFlatItems.turnToAverse(firstFlatItemId);
+
+        assertFalse(groupOfFlatItems.isAllReverseUp());
+        assertFalse(groupOfFlatItems.isAllAverseUp());
+    }
+
+    @Test
+    void turning_all_items_make_them_be_averse_up() {
+        GroupOfFlatItems groupOfFlatItems = GroupOfFlatItems.allReversed(
+                Set.of(firstFlatItemId, secondFlatItemId));
+
+        groupOfFlatItems.turnToAverse(firstFlatItemId);
+        groupOfFlatItems.turnToAverse(secondFlatItemId);
+
+        assertTrue(groupOfFlatItems.isAllAverseUp());
+    }
+
+    @Test
+    void turning_all_cards_to_be_reverse_up() {
+        GroupOfFlatItems groupOfFlatItems = GroupOfFlatItems.allReversed(
+                Set.of(firstFlatItemId, secondFlatItemId));
+
+        groupOfFlatItems.turnToAverse(firstFlatItemId);
+        groupOfFlatItems.turnAllToReverseUp();
+
+        assertTrue(groupOfFlatItems.isAllReverseUp());
+    }
+
 }

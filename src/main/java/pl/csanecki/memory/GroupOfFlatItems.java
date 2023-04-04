@@ -44,8 +44,4 @@ public class GroupOfFlatItems {
                 .allMatch(FlatItem::isAverseUp);
     }
 
-    public int count() {
-        return flatItems.size();
-    }
-
 }
