@@ -58,4 +58,15 @@ class GroupOfFlatItemsTest {
                 () -> GroupOfFlatItems.allReversed(Set.of(firstFlatItemId)));
     }
 
+    @Test
+    void cannot_turn_card_not_being_in_group() {
+        FlatItemId notConsideredFlatItem = FlatItemId.of(2);
+
+        GroupOfFlatItems groupOfFlatItems = GroupOfFlatItems.allReversed(
+                Set.of(firstFlatItemId, secondFlatItemId));
+
+        assertThrows(IllegalStateException.class,
+                () -> groupOfFlatItems.turnToAverse(notConsideredFlatItem));
+    }
+
 }

@@ -11,4 +11,9 @@ public class FlatItemId {
     public static FlatItemId of(int id) {
         return new FlatItemId(id);
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id);
+    }
 }

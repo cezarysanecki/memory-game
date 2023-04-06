@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.csanecki.memory.GuessResult.Continue;
-import static pl.csanecki.memory.GuessResult.Guessed;
+import static pl.csanecki.memory.GuessResult.*;
 
 class MemoryGameTest {
 
@@ -42,6 +41,18 @@ class MemoryGameTest {
         GuessResult result = memoryGame.turnCard(fourthFlatItemId);
 
         assertEquals(result, Continue);
+    }
+
+    @Test
+    void fail_to_guess_all_cards_from_group() {
+        MemoryGame memoryGame = new MemoryGame(Set.of(firstGroupOfFlatItems, secondGroupOfFlatItems));
+
+        memoryGame.turnCard(thirdFlatItemId);
+        memoryGame.turnCard(fourthFlatItemId);
+
+        GuessResult result = memoryGame.turnCard(firstFlatItemId);
+
+        assertEquals(result, Failure);
     }
 
 

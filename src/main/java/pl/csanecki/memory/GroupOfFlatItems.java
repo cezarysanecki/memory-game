@@ -1,5 +1,6 @@
 package pl.csanecki.memory;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -26,11 +27,12 @@ public class GroupOfFlatItems {
     }
 
     public void turnToAverse(FlatItemId flatItemId) {
-        flatItems.stream()
-                .filter(flatItem -> flatItem.getFlatItemId().equals(flatItemId))
+        FlatItem flatItem = flatItems.stream()
+                .filter(item -> item.getFlatItemId().equals(flatItemId))
                 .filter(FlatItem::isReverseUp)
                 .findFirst()
-                .ifPresent(FlatItem::turnAverseUp);
+                .orElseThrow(() -> new IllegalStateException("flat item " + flatItemId + " does not belong to group"));
+        flatItem.turnAverseUp();
     }
 
     public boolean isAllReverseUp() {
@@ -48,4 +50,16 @@ public class GroupOfFlatItems {
                 .anyMatch(flatItem -> flatItem.getFlatItemId().equals(flatItemId));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroupOfFlatItems that = (GroupOfFlatItems) o;
+        return Objects.equals(flatItems, that.flatItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(flatItems);
+    }
 }

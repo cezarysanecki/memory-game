@@ -2,8 +2,7 @@ package pl.csanecki.memory;
 
 import java.util.Set;
 
-import static pl.csanecki.memory.GuessResult.Continue;
-import static pl.csanecki.memory.GuessResult.Guessed;
+import static pl.csanecki.memory.GuessResult.*;
 
 public class MemoryGame {
 
@@ -17,6 +16,11 @@ public class MemoryGame {
     public GuessResult turnCard(FlatItemId flatItemId) {
         if (current == null) {
             current = findBy(flatItemId);
+        } else {
+            GroupOfFlatItems pretender = findBy(flatItemId);
+            if (!pretender.equals(current)) {
+                return Failure;
+            }
         }
 
         current.turnToAverse(flatItemId);
