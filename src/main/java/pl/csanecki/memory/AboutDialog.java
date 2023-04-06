@@ -44,7 +44,7 @@ public class AboutDialog extends JDialog {
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
             Line2D line = new Line2D.Double(0, 20, getWidth(), 20);
-            String text = "Memory: Premier League";
+            String text = "Memory: Animals";
             Font font = new Font("Serif", Font.BOLD, 25);
             g2.setFont(font);
             g2.drawString(text, 0, 110);

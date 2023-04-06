@@ -4,44 +4,56 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MemoryFrame extends JFrame {
-    private AboutDialog aboutDialog;
-    private JMenuBar menuBar;
+
+    private static final String MAIN_MENU = "Plik";
+    private static final String MAIN_MENU_ABOUT_ITEM = "O programie";
+    private static final String MAIN_MENU_EXIT_ITEM = "Zamknij";
+
+    public static void main(String[] args) {
+        new MemoryFrame();
+    }
 
     public MemoryFrame() {
-        menuBar = new JMenuBar();
-        menuConfig(menuBar);
-
-        int widthScreen = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int heightScreen = Toolkit.getDefaultToolkit().getScreenSize().height;
-
-        add(new GamePanel(), BorderLayout.CENTER);
+        JMenuBar menuBar = prepareMenuBar();
         setJMenuBar(menuBar);
 
+        add(new GamePanel(), BorderLayout.CENTER);
+
         pack();
-        setBounds((widthScreen - getWidth()) / 2, (heightScreen - getHeight()) / 2, getWidth(), getHeight());   //ustawia ramkę na środku ekranu
+        int widthScreen = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int heightScreen = Toolkit.getDefaultToolkit().getScreenSize().height;
+        setBounds(
+                (widthScreen - getWidth()) / 2,
+                (heightScreen - getHeight()) / 2,
+                getWidth(),
+                getHeight());
         setVisible(true);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void menuConfig(JMenuBar menuBar) {
-        JMenu main = new JMenu("Plik");
+    private JMenuBar prepareMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
 
-        JMenuItem aboutItem = new JMenuItem("O programie");
-        aboutItem.addActionListener(e -> {
-            if (aboutDialog == null) aboutDialog = new AboutDialog(this);
-        });
-
-        JMenuItem exitItem = new JMenuItem("Zamknij");
-        exitItem.addActionListener(e -> System.exit(0));
-
-        main.add(aboutItem);
-        main.addSeparator();
-        main.add(exitItem);
+        JMenu main = prepareMainMenu();
         menuBar.add(main);
+
+        return menuBar;
     }
 
-    public static void main(String[] args) {
-        new MemoryFrame();
+    private JMenu prepareMainMenu() {
+        JMenu main = new JMenu(MAIN_MENU);
+
+        JMenuItem aboutItem = new JMenuItem(MAIN_MENU_ABOUT_ITEM);
+        aboutItem.addActionListener(event -> new AboutDialog(this));
+        main.add(aboutItem);
+
+        main.addSeparator();
+
+        JMenuItem exitItem = new JMenuItem(MAIN_MENU_EXIT_ITEM);
+        exitItem.addActionListener(event -> System.exit(0));
+        main.add(exitItem);
+
+        return main;
     }
 }
