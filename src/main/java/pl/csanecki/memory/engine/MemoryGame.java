@@ -2,6 +2,7 @@ package pl.csanecki.memory.engine;
 
 import pl.csanecki.memory.GuessResult;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static pl.csanecki.memory.GuessResult.*;
@@ -9,7 +10,9 @@ import static pl.csanecki.memory.GuessResult.*;
 public class MemoryGame {
 
     private final Set<GroupOfFlatItems> groups;
+
     private GroupOfFlatItems current = null;
+    private Set<GroupOfFlatItems> guessed = new HashSet<>();
 
     public MemoryGame(Set<GroupOfFlatItems> groups) {
         this.groups = groups;
@@ -28,7 +31,12 @@ public class MemoryGame {
 
         current.turnToAverse(flatItemId);
 
-        return current.isAllAverseUp() ? Guessed : Continue;
+        if (current.isAllAverseUp()) {
+            guessed.add(current);
+            current = null;
+            return Guessed;
+        }
+        return Continue;
     }
 
     private GroupOfFlatItems findBy(FlatItemId flatItemId) {

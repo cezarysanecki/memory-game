@@ -50,7 +50,6 @@ class MemoryGameTest {
                 GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
 
         memoryGame.turnCard(thirdFlatItemId);
-        memoryGame.turnCard(fourthFlatItemId);
 
         GuessResult result = memoryGame.turnCard(firstFlatItemId);
 
@@ -73,7 +72,7 @@ class MemoryGameTest {
     }
 
     @Test
-    void group_is_already_guessed() {
+    void can_continue_to_guessing_next_cards() {
         MemoryGame memoryGame = new MemoryGame(Set.of(
                 GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
                 GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
@@ -81,9 +80,9 @@ class MemoryGameTest {
         memoryGame.turnCard(firstFlatItemId);
         memoryGame.turnCard(secondFlatItemId);
 
-        GuessResult result = memoryGame.turnCard(firstFlatItemId);
+        GuessResult result = memoryGame.turnCard(thirdFlatItemId);
 
-        assertEquals(Guessed, result);
+        assertEquals(Continue, result);
     }
 
 
