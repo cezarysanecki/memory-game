@@ -1,11 +1,9 @@
 package pl.csanecki.memory.engine;
 
-import pl.csanecki.memory.GuessResult;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import static pl.csanecki.memory.GuessResult.*;
+import static pl.csanecki.memory.engine.GuessResult.*;
 
 public class MemoryGame {
 

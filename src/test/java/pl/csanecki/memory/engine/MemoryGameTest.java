@@ -1,12 +1,11 @@
 package pl.csanecki.memory.engine;
 
 import org.junit.jupiter.api.Test;
-import pl.csanecki.memory.GuessResult;
 
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.csanecki.memory.GuessResult.*;
+import static pl.csanecki.memory.engine.GuessResult.*;
 
 class MemoryGameTest {
 
