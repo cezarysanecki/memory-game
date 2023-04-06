@@ -18,6 +18,11 @@ public class MemoryGame {
         this.groups = groups;
     }
 
+    public void reset() {
+        current = null;
+        guessed.clear();
+    }
+
     public GuessResult turnCard(FlatItemId flatItemId) {
         if (guessed.containsAll(groups)) {
             return GameOver;
