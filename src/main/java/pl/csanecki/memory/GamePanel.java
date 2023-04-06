@@ -1,5 +1,7 @@
 package pl.csanecki.memory;
 
+import pl.csanecki.memory.engine.MemoryGame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -27,18 +29,21 @@ public class GamePanel extends JPanel {
     private int number = 1;
     private int numberOfCards = 40;
 
+    private final MemoryGame memoryGame;
+
     public GamePanel() {
         setLayout(null);
 
-        // dodanie paska wyniku
         Score labelScore = new Score(seconds, columns * 110 + 10);
-        timer = new Timer(100, e -> {
+        timer = new Timer(100, event -> {
             seconds += 1;
             labelScore.setText("Time Score: " + (double) (seconds) / 10 + " s");
         });
         add(labelScore);
 
         addMouseListener(new MouseClick());
+
+        memoryGame = new MemoryGame();
 
         for (int i = 0; i < numberOfCards; i++) {
             GraphicCard graphicCard = new GraphicCard("" + number, "/img/ziemia.png", "/img/" + number + ".png");

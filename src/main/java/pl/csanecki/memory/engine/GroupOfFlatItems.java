@@ -1,5 +1,7 @@
 package pl.csanecki.memory.engine;
 
+import pl.csanecki.memory.state.GroupOfFlatItemsCurrentState;
+
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -60,5 +62,11 @@ public class GroupOfFlatItems {
     @Override
     public int hashCode() {
         return Objects.hash(flatItems);
+    }
+
+    public GroupOfFlatItemsCurrentState currentState() {
+        return new GroupOfFlatItemsCurrentState(flatItems.stream()
+                .map(FlatItem::currentState)
+                .collect(Collectors.toUnmodifiableSet()));
     }
 }

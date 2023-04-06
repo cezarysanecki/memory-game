@@ -1,5 +1,7 @@
 package pl.csanecki.memory.engine;
 
+import pl.csanecki.memory.state.FlatItemCurrentState;
+
 import java.io.Serializable;
 
 public class FlatItem implements Serializable {
@@ -46,5 +48,9 @@ public class FlatItem implements Serializable {
 
     public FlatItemId getFlatItemId() {
         return flatItemId;
+    }
+
+    public FlatItemCurrentState currentState() {
+        return new FlatItemCurrentState(flatItemId, side == Side.AVERSE);
     }
 }

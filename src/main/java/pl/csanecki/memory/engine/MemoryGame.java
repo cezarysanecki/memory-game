@@ -1,7 +1,10 @@
 package pl.csanecki.memory.engine;
 
+import pl.csanecki.memory.state.MemoryGameCurrentState;
+
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static pl.csanecki.memory.engine.GuessResult.*;
 
@@ -22,7 +25,7 @@ public class MemoryGame {
     }
 
     public GuessResult turnCard(FlatItemId flatItemId) {
-        if (guessed.containsAll(groups)) {
+        if (isAllGuessed()) {
             return GameOver;
         } else if (current == null) {
             current = findBy(flatItemId);
@@ -37,7 +40,7 @@ public class MemoryGame {
         if (current.isAllAverseUp()) {
             guessed.add(current);
             current = null;
-            if (guessed.containsAll(groups)) {
+            if (isAllGuessed()) {
                 return GameOver;
             }
             return Guessed;
@@ -45,10 +48,21 @@ public class MemoryGame {
         return Continue;
     }
 
+    private boolean isAllGuessed() {
+        return guessed.containsAll(groups);
+    }
+
     private GroupOfFlatItems findBy(FlatItemId flatItemId) {
         return groups.stream()
                 .filter(group -> group.contains(flatItemId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("cannot find group for flat item: " + flatItemId));
+    }
+
+    public MemoryGameCurrentState currentState() {
+        return new MemoryGameCurrentState(
+                groups.stream()
+                        .map(GroupOfFlatItems::currentState)
+                        .collect(Collectors.toUnmodifiableSet()), isAllGuessed());
     }
 }
