@@ -1,4 +1,6 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.engine;
+
+import pl.csanecki.memory.GuessResult;
 
 import java.util.Set;
 
@@ -19,6 +21,7 @@ public class MemoryGame {
         } else {
             GroupOfFlatItems pretender = findBy(flatItemId);
             if (!pretender.equals(current)) {
+                current = null;
                 return Failure;
             }
         }
@@ -28,7 +31,7 @@ public class MemoryGame {
         return current.isAllAverseUp() ? Guessed : Continue;
     }
 
-    public GroupOfFlatItems findBy(FlatItemId flatItemId) {
+    private GroupOfFlatItems findBy(FlatItemId flatItemId) {
         return groups.stream()
                 .filter(group -> group.contains(flatItemId))
                 .findFirst()

@@ -1,4 +1,4 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.engine;
 
 public class FlatItemId {
 

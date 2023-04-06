@@ -1,5 +1,8 @@
 package pl.csanecki.memory;
 
+import pl.csanecki.memory.engine.FlatItem;
+import pl.csanecki.memory.engine.FlatItemId;
+
 import javax.swing.*;
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.engine;
 
 import java.util.Objects;
 import java.util.Set;

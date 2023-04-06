@@ -1,6 +1,10 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.engine;
 
 import org.junit.jupiter.api.Test;
+import pl.csanecki.memory.GuessResult;
+import pl.csanecki.memory.engine.FlatItemId;
+import pl.csanecki.memory.engine.GroupOfFlatItems;
+import pl.csanecki.memory.engine.MemoryGame;
 
 import java.util.Set;
 
@@ -53,6 +57,20 @@ class MemoryGameTest {
         GuessResult result = memoryGame.turnCard(firstFlatItemId);
 
         assertEquals(result, Failure);
+    }
+
+    @Test
+    void reset_revealed_cars_after_wrong_guess() {
+        MemoryGame memoryGame = new MemoryGame(Set.of(firstGroupOfFlatItems, secondGroupOfFlatItems));
+
+        memoryGame.turnCard(thirdFlatItemId);
+        memoryGame.turnCard(fourthFlatItemId);
+
+        memoryGame.turnCard(firstFlatItemId);
+
+        GuessResult result = memoryGame.turnCard(thirdFlatItemId);
+
+        assertEquals(result, Continue);
     }
 
 

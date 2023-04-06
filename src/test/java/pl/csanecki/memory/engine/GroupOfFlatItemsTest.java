@@ -1,6 +1,8 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.engine;
 
 import org.junit.jupiter.api.Test;
+import pl.csanecki.memory.engine.FlatItemId;
+import pl.csanecki.memory.engine.GroupOfFlatItems;
 
 import java.util.Set;
 
