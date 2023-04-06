@@ -19,6 +19,10 @@ public class MemoryGame {
     }
 
     public GuessResult turnCard(FlatItemId flatItemId) {
+        if (guessed.containsAll(groups)) {
+            return GameOver;
+        }
+
         if (current == null) {
             current = findBy(flatItemId);
         } else {
@@ -34,6 +38,9 @@ public class MemoryGame {
         if (current.isAllAverseUp()) {
             guessed.add(current);
             current = null;
+            if (guessed.containsAll(groups)) {
+                return GameOver;
+            }
             return Guessed;
         }
         return Continue;

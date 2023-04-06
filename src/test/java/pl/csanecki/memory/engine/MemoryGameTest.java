@@ -85,5 +85,19 @@ class MemoryGameTest {
         assertEquals(Continue, result);
     }
 
+    @Test
+    void end_game() {
+        MemoryGame memoryGame = new MemoryGame(Set.of(
+                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
+                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
+
+        memoryGame.turnCard(firstFlatItemId);
+        memoryGame.turnCard(secondFlatItemId);
+        memoryGame.turnCard(thirdFlatItemId);
+        GuessResult result = memoryGame.turnCard(fourthFlatItemId);
+
+        assertEquals(GameOver, result);
+    }
+
 
 }
