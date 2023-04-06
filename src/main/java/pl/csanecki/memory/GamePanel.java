@@ -24,18 +24,13 @@ public class GamePanel extends JPanel {
 
     private final ArrayList<GraphicCard> graphicCards = new ArrayList<>();
 
-    private int seconds;
-    private Timer timer;
+    private final Timer timer;
 
     private final MemoryGame memoryGame;
 
-    public GamePanel(GameConfig gameConfig) {
-        int numberOfElements = GameConfig.countNumberOfElements(gameConfig);
-        int numberOfFields = GameConfig.countNumberOfFields(gameConfig);
-        if (numberOfElements != numberOfFields) {
-            throw new IllegalArgumentException("number of elements and fields must be equal");
-        }
+    private int seconds;
 
+    public GamePanel(GameConfig gameConfig) {
         AtomicInteger currentNumber = new AtomicInteger(0);
         Set<GroupOfFlatItems> groupOfFlatItems = gameConfig.groups
                 .stream()

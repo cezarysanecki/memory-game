@@ -8,28 +8,41 @@ import java.awt.*;
 
 public class GraphicCard extends JLabel {
 
+    public static final int REQUIRED_WIDTH = 100;
+    public static final int REQUIRED_HEIGHT = 100;
+
     ImageIcon reverseIcon;
     ImageIcon averseIcon;
     boolean averse = false;
 
     final FlatItemId flatItemId;
 
-    public GraphicCard(String reverseIcon, String averseIcon, FlatItemId flatItemId) {
-        setPreferredSize(new Dimension(100, 100));
-        this.reverseIcon = new ImageIcon(getClass().getResource(reverseIcon));
-        this.averseIcon = new ImageIcon(getClass().getResource(averseIcon));
+    public GraphicCard(ImageIcon reverseIcon, ImageIcon averseIcon, FlatItemId flatItemId) {
+        setPreferredSize(new Dimension(REQUIRED_WIDTH, REQUIRED_HEIGHT));
+        this.reverseIcon = reverseIcon;
+        this.averseIcon = averseIcon;
         this.flatItemId = flatItemId;
+
         setIcon(currentIcon());
+    }
+
+    public void refresh(FlatItemCurrentState flatItem) {
+        averse = flatItem.averse();
+        setIcon(currentIcon());
+    }
+
+    public FlatItemId getFlatItemId() {
+        return flatItemId;
+    }
+
+    private ImageIcon currentIcon() {
+        return averse ? averseIcon : reverseIcon;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(currentIcon().getImage(), 0, 0, null);
-    }
-
-    private ImageIcon currentIcon() {
-        return averse ? averseIcon : reverseIcon;
     }
 
     @Override
@@ -39,14 +52,5 @@ public class GraphicCard extends JLabel {
         if (this.getClass() != obj.getClass()) return false;
         GraphicCard graphicCard = (GraphicCard) obj;
         return this.flatItemId.equals(graphicCard.flatItemId);
-    }
-
-    public FlatItemId getFlatItemId() {
-        return flatItemId;
-    }
-
-    public void refresh(FlatItemCurrentState flatItem) {
-        averse = flatItem.averse();
-        setIcon(currentIcon());
     }
 }
