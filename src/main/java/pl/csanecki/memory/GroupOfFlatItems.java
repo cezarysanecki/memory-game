@@ -9,6 +9,9 @@ public class GroupOfFlatItems {
     private final Set<FlatItem> flatItems;
 
     private GroupOfFlatItems(Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
+        if (flatItemIds.size() < 2) {
+            throw new IllegalStateException("group of flat items needs at least two items");
+        }
         this.flatItems = flatItemIds.stream()
                 .map(creator)
                 .collect(Collectors.toUnmodifiableSet());
@@ -38,6 +41,11 @@ public class GroupOfFlatItems {
     public boolean isAllAverseUp() {
         return flatItems.stream()
                 .allMatch(FlatItem::isAverseUp);
+    }
+
+    public boolean contains(FlatItemId flatItemId) {
+        return flatItems.stream()
+                .anyMatch(flatItem -> flatItem.getFlatItemId().equals(flatItemId));
     }
 
 }

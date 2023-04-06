@@ -53,14 +53,9 @@ class GroupOfFlatItemsTest {
     }
 
     @Test
-    void cannot() {
-        GroupOfFlatItems groupOfFlatItems = GroupOfFlatItems.allReversed(
-                Set.of(firstFlatItemId, secondFlatItemId));
-
-        groupOfFlatItems.turnToAverse(firstFlatItemId);
-        groupOfFlatItems.turnAllToReverseUp();
-
-        assertTrue(groupOfFlatItems.isAllReverseUp());
+    void cannot_create_group_of_items_with_one_item() {
+        assertThrows(IllegalStateException.class,
+                () -> GroupOfFlatItems.allReversed(Set.of(firstFlatItemId)));
     }
 
 }
