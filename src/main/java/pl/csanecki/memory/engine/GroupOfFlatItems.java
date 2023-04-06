@@ -29,7 +29,6 @@ public class GroupOfFlatItems {
     public void turnToAverse(FlatItemId flatItemId) {
         FlatItem flatItem = flatItems.stream()
                 .filter(item -> item.getFlatItemId().equals(flatItemId))
-                .filter(FlatItem::isReverseUp)
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("flat item " + flatItemId + " does not belong to group"));
         flatItem.turnAverseUp();
