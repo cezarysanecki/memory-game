@@ -4,9 +4,6 @@ import java.util.Set;
 
 public final class GameConfig {
 
-    private GameConfig() {
-    }
-
     public int rows = 5;
     public int columns = 8;
 
@@ -34,6 +31,17 @@ public final class GameConfig {
         new Group("/img/18.png"),
         new Group("/img/19.png"),
         new Group("/img/20.png"));
+
+    static Integer countNumberOfElements(GameConfig gameConfig) {
+            return gameConfig.groups
+                    .stream()
+                    .map(group -> group.numberOfItems)
+                    .reduce(0, Integer::sum, Integer::sum);
+        }
+
+    static int countNumberOfFields(GameConfig gameConfig) {
+            return gameConfig.columns * gameConfig.rows;
+        }
 
     public static class Group {
 

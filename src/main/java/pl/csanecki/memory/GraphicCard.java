@@ -1,44 +1,25 @@
 package pl.csanecki.memory;
 
-import pl.csanecki.memory.engine.FlatItem;
 import pl.csanecki.memory.engine.FlatItemId;
+import pl.csanecki.memory.state.FlatItemCurrentState;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GraphicCard extends JLabel {
 
-    String filename;
     ImageIcon reverseIcon;
     ImageIcon averseIcon;
-    boolean guessed = false;
+    boolean averse = false;
 
-    final FlatItem flatItem;
+    final FlatItemId flatItemId;
 
-    public GraphicCard(String name, String reverseIcon, String averseIcon) {
+    public GraphicCard(String reverseIcon, String averseIcon, FlatItemId flatItemId) {
         setPreferredSize(new Dimension(100, 100));
-        this.filename = name;
         this.reverseIcon = new ImageIcon(getClass().getResource(reverseIcon));
         this.averseIcon = new ImageIcon(getClass().getResource(averseIcon));
-        this.flatItem = FlatItem.reverseUp(FlatItemId.of(1));
+        this.flatItemId = flatItemId;
         setIcon(currentIcon());
-    }
-
-    public void turnCard() {
-        flatItem.flip();
-        setIcon(currentIcon());
-    }
-
-    void markAsGuessed() {
-        this.guessed = true;
-    }
-
-    boolean isNotGuessed() {
-        return !this.guessed;
-    }
-
-    private ImageIcon currentIcon() {
-        return flatItem.isAverseUp() ? this.averseIcon : this.reverseIcon;
     }
 
     @Override
@@ -47,12 +28,25 @@ public class GraphicCard extends JLabel {
         g2.drawImage(currentIcon().getImage(), 0, 0, null);
     }
 
+    private ImageIcon currentIcon() {
+        return averse ? averseIcon : reverseIcon;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (this == obj) return true;
         if (this.getClass() != obj.getClass()) return false;
         GraphicCard graphicCard = (GraphicCard) obj;
-        return this.filename.equals(graphicCard.filename);
+        return this.flatItemId.equals(graphicCard.flatItemId);
+    }
+
+    public FlatItemId getFlatItemId() {
+        return flatItemId;
+    }
+
+    public void refresh(FlatItemCurrentState flatItem) {
+        averse = flatItem.averse();
+        setIcon(currentIcon());
     }
 }

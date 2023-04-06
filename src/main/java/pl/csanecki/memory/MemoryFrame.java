@@ -20,7 +20,7 @@ public class MemoryFrame extends JFrame {
         JMenuBar menuBar = prepareMenuBar();
         setJMenuBar(menuBar);
 
-        add(new GamePanel(), BorderLayout.CENTER);
+        add(new GamePanel(new GameConfig()), BorderLayout.CENTER);
 
         pack();
         setBounds(
