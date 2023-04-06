@@ -21,17 +21,12 @@ public class MemoryGame {
     public GuessResult turnCard(FlatItemId flatItemId) {
         if (guessed.containsAll(groups)) {
             return GameOver;
-        }
-
-        if (current == null) {
+        } else if (current == null) {
             current = findBy(flatItemId);
-        } else {
-            GroupOfFlatItems pretender = findBy(flatItemId);
-            if (!pretender.equals(current)) {
-                current.turnAllToReverseUp();
-                current = null;
-                return Failure;
-            }
+        } else if (!current.contains(flatItemId)) {
+            current.turnAllToReverseUp();
+            current = null;
+            return Failure;
         }
 
         current.turnToAverse(flatItemId);
