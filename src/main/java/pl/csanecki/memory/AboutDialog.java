@@ -6,48 +6,64 @@ import java.awt.geom.Line2D;
 
 public class AboutDialog extends JDialog {
 
+    private static final int WIDTH_DIALOG = 400;
+    private static final int HEIGHT_DIALOG = 200;
+
+    private static final String TITLE = "O programie";
+    private static final String FONT_SERIF_NAME = "Serif";
+    private static final String R_SYMBOL = "\u00AE";
+    private static final String AUTHOR = "Cezary Sanecki";
+    private static final String GAME_TITLE = "Memory: Animals";
+
     public AboutDialog(JFrame owner) {
-        super(owner, "O programie", true);
-        setSize(400, 200);
+        super(owner, TITLE, true);
+        setSize(WIDTH_DIALOG, HEIGHT_DIALOG);
         setLayout(new GridLayout(4, 1));
 
-        JPanel panelName = new JPanel();
-        Font font = new Font("Serif", Font.BOLD, 25);
-        JLabel text = new JLabel("Memory: Premier League");
-        text.setFont(font);
-        panelName.add(text, BorderLayout.SOUTH);
-        add(panelName);
-        add(new ComponentLine());
+        add(gamePanel());
+        add(new LineComponent());
+        add(authorPanel());
+        add(buttonPanel());
 
-        panelName = new JPanel();
-        font = new Font("Serif", Font.ITALIC, 18);
-        text = new JLabel("\u00AE Cezary Sanecki");
-        text.setFont(font);
-        panelName.add(text, BorderLayout.SOUTH);
-        add(panelName);
-
-        JButton buttonOk = new JButton("OK");
-        buttonOk.addActionListener(e -> setVisible(false));
-
-        JPanel panel = new JPanel();
-        panel.add(buttonOk);
-        add(panel);
         setLocation(
-            owner.getLocation().x + (owner.getWidth() - getWidth()) / 2,
-            owner.getLocation().y + (owner.getHeight() - getHeight()) / 2);
+                owner.getLocation().x + (owner.getWidth() - getWidth()) / 2,
+                owner.getLocation().y + (owner.getHeight() - getHeight()) / 2);
         setResizable(false);
         setVisible(true);
     }
 
-    private static class ComponentLine extends JComponent {
+    private JPanel gamePanel() {
+        JPanel gamePanel = new JPanel();
+        Font font = new Font(FONT_SERIF_NAME, Font.BOLD, 25);
+        JLabel text = new JLabel(GAME_TITLE);
+        text.setFont(font);
+        gamePanel.add(text, BorderLayout.SOUTH);
+        return gamePanel;
+    }
+
+    private JPanel authorPanel() {
+        JPanel authorPanel = new JPanel();
+        Font font = new Font(FONT_SERIF_NAME, Font.ITALIC, 18);
+        JLabel text = new JLabel(R_SYMBOL + " " + AUTHOR);
+        text.setFont(font);
+        authorPanel.add(text, BorderLayout.SOUTH);
+        return authorPanel;
+    }
+
+    private JPanel buttonPanel() {
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(event -> setVisible(false));
+
+        JPanel helperPanel = new JPanel();
+        helperPanel.add(okButton);
+        return helperPanel;
+    }
+
+    private static class LineComponent extends JComponent {
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
-            Line2D line = new Line2D.Double(0, 20, getWidth(), 20);
-            String text = "Memory: Animals";
-            Font font = new Font("Serif", Font.BOLD, 25);
-            g2.setFont(font);
-            g2.drawString(text, 0, 110);
+            Line2D line = new Line2D.Double(0, 0, getWidth(), 0);
             g2.draw(line);
         }
     }

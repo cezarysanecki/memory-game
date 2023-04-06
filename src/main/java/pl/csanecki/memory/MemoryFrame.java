@@ -5,6 +5,9 @@ import java.awt.*;
 
 public class MemoryFrame extends JFrame {
 
+    private static final int WIDTH_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static final int HEIGHT_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().height;
+
     private static final String MAIN_MENU = "Plik";
     private static final String MAIN_MENU_ABOUT_ITEM = "O programie";
     private static final String MAIN_MENU_EXIT_ITEM = "Zamknij";
@@ -20,13 +23,9 @@ public class MemoryFrame extends JFrame {
         add(new GamePanel(), BorderLayout.CENTER);
 
         pack();
-        int widthScreen = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int heightScreen = Toolkit.getDefaultToolkit().getScreenSize().height;
         setBounds(
-                (widthScreen - getWidth()) / 2,
-                (heightScreen - getHeight()) / 2,
-                getWidth(),
-                getHeight());
+                (WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2,
+                getWidth(), getHeight());
         setVisible(true);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
