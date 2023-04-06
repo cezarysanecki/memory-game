@@ -17,8 +17,6 @@ public class MemoryGame {
     public GuessResult turnCard(FlatItemId flatItemId) {
         if (current == null) {
             current = findBy(flatItemId);
-            current.turnToAverse(flatItemId);
-            return Continue;
         }
 
         current.turnToAverse(flatItemId);
