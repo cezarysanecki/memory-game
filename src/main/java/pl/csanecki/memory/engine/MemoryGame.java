@@ -1,8 +1,11 @@
 package pl.csanecki.memory.engine;
 
 import pl.csanecki.memory.state.MemoryGameCurrentState;
+import pl.csanecki.memory.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,11 +15,24 @@ public class MemoryGame {
 
     private final Set<GroupOfFlatItems> groups;
 
-    private GroupOfFlatItems current = null;
-    private Set<GroupOfFlatItems> guessed = new HashSet<>();
+    private final Set<GroupOfFlatItems> guessed = new HashSet<>();
 
-    public MemoryGame(Set<GroupOfFlatItems> groups) {
-        this.groups = groups;
+    private GroupOfFlatItems current = null;
+
+    public MemoryGame(MemoryGameSetup memoryGameSetup) {
+        List<FlatItemId> flatItemIds = memoryGameSetup.groupsToGuesses()
+                .stream()
+                .map(MemoryGameSetup.GroupToGuess::flatItemIds)
+                .flatMap(Collection::stream)
+                .toList();
+        if (CollectionUtils.containsDuplicates(flatItemIds)) {
+            throw new IllegalArgumentException("flat item ids must be unique");
+        }
+
+        this.groups = memoryGameSetup.groupsToGuesses()
+                .stream()
+                .map(groupToGuess -> GroupOfFlatItems.allReversed(groupToGuess.flatItemIds()))
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     public void reset() {

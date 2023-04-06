@@ -1,9 +1,17 @@
 package pl.csanecki.memory;
 
+import pl.csanecki.memory.engine.FlatItemId;
+import pl.csanecki.memory.setup.GameCard;
+import pl.csanecki.memory.setup.GameSetupCoordinator;
+import pl.csanecki.memory.setup.GroupOfGameCards;
+
 import javax.swing.*;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public final class GameConfig {
 
@@ -65,6 +73,18 @@ public final class GameConfig {
                 new Group("/img/18.png"),
                 new Group("/img/19.png"),
                 new Group("/img/20.png")));
+    }
+
+    public GameSetupCoordinator createGameSetupCoordinator() {
+        AtomicInteger currentNumber = new AtomicInteger(0);
+        Set<GroupOfGameCards> groupToGuesses = this.groups.stream()
+                .map(group -> IntStream.of(0, group.numberOfItems)
+                        .mapToObj(index -> FlatItemId.of(currentNumber.getAndIncrement()))
+                        .map(flatItemId -> new GameCard(flatItemId, reverseImage, group.averseImage))
+                        .collect(Collectors.toUnmodifiableSet()))
+                .map(GroupOfGameCards::new)
+                .collect(Collectors.toUnmodifiableSet());
+        return new GameSetupCoordinator(groupToGuesses);
     }
 
     private static int countNumberOfElements(Set<Group> groups) {

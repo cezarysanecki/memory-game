@@ -5,6 +5,7 @@ import pl.csanecki.memory.state.FlatItemCurrentState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class GraphicCard extends JLabel {
 
@@ -17,11 +18,12 @@ public class GraphicCard extends JLabel {
 
     final FlatItemId flatItemId;
 
-    public GraphicCard(ImageIcon reverseIcon, ImageIcon averseIcon, FlatItemId flatItemId) {
+    public GraphicCard(FlatItemId flatItemId, ImageIcon reverseIcon, ImageIcon averseIcon) {
         setPreferredSize(new Dimension(REQUIRED_WIDTH, REQUIRED_HEIGHT));
+
+        this.flatItemId = flatItemId;
         this.reverseIcon = reverseIcon;
         this.averseIcon = averseIcon;
-        this.flatItemId = flatItemId;
 
         setIcon(currentIcon());
     }
@@ -37,6 +39,13 @@ public class GraphicCard extends JLabel {
 
     private ImageIcon currentIcon() {
         return averse ? averseIcon : reverseIcon;
+    }
+
+    public boolean contains(Point2D point) {
+        Rectangle rectangle = new Rectangle(
+                this.getLocation().x, this.getLocation().y,
+                this.getWidth(), this.getHeight());
+        return rectangle.contains(point);
     }
 
     @Override
