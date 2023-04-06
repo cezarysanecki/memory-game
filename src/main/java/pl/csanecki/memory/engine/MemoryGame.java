@@ -28,6 +28,7 @@ public class MemoryGame {
         } else {
             GroupOfFlatItems pretender = findBy(flatItemId);
             if (!pretender.equals(current)) {
+                current.turnAllToReverseUp();
                 current = null;
                 return Failure;
             }

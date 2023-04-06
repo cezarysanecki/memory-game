@@ -66,7 +66,7 @@ class MemoryGameTest {
 
         memoryGame.turnCard(thirdFlatItemId);
 
-        GuessResult result = memoryGame.turnCard(firstFlatItemId);
+        GuessResult result = memoryGame.turnCard(secondFlatItemId);
 
         assertEquals(Continue, result);
     }
