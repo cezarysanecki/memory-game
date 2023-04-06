@@ -9,7 +9,7 @@ public final class CollectionUtils {
     }
 
     public static boolean containsDuplicates(List<?> list) {
-        return list.stream()
+        return !list.stream()
                 .allMatch(new HashSet<>()::add);
     }
 }

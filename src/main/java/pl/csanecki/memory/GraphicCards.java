@@ -4,10 +4,7 @@ import pl.csanecki.memory.state.GroupOfFlatItemsCurrentState;
 import pl.csanecki.memory.state.MemoryGameCurrentState;
 
 import java.awt.geom.Point2D;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class GraphicCards {
 
@@ -34,6 +31,6 @@ public class GraphicCards {
     }
 
     public List<GraphicCard> getGraphicCards() {
-        return List.copyOf(graphicCards);
+        return new ArrayList<>(graphicCards);
     }
 }
