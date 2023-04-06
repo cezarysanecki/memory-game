@@ -72,5 +72,19 @@ class MemoryGameTest {
         assertEquals(Continue, result);
     }
 
+    @Test
+    void group_is_already_guessed() {
+        MemoryGame memoryGame = new MemoryGame(Set.of(
+                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
+                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
+
+        memoryGame.turnCard(firstFlatItemId);
+        memoryGame.turnCard(secondFlatItemId);
+
+        GuessResult result = memoryGame.turnCard(firstFlatItemId);
+
+        assertEquals(Guessed, result);
+    }
+
 
 }
