@@ -4,6 +4,7 @@ import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
 import pl.csanecki.memory.setup.GameSetupCoordinator;
+import pl.csanecki.memory.util.Timer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ public class GamePanel extends JPanel {
 
     private final GraphicCards graphicCards;
 
-    private final Timer timer;
+    private final pl.csanecki.memory.util.Timer timer;
 
     private final MemoryGame memoryGame;
 
