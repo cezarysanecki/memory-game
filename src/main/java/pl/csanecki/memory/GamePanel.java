@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class GamePanel extends JPanel {
 
@@ -22,7 +23,7 @@ public class GamePanel extends JPanel {
 
     private final MemoryGame memoryGame;
 
-    private int seconds;
+    private boolean started = false;
 
     public GamePanel(GameConfig gameConfig) {
         GameSetupCoordinator gameSetupCoordinator = gameConfig.createGameSetupCoordinator();
@@ -31,11 +32,9 @@ public class GamePanel extends JPanel {
 
         setLayout(null);
 
-        ScoreLabel labelScoreLabel = new ScoreLabel(seconds, gameConfig.columns * 110 + 10);
-        millisTimer = new MillisTimer(100, event -> {
-            seconds += 1;
-            labelScoreLabel.updateSeconds(seconds);
-        });
+        ScoreLabel labelScoreLabel = new ScoreLabel(gameConfig.columns * 110 + 10);
+        millisTimer = MillisTimer.ofOneHundredMilliseconds();
+        millisTimer.registerSubscribers(Set.of(labelScoreLabel));
         add(labelScoreLabel);
 
         addMouseListener(new MouseClick());
@@ -64,7 +63,10 @@ public class GamePanel extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent event) {
-            millisTimer.start();
+            if (!started) {
+                millisTimer.start();
+                started = true;
+            }
             Optional<GraphicCard> chosenGraphicCard = graphicCards.findCardByCoordinates(event.getPoint());
             if (chosenGraphicCard.isEmpty()) {
                 return;

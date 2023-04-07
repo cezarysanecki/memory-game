@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class MillisTimer {
 
     private final long millisecondsRefresh;
+    private Collection<Subscriber> subscribers;
 
     private ScheduledExecutorService timer;
     private long passed;
@@ -32,7 +33,11 @@ public class MillisTimer {
         return new MillisTimer(1_000);
     }
 
-    public void start(Collection<Subscriber> subscribers) {
+    public void registerSubscribers(Collection<Subscriber> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public void start() {
         passed = 0;
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(() -> {
