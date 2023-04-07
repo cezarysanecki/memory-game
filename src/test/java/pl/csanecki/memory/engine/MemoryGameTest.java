@@ -17,9 +17,9 @@ class MemoryGameTest {
 
     @Test
     void properly_guessed_cards() {
-        MemoryGame memoryGame = new MemoryGame(Set.of(
-                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
-                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
+        MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
+                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         GuessResult firstGuess = memoryGame.turnCard(firstFlatItemId);
 
@@ -32,9 +32,9 @@ class MemoryGameTest {
 
     @Test
     void need_to_reveal_all_cards_from_group() {
-        MemoryGame memoryGame = new MemoryGame(Set.of(
-                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
-                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId, fifthFlatItemId))));
+        MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
+                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId, fifthFlatItemId)))));
 
         memoryGame.turnCard(thirdFlatItemId);
         GuessResult result = memoryGame.turnCard(fourthFlatItemId);
@@ -44,9 +44,9 @@ class MemoryGameTest {
 
     @Test
     void fail_to_guess_all_cards_from_group() {
-        MemoryGame memoryGame = new MemoryGame(Set.of(
-                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
-                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
+        MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
+                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(thirdFlatItemId);
 
@@ -57,9 +57,9 @@ class MemoryGameTest {
 
     @Test
     void reset_revealed_cars_after_wrong_guess() {
-        MemoryGame memoryGame = new MemoryGame(Set.of(
-                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
-                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
+        MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
+                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(firstFlatItemId);
 
@@ -72,9 +72,9 @@ class MemoryGameTest {
 
     @Test
     void can_continue_to_guessing_next_cards() {
-        MemoryGame memoryGame = new MemoryGame(Set.of(
-                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
-                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
+        MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
+                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(firstFlatItemId);
         memoryGame.turnCard(secondFlatItemId);
@@ -86,9 +86,9 @@ class MemoryGameTest {
 
     @Test
     void end_game() {
-        MemoryGame memoryGame = new MemoryGame(Set.of(
-                GroupOfFlatItems.allReversed(Set.of(firstFlatItemId, secondFlatItemId)),
-                GroupOfFlatItems.allReversed(Set.of(thirdFlatItemId, fourthFlatItemId))));
+        MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
+                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(firstFlatItemId);
         memoryGame.turnCard(secondFlatItemId);
