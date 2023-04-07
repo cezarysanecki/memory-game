@@ -62,4 +62,9 @@ public class GraphicCard extends JLabel {
         GraphicCard graphicCard = (GraphicCard) obj;
         return this.flatItemId.equals(graphicCard.flatItemId);
     }
+
+    public void turnToAverseUp() {
+        averse = true;
+        setIcon(currentIcon());
+    }
 }

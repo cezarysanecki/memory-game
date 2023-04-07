@@ -71,11 +71,15 @@ public class GamePanel extends JPanel {
             FlatItemId flatItemId = chosenGraphicCard.get().getFlatItemId();
 
             GuessResult result = memoryGame.turnCard(flatItemId);
-            if (result == GuessResult.GameOver) {
-                timer.stop();
-            }
 
-            graphicCards.refreshAll(memoryGame.currentState());
+            switch (result) {
+                case Failure -> chosenGraphicCard.get().turnToAverseUp();
+                case GameOver -> {
+                    timer.stop();
+                    graphicCards.refreshAll(memoryGame.currentState());
+                }
+                default -> graphicCards.refreshAll(memoryGame.currentState());
+            }
         }
     }
 }
