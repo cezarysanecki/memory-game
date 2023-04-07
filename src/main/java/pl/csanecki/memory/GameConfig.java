@@ -71,16 +71,6 @@ public final class GameConfig {
         return new GameSetupCoordinator(groupToGuesses);
     }
 
-    private static int countNumberOfElements(Set<Group> groups) {
-        return groups.stream()
-            .map(group -> group.numberOfItems)
-            .reduce(0, Integer::sum, Integer::sum);
-    }
-
-    private static int countNumberOfFields(int rows, int columns) {
-        return columns * rows;
-    }
-
     public static class Group {
 
         // 100x100 px
