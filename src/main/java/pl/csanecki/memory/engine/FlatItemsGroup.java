@@ -7,11 +7,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class GroupOfFlatItems {
+public class FlatItemsGroup {
 
+    private final FlatItemsGroupId flatItemsGroupId;
     private final Set<FlatItem> flatItems;
 
-    private GroupOfFlatItems(Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
+    private FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
+        this.flatItemsGroupId = flatItemsGroupId;
         if (flatItemIds.isEmpty()) {
             throw new IllegalStateException("group of flat items cannot be empty");
         }
@@ -20,8 +22,8 @@ public class GroupOfFlatItems {
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    public static GroupOfFlatItems allReversed(Set<FlatItemId> flatItemIds) {
-        return new GroupOfFlatItems(flatItemIds, FlatItem::reverseUp);
+    public static FlatItemsGroup allReversed(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds) {
+        return new FlatItemsGroup(flatItemsGroupId, flatItemIds, FlatItem::reverseUp);
     }
 
     public void turnAllToReverseUp() {
@@ -55,7 +57,7 @@ public class GroupOfFlatItems {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GroupOfFlatItems that = (GroupOfFlatItems) o;
+        FlatItemsGroup that = (FlatItemsGroup) o;
         return Objects.equals(flatItems, that.flatItems);
     }
 

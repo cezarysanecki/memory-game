@@ -2,9 +2,9 @@ package pl.csanecki.memory.engine;
 
 import pl.csanecki.memory.state.FlatItemCurrentState;
 
-import java.io.Serializable;
+import java.util.Objects;
 
-public class FlatItem implements Serializable {
+public class FlatItem {
 
     private enum Side {
         REVERSE, AVERSE
@@ -48,6 +48,19 @@ public class FlatItem implements Serializable {
 
     public FlatItemId getFlatItemId() {
         return flatItemId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FlatItem flatItem = (FlatItem) o;
+        return Objects.equals(flatItemId, flatItem.flatItemId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(flatItemId);
     }
 
     public FlatItemCurrentState currentState() {

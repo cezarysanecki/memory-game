@@ -13,11 +13,11 @@ import static pl.csanecki.memory.engine.GuessResult.*;
 
 public class MemoryGame {
 
-    private final Set<GroupOfFlatItems> groups;
+    private final Set<FlatItemsGroup> groups;
 
-    private final Set<GroupOfFlatItems> guessed = new HashSet<>();
+    private final Set<FlatItemsGroup> guessed = new HashSet<>();
 
-    private GroupOfFlatItems current = null;
+    private FlatItemsGroup current = null;
 
     public MemoryGame(MemoryGameSetup memoryGameSetup) {
         List<FlatItemId> flatItemIds = memoryGameSetup.groupsToGuesses()
@@ -31,7 +31,7 @@ public class MemoryGame {
 
         this.groups = memoryGameSetup.groupsToGuesses()
                 .stream()
-                .map(groupToGuess -> GroupOfFlatItems.allReversed(groupToGuess.flatItemIds()))
+                .map(groupToGuess -> FlatItemsGroup.allReversed(groupToGuess.flatItemIds()))
                 .collect(Collectors.toUnmodifiableSet());
     }
 
@@ -68,7 +68,7 @@ public class MemoryGame {
         return guessed.containsAll(groups);
     }
 
-    private GroupOfFlatItems findBy(FlatItemId flatItemId) {
+    private FlatItemsGroup findBy(FlatItemId flatItemId) {
         return groups.stream()
                 .filter(group -> group.contains(flatItemId))
                 .findFirst()
@@ -78,7 +78,7 @@ public class MemoryGame {
     public MemoryGameCurrentState currentState() {
         return new MemoryGameCurrentState(
                 groups.stream()
-                        .map(GroupOfFlatItems::currentState)
+                        .map(FlatItemsGroup::currentState)
                         .collect(Collectors.toUnmodifiableSet()), isAllGuessed());
     }
 }
