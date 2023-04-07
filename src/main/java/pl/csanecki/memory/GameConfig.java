@@ -1,6 +1,7 @@
 package pl.csanecki.memory;
 
 import pl.csanecki.memory.engine.FlatItemId;
+import pl.csanecki.memory.engine.FlatItemsGroupId;
 import pl.csanecki.memory.setup.GameCard;
 import pl.csanecki.memory.setup.GameSetupCoordinator;
 import pl.csanecki.memory.setup.GroupOfGameCards;
@@ -76,13 +77,16 @@ public final class GameConfig {
     }
 
     public GameSetupCoordinator createGameSetupCoordinator() {
-        AtomicInteger currentNumber = new AtomicInteger(0);
+        AtomicInteger flatItemIdGenerator = new AtomicInteger(0);
+        AtomicInteger flatItemsGroupsIdGenerator = new AtomicInteger(0);
+
         Set<GroupOfGameCards> groupToGuesses = this.groups.stream()
                 .map(group -> IntStream.of(0, group.numberOfItems)
-                        .mapToObj(index -> FlatItemId.of(currentNumber.getAndIncrement()))
+                        .mapToObj(index -> FlatItemId.of(flatItemIdGenerator.getAndIncrement()))
                         .map(flatItemId -> new GameCard(flatItemId, reverseImage, group.averseImage))
                         .collect(Collectors.toUnmodifiableSet()))
-                .map(GroupOfGameCards::new)
+                .map(gameCards -> new GroupOfGameCards(
+                        FlatItemsGroupId.of(flatItemsGroupsIdGenerator.getAndIncrement()), gameCards))
                 .collect(Collectors.toUnmodifiableSet());
         return new GameSetupCoordinator(groupToGuesses);
     }

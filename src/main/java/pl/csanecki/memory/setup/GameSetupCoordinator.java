@@ -12,8 +12,10 @@ public record GameSetupCoordinator(Set<GroupOfGameCards> groupsOfGameCards) {
 
     public MemoryGameSetup toGameSetup() {
         Set<MemoryGameSetup.GroupToGuess> groupsToGuess = groupsOfGameCards.stream()
-                .map(GroupOfGameCards::getFlatItemIds)
-                .map(MemoryGameSetup.GroupToGuess::new)
+                .map(groupsOfGameCards -> new MemoryGameSetup.GroupToGuess(
+                        groupsOfGameCards.getFlatItemsGroupId(),
+                        groupsOfGameCards.getFlatItemIds()
+                ))
                 .collect(Collectors.toUnmodifiableSet());
         return new MemoryGameSetup(groupsToGuess);
     }
