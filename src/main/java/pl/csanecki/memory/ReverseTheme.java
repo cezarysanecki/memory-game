@@ -2,7 +2,9 @@ package pl.csanecki.memory;
 
 public enum ReverseTheme {
 
-    Earth("/img/reverses/earth.png");
+    Earth("/img/reverses/earth.png"),
+    Jungle("/img/reverses/jungle.png"),
+    PremierLeague("/img/reverses/premier_league.png");
 
     private final String path;
 
