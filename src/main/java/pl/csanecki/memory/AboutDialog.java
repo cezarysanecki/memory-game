@@ -11,7 +11,7 @@ public class AboutDialog extends JDialog {
 
     private static final String TITLE = "O programie";
     private static final String FONT_SERIF_NAME = "Serif";
-    private static final String R_SYMBOL = "\u00AE";
+    private static final String R_SYMBOL = "®";
     private static final String AUTHOR = "Cezary Sanecki";
     private static final String GAME_TITLE = "Memory: Animals";
 
