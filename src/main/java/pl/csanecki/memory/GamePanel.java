@@ -4,7 +4,7 @@ import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
 import pl.csanecki.memory.setup.GameSetupCoordinator;
-import pl.csanecki.memory.util.Timer;
+import pl.csanecki.memory.util.MillisTimer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class GamePanel extends JPanel {
 
     private final GraphicCards graphicCards;
 
-    private final pl.csanecki.memory.util.Timer timer;
+    private final MillisTimer millisTimer;
 
     private final MemoryGame memoryGame;
 
@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
         setLayout(null);
 
         ScoreLabel labelScoreLabel = new ScoreLabel(seconds, gameConfig.columns * 110 + 10);
-        timer = new Timer(100, event -> {
+        millisTimer = new MillisTimer(100, event -> {
             seconds += 1;
             labelScoreLabel.updateSeconds(seconds);
         });
@@ -64,7 +64,7 @@ public class GamePanel extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent event) {
-            timer.start();
+            millisTimer.start();
             Optional<GraphicCard> chosenGraphicCard = graphicCards.findCardByCoordinates(event.getPoint());
             if (chosenGraphicCard.isEmpty()) {
                 return;
@@ -76,7 +76,7 @@ public class GamePanel extends JPanel {
             switch (result) {
                 case Failure -> chosenGraphicCard.get().turnToAverseUp();
                 case GameOver -> {
-                    timer.stop();
+                    millisTimer.stop();
                     graphicCards.refreshAll(memoryGame.currentState());
                 }
                 default -> graphicCards.refreshAll(memoryGame.currentState());
