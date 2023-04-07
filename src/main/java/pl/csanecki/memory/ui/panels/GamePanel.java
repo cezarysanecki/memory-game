@@ -1,5 +1,7 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.ui.panels;
 
+import pl.csanecki.memory.GameConfig;
+import pl.csanecki.memory.ScoreLabel;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
 import pl.csanecki.memory.setup.GameSetupCoordinator;
@@ -33,7 +35,7 @@ public class GamePanel extends JPanel {
         setLayout(null);
 
         ScoreLabel labelScoreLabel = new ScoreLabel(gameConfig.columns * 110 + 10);
-        millisTimer = MillisTimer.ofOneHundredMilliseconds();
+        millisTimer = MillisTimer.ofOneThousandMilliseconds();
         millisTimer.registerSubscribers(Set.of(labelScoreLabel));
         add(labelScoreLabel);
 

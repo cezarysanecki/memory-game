@@ -8,29 +8,26 @@ import java.util.concurrent.TimeUnit;
 
 public class MillisTimer {
 
-    private final long millisecondsRefresh;
+    private final MillisRefreshment millisRefreshment;
     private Collection<MillisTimerSubscriber> millisTimerSubscribers;
 
     private ScheduledExecutorService timer;
     private long passed;
 
-    private MillisTimer(long millisRefreshment) {
-        if (millisRefreshment <= 0) {
-            throw new IllegalStateException("value of milliseconds must be positive");
-        }
-        this.millisecondsRefresh = millisRefreshment;
+    private MillisTimer(MillisRefreshment millisRefreshment) {
+        this.millisRefreshment = millisRefreshment;
     }
 
     public static MillisTimer ofTenMilliseconds() {
-        return new MillisTimer(10);
+        return new MillisTimer(MillisRefreshment.Ten);
     }
 
     public static MillisTimer ofOneHundredMilliseconds() {
-        return new MillisTimer(100);
+        return new MillisTimer(MillisRefreshment.OneHundred);
     }
 
     public static MillisTimer ofOneThousandMilliseconds() {
-        return new MillisTimer(1_000);
+        return new MillisTimer(MillisRefreshment.OneThousand);
     }
 
     public void registerSubscribers(Collection<MillisTimerSubscriber> millisTimerSubscribers) {
@@ -41,9 +38,9 @@ public class MillisTimer {
         passed = 0;
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(() -> {
-            passed += millisecondsRefresh;
-            millisTimerSubscribers.forEach(millisTimerSubscriber -> millisTimerSubscriber.update(getResultAsMilliseconds()));
-        }, 0, millisecondsRefresh, TimeUnit.MILLISECONDS);
+            passed += millisRefreshment.millis;
+            millisTimerSubscribers.forEach(millisTimerSubscriber -> millisTimerSubscriber.update(getResultAsMilliseconds(), millisRefreshment));
+        }, 0, millisRefreshment.millis, TimeUnit.MILLISECONDS);
     }
 
     public void stop() {

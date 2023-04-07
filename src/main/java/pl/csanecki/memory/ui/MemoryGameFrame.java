@@ -1,8 +1,8 @@
 package pl.csanecki.memory.ui;
 
 import pl.csanecki.memory.GameConfig;
-import pl.csanecki.memory.GamePanel;
 import pl.csanecki.memory.ui.dialogs.AboutDialog;
+import pl.csanecki.memory.ui.panels.GamePanel;
 
 import javax.swing.*;
 import java.awt.*;

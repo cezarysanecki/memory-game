@@ -4,6 +4,6 @@ import java.time.Duration;
 
 public interface MillisTimerSubscriber {
 
-    void update(Duration passed);
+    void update(Duration passed, MillisRefreshment millisRefreshment);
 
 }
