@@ -20,7 +20,7 @@ public final class GameConfig {
     private static final int ALLOWED_IMAGE_HEIGHT = GraphicCard.REQUIRED_HEIGHT;
     private static final int ALLOWED_IMAGE_WIDTH = GraphicCard.REQUIRED_WIDTH;
 
-    private static final String DEFAULT_REVERSE = "/img/ziemia.png";
+    private static final String DEFAULT_REVERSE = "/img/reverses/earth.png";
     private static final int DEFAULT_NUMBER_OF_ROWS = 5;
     private static final int DEFAULT_NUMBER_OF_COLUMNS = 8;
     private static final int DEFAULT_NUMBER_OF_ITEMS = 2;
@@ -55,26 +55,26 @@ public final class GameConfig {
 
     public GameConfig() {
         this(DEFAULT_NUMBER_OF_ROWS, DEFAULT_NUMBER_OF_COLUMNS, DEFAULT_REVERSE, Set.of(
-                new Group("/img/1.png"),
-                new Group("/img/2.png"),
-                new Group("/img/3.png"),
-                new Group("/img/4.png"),
-                new Group("/img/5.png"),
-                new Group("/img/6.png"),
-                new Group("/img/7.png"),
-                new Group("/img/8.png"),
-                new Group("/img/9.png"),
-                new Group("/img/10.png"),
-                new Group("/img/11.png"),
-                new Group("/img/12.png"),
-                new Group("/img/13.png"),
-                new Group("/img/14.png"),
-                new Group("/img/15.png"),
-                new Group("/img/16.png"),
-                new Group("/img/17.png"),
-                new Group("/img/18.png"),
-                new Group("/img/19.png"),
-                new Group("/img/20.png")));
+                new Group("/img/averses/animals/giraffe.png"),
+                new Group("/img/averses/animals/lion.png"),
+                new Group("/img/averses/animals/elephant.png"),
+                new Group("/img/averses/animals/hippopotamus.png"),
+                new Group("/img/averses/animals/dog.png"),
+                new Group("/img/averses/animals/cat.png"),
+                new Group("/img/averses/animals/bear.png"),
+                new Group("/img/averses/animals/crocodile.png"),
+                new Group("/img/averses/animals/buffalo.png"),
+                new Group("/img/averses/animals/cow.png"),
+                new Group("/img/averses/animals/parrot.png"),
+                new Group("/img/averses/animals/horse.png"),
+                new Group("/img/averses/animals/deer.png"),
+                new Group("/img/averses/animals/snake.png"),
+                new Group("/img/averses/animals/tiger.png"),
+                new Group("/img/averses/animals/dolphin.png"),
+                new Group("/img/averses/animals/boar.png"),
+                new Group("/img/averses/animals/seal.png"),
+                new Group("/img/averses/animals/squirrel.png"),
+                new Group("/img/averses/animals/rabbit.png")));
     }
 
     public GameSetupCoordinator createGameSetupCoordinator() {
