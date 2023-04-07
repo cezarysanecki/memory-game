@@ -4,20 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-public class AboutDialog extends JDialog {
-
-    private static final int WIDTH_DIALOG = 400;
-    private static final int HEIGHT_DIALOG = 200;
+public class AboutDialog extends GenericModalDialog {
 
     private static final String TITLE = "O programie";
     private static final String FONT_SERIF_NAME = "Serif";
     private static final String R_SYMBOL = "®";
     private static final String AUTHOR = "Cezary Sanecki";
     private static final String GAME_TITLE = "Memory: Animals";
+    private static final String ACCEPT_BUTTON_NAME = "OK";
 
     public AboutDialog(JFrame owner) {
-        super(owner, TITLE, true);
-        setSize(WIDTH_DIALOG, HEIGHT_DIALOG);
+        super(owner, TITLE);
         setLayout(new GridLayout(4, 1));
 
         add(gamePanel());
@@ -25,10 +22,6 @@ public class AboutDialog extends JDialog {
         add(authorPanel());
         add(buttonPanel());
 
-        setLocation(
-                owner.getLocation().x + (owner.getWidth() - getWidth()) / 2,
-                owner.getLocation().y + (owner.getHeight() - getHeight()) / 2);
-        setResizable(false);
         setVisible(true);
     }
 
@@ -51,7 +44,7 @@ public class AboutDialog extends JDialog {
     }
 
     private JPanel buttonPanel() {
-        JButton okButton = new JButton("OK");
+        JButton okButton = new JButton(ACCEPT_BUTTON_NAME);
         okButton.addActionListener(event -> setVisible(false));
 
         JPanel helperPanel = new JPanel();
