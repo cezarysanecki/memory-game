@@ -6,7 +6,7 @@ import pl.csanecki.memory.GamePanel;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainFrame extends JFrame {
+public class MemoryGameBoard extends JFrame {
 
     private static final int WIDTH_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int HEIGHT_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -15,11 +15,11 @@ public class MainFrame extends JFrame {
     private static final String MAIN_MENU_ABOUT_ITEM = "O programie";
     private static final String MAIN_MENU_EXIT_ITEM = "Zamknij";
 
-    public MainFrame() {
+    public MemoryGameBoard(GameConfig gameConfig) {
         JMenuBar menuBar = prepareMenuBar();
         setJMenuBar(menuBar);
 
-        add(new GamePanel(new GameConfig()), BorderLayout.CENTER);
+        add(new GamePanel(gameConfig), BorderLayout.CENTER);
 
         pack();
         setBounds(
