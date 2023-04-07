@@ -8,7 +8,9 @@ import pl.csanecki.memory.setup.GroupOfGameCards;
 import pl.csanecki.memory.ui.items.GraphicCard;
 
 import javax.swing.*;
+import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,7 +22,9 @@ public final class GameConfig {
     private static final int ALLOWED_IMAGE_HEIGHT = GraphicCard.REQUIRED_HEIGHT;
     private static final int ALLOWED_IMAGE_WIDTH = GraphicCard.REQUIRED_WIDTH;
 
-    private static final String DEFAULT_REVERSE = "/img/reverses/premier_league.png";
+    private static final ReverseTheme DEFAULT_REVERSE = ReverseTheme.Jungle;
+    private static final ObversesTheme DEFAULT_OBVERSES = ObversesTheme.EnglishClubs;
+
     private static final int DEFAULT_NUMBER_OF_ROWS = 5;
     private static final int DEFAULT_NUMBER_OF_COLUMNS = 8;
     private static final int DEFAULT_NUMBER_OF_ITEMS = 2;
@@ -33,48 +37,30 @@ public final class GameConfig {
 
     public final Set<Group> groups;
 
-    public GameConfig(int rows, int columns, String reverseImagePath, Set<Group> groups) {
-        int numberOfElements = countNumberOfElements(groups);
-        int numberOfFields = countNumberOfFields(rows, columns);
-        if (numberOfElements != numberOfFields) {
-            throw new IllegalArgumentException("number of elements and fields must be equal");
-        }
+    public GameConfig(int rows, int columns, ReverseTheme reverseTheme, ObversesTheme obversesTheme) {
+        Set<Group> groups1 = Arrays.stream((new File(getClass().getResource(obversesTheme.getPath()).getPath())).list())
+            .filter(f -> f.endsWith(".png"))
+            .map(f -> obversesTheme.getPath() + f)
+            .map(Group::new)
+            .collect(Collectors.toUnmodifiableSet());
 
-        URL reverseImageUrl = Objects.requireNonNull(getClass().getResource(reverseImagePath));
+
+//        int numberOfElements = countNumberOfElements(groups);
+        int numberOfFields = countNumberOfFields(rows, columns);
+//        if (numberOfElements != numberOfFields) {
+//            throw new IllegalArgumentException("number of elements and fields must be equal");
+//        }
+
+        URL reverseImageUrl = Objects.requireNonNull(getClass().getResource(reverseTheme.getPath()));
 
         this.rows = rows;
         this.columns = columns;
         this.reverseImage = new ImageIcon(reverseImageUrl);
-        this.groups = groups;
-
-        if (reverseImage.getIconWidth() != ALLOWED_IMAGE_WIDTH || reverseImage.getIconHeight() != ALLOWED_IMAGE_HEIGHT) {
-            throw new IllegalArgumentException(
-                    String.format("image " + reverseImagePath + " must be %sx%s", ALLOWED_IMAGE_WIDTH, ALLOWED_IMAGE_HEIGHT));
-        }
+        this.groups = groups1;
     }
 
     public GameConfig() {
-        this(DEFAULT_NUMBER_OF_ROWS, DEFAULT_NUMBER_OF_COLUMNS, DEFAULT_REVERSE, Set.of(
-                new Group("/img/obverses/animals/giraffe.png"),
-                new Group("/img/obverses/animals/lion.png"),
-                new Group("/img/obverses/animals/elephant.png"),
-                new Group("/img/obverses/animals/hippopotamus.png"),
-                new Group("/img/obverses/animals/dog.png"),
-                new Group("/img/obverses/animals/cat.png"),
-                new Group("/img/obverses/animals/bear.png"),
-                new Group("/img/obverses/animals/crocodile.png"),
-                new Group("/img/obverses/animals/buffalo.png"),
-                new Group("/img/obverses/animals/cow.png"),
-                new Group("/img/obverses/animals/parrot.png"),
-                new Group("/img/obverses/animals/horse.png"),
-                new Group("/img/obverses/animals/deer.png"),
-                new Group("/img/obverses/animals/snake.png"),
-                new Group("/img/obverses/animals/tiger.png"),
-                new Group("/img/obverses/animals/dolphin.png"),
-                new Group("/img/obverses/animals/boar.png"),
-                new Group("/img/obverses/animals/seal.png"),
-                new Group("/img/obverses/animals/squirrel.png"),
-                new Group("/img/obverses/animals/rabbit.png")));
+        this(DEFAULT_NUMBER_OF_ROWS, DEFAULT_NUMBER_OF_COLUMNS, DEFAULT_REVERSE, DEFAULT_OBVERSES);
     }
 
     public GameSetupCoordinator createGameSetupCoordinator() {
@@ -82,20 +68,20 @@ public final class GameConfig {
         AtomicInteger flatItemsGroupsIdGenerator = new AtomicInteger(0);
 
         Set<GroupOfGameCards> groupToGuesses = this.groups.stream()
-                .map(group -> IntStream.of(0, group.numberOfItems)
-                        .mapToObj(index -> FlatItemId.of(flatItemIdGenerator.getAndIncrement()))
-                        .map(flatItemId -> new GameCard(flatItemId, reverseImage, group.obverseImage))
-                        .collect(Collectors.toUnmodifiableSet()))
-                .map(gameCards -> new GroupOfGameCards(
-                        FlatItemsGroupId.of(flatItemsGroupsIdGenerator.getAndIncrement()), gameCards))
-                .collect(Collectors.toUnmodifiableSet());
+            .map(group -> IntStream.of(0, group.numberOfItems)
+                .mapToObj(index -> FlatItemId.of(flatItemIdGenerator.getAndIncrement()))
+                .map(flatItemId -> new GameCard(flatItemId, reverseImage, group.obverseImage))
+                .collect(Collectors.toUnmodifiableSet()))
+            .map(gameCards -> new GroupOfGameCards(
+                FlatItemsGroupId.of(flatItemsGroupsIdGenerator.getAndIncrement()), gameCards))
+            .collect(Collectors.toUnmodifiableSet());
         return new GameSetupCoordinator(groupToGuesses);
     }
 
     private static int countNumberOfElements(Set<Group> groups) {
         return groups.stream()
-                .map(group -> group.numberOfItems)
-                .reduce(0, Integer::sum, Integer::sum);
+            .map(group -> group.numberOfItems)
+            .reduce(0, Integer::sum, Integer::sum);
     }
 
     private static int countNumberOfFields(int rows, int columns) {
@@ -116,7 +102,7 @@ public final class GameConfig {
 
             if (obverseImage.getIconWidth() != ALLOWED_IMAGE_WIDTH || obverseImage.getIconHeight() != ALLOWED_IMAGE_HEIGHT) {
                 throw new IllegalArgumentException(
-                        String.format("image " + obverseImagePath + " must be %sx%s", ALLOWED_IMAGE_WIDTH, ALLOWED_IMAGE_HEIGHT));
+                    String.format("image " + obverseImagePath + " must be %sx%s", ALLOWED_IMAGE_WIDTH, ALLOWED_IMAGE_HEIGHT));
             }
         }
 
