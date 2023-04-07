@@ -12,8 +12,8 @@ public class GroupOfFlatItems {
     private final Set<FlatItem> flatItems;
 
     private GroupOfFlatItems(Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
-        if (flatItemIds.size() < 2) {
-            throw new IllegalStateException("group of flat items needs at least two items");
+        if (flatItemIds.isEmpty()) {
+            throw new IllegalStateException("group of flat items cannot be empty");
         }
         this.flatItems = flatItemIds.stream()
                 .map(creator)

@@ -55,9 +55,9 @@ class GroupOfFlatItemsTest {
     }
 
     @Test
-    void cannot_create_group_of_items_with_one_item() {
+    void group_of_items_should_have_at_least_one_element() {
         assertThrows(IllegalStateException.class,
-                () -> GroupOfFlatItems.allReversed(Set.of(firstFlatItemId)));
+                () -> GroupOfFlatItems.allReversed(Set.of()));
     }
 
     @Test
