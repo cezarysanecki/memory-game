@@ -55,26 +55,26 @@ public final class GameConfig {
 
     public GameConfig() {
         this(DEFAULT_NUMBER_OF_ROWS, DEFAULT_NUMBER_OF_COLUMNS, DEFAULT_REVERSE, Set.of(
-                new Group("/img/averses/animals/giraffe.png"),
-                new Group("/img/averses/animals/lion.png"),
-                new Group("/img/averses/animals/elephant.png"),
-                new Group("/img/averses/animals/hippopotamus.png"),
-                new Group("/img/averses/animals/dog.png"),
-                new Group("/img/averses/animals/cat.png"),
-                new Group("/img/averses/animals/bear.png"),
-                new Group("/img/averses/animals/crocodile.png"),
-                new Group("/img/averses/animals/buffalo.png"),
-                new Group("/img/averses/animals/cow.png"),
-                new Group("/img/averses/animals/parrot.png"),
-                new Group("/img/averses/animals/horse.png"),
-                new Group("/img/averses/animals/deer.png"),
-                new Group("/img/averses/animals/snake.png"),
-                new Group("/img/averses/animals/tiger.png"),
-                new Group("/img/averses/animals/dolphin.png"),
-                new Group("/img/averses/animals/boar.png"),
-                new Group("/img/averses/animals/seal.png"),
-                new Group("/img/averses/animals/squirrel.png"),
-                new Group("/img/averses/animals/rabbit.png")));
+                new Group("/img/obverses/animals/giraffe.png"),
+                new Group("/img/obverses/animals/lion.png"),
+                new Group("/img/obverses/animals/elephant.png"),
+                new Group("/img/obverses/animals/hippopotamus.png"),
+                new Group("/img/obverses/animals/dog.png"),
+                new Group("/img/obverses/animals/cat.png"),
+                new Group("/img/obverses/animals/bear.png"),
+                new Group("/img/obverses/animals/crocodile.png"),
+                new Group("/img/obverses/animals/buffalo.png"),
+                new Group("/img/obverses/animals/cow.png"),
+                new Group("/img/obverses/animals/parrot.png"),
+                new Group("/img/obverses/animals/horse.png"),
+                new Group("/img/obverses/animals/deer.png"),
+                new Group("/img/obverses/animals/snake.png"),
+                new Group("/img/obverses/animals/tiger.png"),
+                new Group("/img/obverses/animals/dolphin.png"),
+                new Group("/img/obverses/animals/boar.png"),
+                new Group("/img/obverses/animals/seal.png"),
+                new Group("/img/obverses/animals/squirrel.png"),
+                new Group("/img/obverses/animals/rabbit.png")));
     }
 
     public GameSetupCoordinator createGameSetupCoordinator() {
