@@ -1,10 +1,10 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.ui;
 
 import javax.swing.*;
 
-public abstract class GenericModalDialog extends JDialog {
+abstract class GenericModalDialog extends JDialog {
 
-    public GenericModalDialog(JFrame owner, String title) {
+    GenericModalDialog(JFrame owner, String title) {
         super(owner, title, true);
 
         setSize(owner.getWidth() / 2, owner.getHeight() / 3);

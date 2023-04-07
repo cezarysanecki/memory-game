@@ -1,9 +1,12 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.ui;
+
+import pl.csanecki.memory.GameConfig;
+import pl.csanecki.memory.GamePanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MemoryFrame extends JFrame {
+public class MainFrame extends JFrame {
 
     private static final int WIDTH_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int HEIGHT_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -12,11 +15,7 @@ public class MemoryFrame extends JFrame {
     private static final String MAIN_MENU_ABOUT_ITEM = "O programie";
     private static final String MAIN_MENU_EXIT_ITEM = "Zamknij";
 
-    public static void main(String[] args) {
-        new MemoryFrame();
-    }
-
-    public MemoryFrame() {
+    public MainFrame() {
         JMenuBar menuBar = prepareMenuBar();
         setJMenuBar(menuBar);
 
