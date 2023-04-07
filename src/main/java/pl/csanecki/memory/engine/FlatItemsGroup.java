@@ -1,6 +1,6 @@
 package pl.csanecki.memory.engine;
 
-import pl.csanecki.memory.state.GroupOfFlatItemsCurrentState;
+import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
 
 import java.util.Objects;
 import java.util.Set;

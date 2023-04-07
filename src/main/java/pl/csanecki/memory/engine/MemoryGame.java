@@ -1,6 +1,6 @@
 package pl.csanecki.memory.engine;
 
-import pl.csanecki.memory.state.MemoryGameCurrentState;
+import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
 import pl.csanecki.memory.util.CollectionUtils;
 
 import java.util.HashSet;

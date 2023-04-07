@@ -1,7 +1,7 @@
 package pl.csanecki.memory;
 
 import pl.csanecki.memory.engine.FlatItemId;
-import pl.csanecki.memory.state.FlatItemCurrentState;
+import pl.csanecki.memory.engine.state.FlatItemCurrentState;
 
 import javax.swing.*;
 import java.awt.*;

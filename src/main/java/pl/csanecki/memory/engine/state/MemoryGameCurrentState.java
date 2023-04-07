@@ -1,4 +1,4 @@
-package pl.csanecki.memory.state;
+package pl.csanecki.memory.engine.state;
 
 import java.util.Set;
 

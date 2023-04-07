@@ -1,7 +1,7 @@
 package pl.csanecki.memory;
 
-import pl.csanecki.memory.state.GroupOfFlatItemsCurrentState;
-import pl.csanecki.memory.state.MemoryGameCurrentState;
+import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
+import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
 
 import java.awt.geom.Point2D;
 import java.util.*;
