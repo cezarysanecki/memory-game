@@ -24,9 +24,8 @@ public final class GameConfig {
 
     private static final ReverseTheme DEFAULT_REVERSE = ReverseTheme.Jungle;
     private static final ObversesTheme DEFAULT_OBVERSES = ObversesTheme.EnglishClubs;
+    private static final Difficulty DEFAULT_DIFFICULTY = Difficulty.Easy;
 
-    private static final int DEFAULT_NUMBER_OF_ROWS = 5;
-    private static final int DEFAULT_NUMBER_OF_COLUMNS = 8;
     private static final int DEFAULT_NUMBER_OF_ITEMS = 2;
 
     public final int rows;
@@ -37,30 +36,24 @@ public final class GameConfig {
 
     public final Set<Group> groups;
 
-    public GameConfig(int rows, int columns, ReverseTheme reverseTheme, ObversesTheme obversesTheme) {
-        Set<Group> groups1 = Arrays.stream((new File(getClass().getResource(obversesTheme.getPath()).getPath())).list())
+    public GameConfig(Difficulty difficulty, ReverseTheme reverseTheme, ObversesTheme obversesTheme) {
+        Set<Group> groups = Arrays.stream((new File(getClass().getResource(obversesTheme.getPath()).getPath())).list())
             .filter(f -> f.endsWith(".png"))
             .map(f -> obversesTheme.getPath() + f)
             .map(Group::new)
             .collect(Collectors.toUnmodifiableSet());
 
 
-//        int numberOfElements = countNumberOfElements(groups);
-        int numberOfFields = countNumberOfFields(rows, columns);
-//        if (numberOfElements != numberOfFields) {
-//            throw new IllegalArgumentException("number of elements and fields must be equal");
-//        }
-
         URL reverseImageUrl = Objects.requireNonNull(getClass().getResource(reverseTheme.getPath()));
 
-        this.rows = rows;
-        this.columns = columns;
+        this.rows = difficulty.numberOfRows;
+        this.columns = difficulty.numberOfColumns;
         this.reverseImage = new ImageIcon(reverseImageUrl);
-        this.groups = groups1;
+        this.groups = groups;
     }
 
     public GameConfig() {
-        this(DEFAULT_NUMBER_OF_ROWS, DEFAULT_NUMBER_OF_COLUMNS, DEFAULT_REVERSE, DEFAULT_OBVERSES);
+        this(DEFAULT_DIFFICULTY, DEFAULT_REVERSE, DEFAULT_OBVERSES);
     }
 
     public GameSetupCoordinator createGameSetupCoordinator() {
