@@ -20,7 +20,7 @@ public final class GameConfig {
     private static final int ALLOWED_IMAGE_HEIGHT = GraphicCard.REQUIRED_HEIGHT;
     private static final int ALLOWED_IMAGE_WIDTH = GraphicCard.REQUIRED_WIDTH;
 
-    private static final String DEFAULT_REVERSE = "/img/reverses/earth.png";
+    private static final String DEFAULT_REVERSE = "/img/reverses/premier_league.png";
     private static final int DEFAULT_NUMBER_OF_ROWS = 5;
     private static final int DEFAULT_NUMBER_OF_COLUMNS = 8;
     private static final int DEFAULT_NUMBER_OF_ITEMS = 2;
