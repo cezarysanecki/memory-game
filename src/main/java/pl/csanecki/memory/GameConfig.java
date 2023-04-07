@@ -5,6 +5,7 @@ import pl.csanecki.memory.engine.FlatItemsGroupId;
 import pl.csanecki.memory.setup.GameCard;
 import pl.csanecki.memory.setup.GameSetupCoordinator;
 import pl.csanecki.memory.setup.GroupOfGameCards;
+import pl.csanecki.memory.ui.items.GraphicCard;
 
 import javax.swing.*;
 import java.net.URL;

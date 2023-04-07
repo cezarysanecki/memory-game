@@ -1,4 +1,4 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.ui.items;
 
 import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
 import pl.csanecki.memory.engine.state.MemoryGameCurrentState;

@@ -1,4 +1,4 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.ui.items;
 
 import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.state.FlatItemCurrentState;

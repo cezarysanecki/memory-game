@@ -3,6 +3,8 @@ package pl.csanecki.memory;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
 import pl.csanecki.memory.setup.GameSetupCoordinator;
+import pl.csanecki.memory.ui.items.GraphicCard;
+import pl.csanecki.memory.ui.items.GraphicCards;
 import pl.csanecki.memory.util.MillisTimer;
 
 import javax.swing.*;

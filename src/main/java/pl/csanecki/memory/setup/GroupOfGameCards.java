@@ -1,6 +1,6 @@
 package pl.csanecki.memory.setup;
 
-import pl.csanecki.memory.GraphicCard;
+import pl.csanecki.memory.ui.items.GraphicCard;
 import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.FlatItemsGroupId;
 

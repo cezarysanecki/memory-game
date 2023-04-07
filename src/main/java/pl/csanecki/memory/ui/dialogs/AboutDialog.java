@@ -1,10 +1,10 @@
-package pl.csanecki.memory.ui;
+package pl.csanecki.memory.ui.dialogs;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-class AboutDialog extends GenericModalDialog {
+public class AboutDialog extends GenericModalDialog {
 
     private static final String TITLE = "O programie";
     private static final String FONT_SERIF_NAME = "Serif";
@@ -13,7 +13,7 @@ class AboutDialog extends GenericModalDialog {
     private static final String GAME_TITLE = "Memory: Animals";
     private static final String ACCEPT_BUTTON_NAME = "OK";
 
-    AboutDialog(JFrame owner) {
+    public AboutDialog(JFrame owner) {
         super(owner, TITLE);
         setLayout(new GridLayout(4, 1));
 

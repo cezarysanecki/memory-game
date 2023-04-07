@@ -1,7 +1,7 @@
 package pl.csanecki.memory.setup;
 
-import pl.csanecki.memory.GraphicCard;
-import pl.csanecki.memory.GraphicCards;
+import pl.csanecki.memory.ui.items.GraphicCard;
+import pl.csanecki.memory.ui.items.GraphicCards;
 import pl.csanecki.memory.engine.MemoryGameSetup;
 
 import java.util.Collection;

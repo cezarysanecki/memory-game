@@ -1,4 +1,4 @@
-package pl.csanecki.memory.ui;
+package pl.csanecki.memory.ui.dialogs;
 
 import javax.swing.*;
 
