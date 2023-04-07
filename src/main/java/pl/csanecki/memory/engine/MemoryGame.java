@@ -3,9 +3,7 @@ package pl.csanecki.memory.engine;
 import pl.csanecki.memory.state.MemoryGameCurrentState;
 import pl.csanecki.memory.util.CollectionUtils;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,18 +18,18 @@ public class MemoryGame {
     private FlatItemsGroup current = null;
 
     public MemoryGame(MemoryGameSetup memoryGameSetup) {
-        List<FlatItemId> flatItemIds = memoryGameSetup.groupsToGuesses()
-                .stream()
-                .map(MemoryGameSetup.GroupToGuess::flatItemIds)
-                .flatMap(Collection::stream)
-                .toList();
-        if (CollectionUtils.containsDuplicates(flatItemIds)) {
+        if (CollectionUtils.containsDuplicates(memoryGameSetup.getAllFlatItemIds())) {
             throw new IllegalArgumentException("flat item ids must be unique");
+        }
+        if (CollectionUtils.containsDuplicates(memoryGameSetup.getAllFlatItemsGroupIds())) {
+            throw new IllegalArgumentException("flat item groups ids must be unique");
         }
 
         this.groups = memoryGameSetup.groupsToGuesses()
                 .stream()
-                .map(groupToGuess -> FlatItemsGroup.allReversed(groupToGuess.flatItemIds()))
+                .map(groupToGuess -> FlatItemsGroup.allReversed(
+                        groupToGuess.flatItemsGroupId(),
+                        groupToGuess.flatItemIds()))
                 .collect(Collectors.toUnmodifiableSet());
     }
 
