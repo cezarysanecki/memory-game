@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class FlatItemsGroup {
+public final class FlatItemsGroup {
 
     private final FlatItemsGroupId flatItemsGroupId;
     private final Set<FlatItem> flatItems;
@@ -38,6 +38,11 @@ public class FlatItemsGroup {
         flatItem.turnAverseUp();
     }
 
+    public boolean contains(FlatItemId flatItemId) {
+        return flatItems.stream()
+                .anyMatch(flatItem -> flatItem.getFlatItemId().equals(flatItemId));
+    }
+
     public boolean isAllReverseUp() {
         return flatItems.stream()
                 .allMatch(FlatItem::isReverseUp);
@@ -48,22 +53,17 @@ public class FlatItemsGroup {
                 .allMatch(FlatItem::isAverseUp);
     }
 
-    public boolean contains(FlatItemId flatItemId) {
-        return flatItems.stream()
-                .anyMatch(flatItem -> flatItem.getFlatItemId().equals(flatItemId));
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FlatItemsGroup that = (FlatItemsGroup) o;
-        return Objects.equals(flatItems, that.flatItems);
+        return Objects.equals(flatItemsGroupId, that.flatItemsGroupId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(flatItems);
+        return Objects.hash(flatItemsGroupId);
     }
 
     public GroupOfFlatItemsCurrentState currentState() {

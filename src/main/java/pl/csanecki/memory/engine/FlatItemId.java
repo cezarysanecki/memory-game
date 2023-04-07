@@ -1,6 +1,8 @@
 package pl.csanecki.memory.engine;
 
-public class FlatItemId {
+import java.util.Objects;
+
+public final class FlatItemId {
 
     private final int id;
 
@@ -10,6 +12,19 @@ public class FlatItemId {
 
     public static FlatItemId of(int id) {
         return new FlatItemId(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FlatItemId that = (FlatItemId) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

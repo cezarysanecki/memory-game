@@ -4,7 +4,7 @@ import pl.csanecki.memory.state.FlatItemCurrentState;
 
 import java.util.Objects;
 
-public class FlatItem {
+public final class FlatItem {
 
     private enum Side {
         REVERSE, AVERSE
