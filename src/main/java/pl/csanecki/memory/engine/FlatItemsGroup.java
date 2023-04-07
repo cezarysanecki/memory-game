@@ -30,12 +30,12 @@ public final class FlatItemsGroup {
         flatItems.forEach(FlatItem::turnReverseUp);
     }
 
-    public void turnToAverse(FlatItemId flatItemId) {
+    public void turnToObverse(FlatItemId flatItemId) {
         FlatItem flatItem = flatItems.stream()
                 .filter(item -> item.getFlatItemId().equals(flatItemId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("flat item " + flatItemId + " does not belong to group"));
-        flatItem.turnAverseUp();
+        flatItem.turnObverseUp();
     }
 
     public boolean contains(FlatItemId flatItemId) {
@@ -48,9 +48,9 @@ public final class FlatItemsGroup {
                 .allMatch(FlatItem::isReverseUp);
     }
 
-    public boolean isAllAverseUp() {
+    public boolean isAllObverseUp() {
         return flatItems.stream()
-                .allMatch(FlatItem::isAverseUp);
+                .allMatch(FlatItem::isObverseUp);
     }
 
     @Override

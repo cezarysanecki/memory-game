@@ -13,23 +13,23 @@ public class GraphicCard extends JLabel {
     public static final int REQUIRED_HEIGHT = 100;
 
     ImageIcon reverseIcon;
-    ImageIcon averseIcon;
-    boolean averse = false;
+    ImageIcon obverseIcon;
+    boolean obverse = false;
 
     final FlatItemId flatItemId;
 
-    public GraphicCard(FlatItemId flatItemId, ImageIcon reverseIcon, ImageIcon averseIcon) {
+    public GraphicCard(FlatItemId flatItemId, ImageIcon reverseIcon, ImageIcon obverseIcon) {
         setPreferredSize(new Dimension(REQUIRED_WIDTH, REQUIRED_HEIGHT));
 
         this.flatItemId = flatItemId;
         this.reverseIcon = reverseIcon;
-        this.averseIcon = averseIcon;
+        this.obverseIcon = obverseIcon;
 
         setIcon(currentIcon());
     }
 
     public void refresh(FlatItemCurrentState flatItem) {
-        averse = flatItem.averse();
+        obverse = flatItem.obverse();
         setIcon(currentIcon());
     }
 
@@ -38,7 +38,7 @@ public class GraphicCard extends JLabel {
     }
 
     private ImageIcon currentIcon() {
-        return averse ? averseIcon : reverseIcon;
+        return obverse ? obverseIcon : reverseIcon;
     }
 
     public boolean contains(Point2D point) {
@@ -63,8 +63,8 @@ public class GraphicCard extends JLabel {
         return this.flatItemId.equals(graphicCard.flatItemId);
     }
 
-    public void turnToAverseUp() {
-        averse = true;
+    public void turnToObverseUp() {
+        obverse = true;
         setIcon(currentIcon());
     }
 }

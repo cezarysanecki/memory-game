@@ -73,7 +73,7 @@ public class GamePanel extends JPanel {
                     .ifPresent(graphicCard -> {
                         GuessResult result = memoryGame.turnCard(graphicCard.getFlatItemId());
                         switch (result) {
-                            case Failure -> graphicCard.turnToAverseUp();
+                            case Failure -> graphicCard.turnToObverseUp();
                             case GameOver -> {
                                 millisTimer.stop();
                                 graphicCards.refreshAll(memoryGame.currentState());

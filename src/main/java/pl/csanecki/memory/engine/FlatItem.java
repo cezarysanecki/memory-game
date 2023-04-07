@@ -7,7 +7,7 @@ import java.util.Objects;
 public final class FlatItem {
 
     private enum Side {
-        REVERSE, AVERSE
+        Reverse, Obverse
     }
 
     private final FlatItemId flatItemId;
@@ -18,32 +18,32 @@ public final class FlatItem {
         this.side = side;
     }
 
-    public static FlatItem averseUp(FlatItemId flatItemId) {
-        return new FlatItem(flatItemId, Side.AVERSE);
+    public static FlatItem obverseUp(FlatItemId flatItemId) {
+        return new FlatItem(flatItemId, Side.Obverse);
     }
 
     public static FlatItem reverseUp(FlatItemId flatItemId) {
-        return new FlatItem(flatItemId, Side.REVERSE);
+        return new FlatItem(flatItemId, Side.Reverse);
     }
 
     public void flip() {
-        side = side == Side.AVERSE ? Side.REVERSE : Side.AVERSE;
+        side = side == Side.Obverse ? Side.Reverse : Side.Obverse;
     }
 
-    public void turnAverseUp() {
-        side = Side.AVERSE;
+    public void turnObverseUp() {
+        side = Side.Obverse;
     }
 
     public void turnReverseUp() {
-        side = Side.REVERSE;
+        side = Side.Reverse;
     }
 
-    public boolean isAverseUp() {
-        return side == Side.AVERSE;
+    public boolean isObverseUp() {
+        return side == Side.Obverse;
     }
 
     public boolean isReverseUp() {
-        return side == Side.REVERSE;
+        return side == Side.Reverse;
     }
 
     public FlatItemId getFlatItemId() {
@@ -64,6 +64,6 @@ public final class FlatItem {
     }
 
     public FlatItemCurrentState currentState() {
-        return new FlatItemCurrentState(flatItemId, side == Side.AVERSE);
+        return new FlatItemCurrentState(flatItemId, side == Side.Obverse);
     }
 }

@@ -84,7 +84,7 @@ public final class GameConfig {
         Set<GroupOfGameCards> groupToGuesses = this.groups.stream()
                 .map(group -> IntStream.of(0, group.numberOfItems)
                         .mapToObj(index -> FlatItemId.of(flatItemIdGenerator.getAndIncrement()))
-                        .map(flatItemId -> new GameCard(flatItemId, reverseImage, group.averseImage))
+                        .map(flatItemId -> new GameCard(flatItemId, reverseImage, group.obverseImage))
                         .collect(Collectors.toUnmodifiableSet()))
                 .map(gameCards -> new GroupOfGameCards(
                         FlatItemsGroupId.of(flatItemsGroupsIdGenerator.getAndIncrement()), gameCards))
@@ -105,23 +105,23 @@ public final class GameConfig {
     public static class Group {
 
         // 100x100 px
-        public final ImageIcon averseImage;
+        public final ImageIcon obverseImage;
         public final int numberOfItems;
 
-        public Group(String averseImagePath, int numberOfItems) {
-            URL averseImageUrl = Objects.requireNonNull(getClass().getResource(averseImagePath));
+        public Group(String obverseImagePath, int numberOfItems) {
+            URL obverseImageUrl = Objects.requireNonNull(getClass().getResource(obverseImagePath));
 
-            this.averseImage = new ImageIcon(averseImageUrl);
+            this.obverseImage = new ImageIcon(obverseImageUrl);
             this.numberOfItems = numberOfItems;
 
-            if (averseImage.getIconWidth() != ALLOWED_IMAGE_WIDTH || averseImage.getIconHeight() != ALLOWED_IMAGE_HEIGHT) {
+            if (obverseImage.getIconWidth() != ALLOWED_IMAGE_WIDTH || obverseImage.getIconHeight() != ALLOWED_IMAGE_HEIGHT) {
                 throw new IllegalArgumentException(
-                        String.format("image " + averseImagePath + " must be %sx%s", ALLOWED_IMAGE_WIDTH, ALLOWED_IMAGE_HEIGHT));
+                        String.format("image " + obverseImagePath + " must be %sx%s", ALLOWED_IMAGE_WIDTH, ALLOWED_IMAGE_HEIGHT));
             }
         }
 
-        public Group(String averseImagePath) {
-            this(averseImagePath, DEFAULT_NUMBER_OF_ITEMS);
+        public Group(String obverseImagePath) {
+            this(obverseImagePath, DEFAULT_NUMBER_OF_ITEMS);
         }
     }
 

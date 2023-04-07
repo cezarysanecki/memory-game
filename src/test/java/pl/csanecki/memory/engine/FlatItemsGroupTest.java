@@ -23,27 +23,27 @@ class FlatItemsGroupTest {
     }
 
     @Test
-    void all_are_not_averse_up_and_reserve_up_when_one_of_items_is_averse_up_from_all() {
+    void all_are_not_obverse_up_and_reserve_up_when_one_of_items_is_obverse_up_from_all() {
         FlatItemsGroup flatItemsGroup = FlatItemsGroup.allReversed(
                 flatItemsGroupId,
                 Set.of(firstFlatItemId, secondFlatItemId));
 
-        flatItemsGroup.turnToAverse(firstFlatItemId);
+        flatItemsGroup.turnToObverse(firstFlatItemId);
 
         assertFalse(flatItemsGroup.isAllReverseUp());
-        assertFalse(flatItemsGroup.isAllAverseUp());
+        assertFalse(flatItemsGroup.isAllObverseUp());
     }
 
     @Test
-    void turning_all_items_make_them_be_averse_up() {
+    void turning_all_items_make_them_be_obverse_up() {
         FlatItemsGroup flatItemsGroup = FlatItemsGroup.allReversed(
                 flatItemsGroupId,
                 Set.of(firstFlatItemId, secondFlatItemId));
 
-        flatItemsGroup.turnToAverse(firstFlatItemId);
-        flatItemsGroup.turnToAverse(secondFlatItemId);
+        flatItemsGroup.turnToObverse(firstFlatItemId);
+        flatItemsGroup.turnToObverse(secondFlatItemId);
 
-        assertTrue(flatItemsGroup.isAllAverseUp());
+        assertTrue(flatItemsGroup.isAllObverseUp());
     }
 
     @Test
@@ -52,7 +52,7 @@ class FlatItemsGroupTest {
                 flatItemsGroupId,
                 Set.of(firstFlatItemId, secondFlatItemId));
 
-        flatItemsGroup.turnToAverse(firstFlatItemId);
+        flatItemsGroup.turnToObverse(firstFlatItemId);
         flatItemsGroup.turnAllToReverseUp();
 
         assertTrue(flatItemsGroup.isAllReverseUp());
@@ -73,7 +73,7 @@ class FlatItemsGroupTest {
                 Set.of(firstFlatItemId, secondFlatItemId));
 
         assertThrows(IllegalStateException.class,
-                () -> flatItemsGroup.turnToAverse(notConsideredFlatItem));
+                () -> flatItemsGroup.turnToObverse(notConsideredFlatItem));
     }
 
 }

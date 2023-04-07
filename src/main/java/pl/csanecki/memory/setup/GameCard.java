@@ -5,9 +5,9 @@ import pl.csanecki.memory.engine.FlatItemId;
 
 import javax.swing.*;
 
-public record GameCard(FlatItemId flatItemId, ImageIcon reserveIcon, ImageIcon averseIcon) {
+public record GameCard(FlatItemId flatItemId, ImageIcon reserveIcon, ImageIcon obverseIcon) {
 
     public GraphicCard toGraphicCard() {
-        return new GraphicCard(flatItemId, reserveIcon, averseIcon);
+        return new GraphicCard(flatItemId, reserveIcon, obverseIcon);
     }
 }

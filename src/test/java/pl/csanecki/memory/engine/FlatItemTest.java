@@ -1,25 +1,23 @@
 package pl.csanecki.memory.engine;
 
 import org.junit.jupiter.api.Test;
-import pl.csanecki.memory.engine.FlatItem;
-import pl.csanecki.memory.engine.FlatItemId;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FlatItemTest {
 
     @Test
-    void turning_around_reverse_up_makes_it_averse_up() {
+    void turning_around_reverse_up_makes_it_obverse_up() {
         FlatItem flatItem = FlatItem.reverseUp(FlatItemId.of(1));
 
         flatItem.flip();
 
-        assertTrue(flatItem.isAverseUp());
+        assertTrue(flatItem.isObverseUp());
     }
 
     @Test
-    void turning_around_averse_up_makes_it_reverse_up() {
-        FlatItem flatItem = FlatItem.averseUp(FlatItemId.of(1));
+    void turning_around_obverse_up_makes_it_reverse_up() {
+        FlatItem flatItem = FlatItem.obverseUp(FlatItemId.of(1));
 
         flatItem.flip();
 
@@ -27,17 +25,17 @@ class FlatItemTest {
     }
 
     @Test
-    void turn_averse_up_no_matter_what() {
+    void turn_obverse_up_no_matter_what() {
         FlatItem flatItem = FlatItem.reverseUp(FlatItemId.of(1));
 
-        flatItem.turnAverseUp();
+        flatItem.turnObverseUp();
 
-        assertTrue(flatItem.isAverseUp());
+        assertTrue(flatItem.isObverseUp());
     }
 
     @Test
     void turn_reverse_up_no_matter_what() {
-        FlatItem flatItem = FlatItem.averseUp(FlatItemId.of(1));
+        FlatItem flatItem = FlatItem.obverseUp(FlatItemId.of(1));
 
         flatItem.turnReverseUp();
 

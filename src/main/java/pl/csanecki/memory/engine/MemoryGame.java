@@ -49,9 +49,9 @@ public class MemoryGame {
             return Failure;
         }
 
-        current.turnToAverse(flatItemId);
+        current.turnToObverse(flatItemId);
 
-        if (current.isAllAverseUp()) {
+        if (current.isAllObverseUp()) {
             guessed.add(current);
             current = null;
             if (isAllGuessed()) {
