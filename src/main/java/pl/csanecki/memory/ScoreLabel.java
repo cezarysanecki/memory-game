@@ -7,8 +7,10 @@ import java.time.Duration;
 
 public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
 
+    private static final String WELCOME_TEXT = "Let's start the game!";
+
     public ScoreLabel(int width) {
-        super("Let's start the game!");
+        super(WELCOME_TEXT);
         setHorizontalAlignment(SwingConstants.CENTER);
         setBounds(0, 0, width, 40);
     }
