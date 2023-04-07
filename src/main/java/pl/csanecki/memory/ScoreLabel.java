@@ -1,11 +1,11 @@
 package pl.csanecki.memory;
 
-import pl.csanecki.memory.util.Subscriber;
+import pl.csanecki.memory.util.MillisTimerSubscriber;
 
 import javax.swing.*;
 import java.time.Duration;
 
-public class ScoreLabel extends JLabel implements Subscriber {
+public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
 
     public ScoreLabel(int width) {
         super("Let's start the game!");

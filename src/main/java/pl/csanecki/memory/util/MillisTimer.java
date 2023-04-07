@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class MillisTimer {
 
     private final long millisecondsRefresh;
-    private Collection<Subscriber> subscribers;
+    private Collection<MillisTimerSubscriber> millisTimerSubscribers;
 
     private ScheduledExecutorService timer;
     private long passed;
@@ -33,8 +33,8 @@ public class MillisTimer {
         return new MillisTimer(1_000);
     }
 
-    public void registerSubscribers(Collection<Subscriber> subscribers) {
-        this.subscribers = subscribers;
+    public void registerSubscribers(Collection<MillisTimerSubscriber> millisTimerSubscribers) {
+        this.millisTimerSubscribers = millisTimerSubscribers;
     }
 
     public void start() {
@@ -42,7 +42,7 @@ public class MillisTimer {
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(() -> {
             passed += millisecondsRefresh;
-            subscribers.forEach(subscriber -> subscriber.update(getResultAsMilliseconds()));
+            millisTimerSubscribers.forEach(millisTimerSubscriber -> millisTimerSubscriber.update(getResultAsMilliseconds()));
         }, 0, millisecondsRefresh, TimeUnit.MILLISECONDS);
     }
 
