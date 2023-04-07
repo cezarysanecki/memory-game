@@ -1,6 +1,5 @@
 package pl.csanecki.memory;
 
-import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
 import pl.csanecki.memory.setup.GameSetupCoordinator;
@@ -12,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class GamePanel extends JPanel {
@@ -67,22 +65,18 @@ public class GamePanel extends JPanel {
                 millisTimer.start();
                 started = true;
             }
-            Optional<GraphicCard> chosenGraphicCard = graphicCards.findCardByCoordinates(event.getPoint());
-            if (chosenGraphicCard.isEmpty()) {
-                return;
-            }
-            FlatItemId flatItemId = chosenGraphicCard.get().getFlatItemId();
-
-            GuessResult result = memoryGame.turnCard(flatItemId);
-
-            switch (result) {
-                case Failure -> chosenGraphicCard.get().turnToAverseUp();
-                case GameOver -> {
-                    millisTimer.stop();
-                    graphicCards.refreshAll(memoryGame.currentState());
-                }
-                default -> graphicCards.refreshAll(memoryGame.currentState());
-            }
+            graphicCards.findCardByCoordinates(event.getPoint())
+                    .ifPresent(graphicCard -> {
+                        GuessResult result = memoryGame.turnCard(graphicCard.getFlatItemId());
+                        switch (result) {
+                            case Failure -> graphicCard.turnToAverseUp();
+                            case GameOver -> {
+                                millisTimer.stop();
+                                graphicCards.refreshAll(memoryGame.currentState());
+                            }
+                            default -> graphicCards.refreshAll(memoryGame.currentState());
+                        }
+                    });
         }
     }
 }
