@@ -9,6 +9,9 @@ import static pl.csanecki.memory.engine.GuessResult.*;
 
 class MemoryGameTest {
 
+    FlatItemsGroupId firstFlatItemsGroupId = FlatItemsGroupId.of(0);
+    FlatItemsGroupId secondFlatItemsGroupId = FlatItemsGroupId.of(1);
+
     FlatItemId firstFlatItemId = FlatItemId.of(1);
     FlatItemId secondFlatItemId = FlatItemId.of(2);
     FlatItemId thirdFlatItemId = FlatItemId.of(3);
@@ -18,8 +21,8 @@ class MemoryGameTest {
     @Test
     void properly_guessed_cards() {
         MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
-                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
-                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
+                new MemoryGameSetup.GroupToGuess(firstFlatItemsGroupId, Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(secondFlatItemsGroupId, Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         GuessResult firstGuess = memoryGame.turnCard(firstFlatItemId);
 
@@ -33,8 +36,8 @@ class MemoryGameTest {
     @Test
     void need_to_reveal_all_cards_from_group() {
         MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
-                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
-                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId, fifthFlatItemId)))));
+                new MemoryGameSetup.GroupToGuess(firstFlatItemsGroupId, Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(secondFlatItemsGroupId, Set.of(thirdFlatItemId, fourthFlatItemId, fifthFlatItemId)))));
 
         memoryGame.turnCard(thirdFlatItemId);
         GuessResult result = memoryGame.turnCard(fourthFlatItemId);
@@ -45,8 +48,8 @@ class MemoryGameTest {
     @Test
     void fail_to_guess_all_cards_from_group() {
         MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
-                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
-                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
+                new MemoryGameSetup.GroupToGuess(firstFlatItemsGroupId, Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(secondFlatItemsGroupId, Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(thirdFlatItemId);
 
@@ -58,8 +61,8 @@ class MemoryGameTest {
     @Test
     void reset_revealed_cars_after_wrong_guess() {
         MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
-                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
-                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
+                new MemoryGameSetup.GroupToGuess(firstFlatItemsGroupId, Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(secondFlatItemsGroupId, Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(firstFlatItemId);
 
@@ -73,8 +76,8 @@ class MemoryGameTest {
     @Test
     void can_continue_to_guessing_next_cards() {
         MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
-                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
-                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
+                new MemoryGameSetup.GroupToGuess(firstFlatItemsGroupId, Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(secondFlatItemsGroupId, Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(firstFlatItemId);
         memoryGame.turnCard(secondFlatItemId);
@@ -87,8 +90,8 @@ class MemoryGameTest {
     @Test
     void end_game() {
         MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
-                new MemoryGameSetup.GroupToGuess(Set.of(firstFlatItemId, secondFlatItemId)),
-                new MemoryGameSetup.GroupToGuess(Set.of(thirdFlatItemId, fourthFlatItemId)))));
+                new MemoryGameSetup.GroupToGuess(firstFlatItemsGroupId, Set.of(firstFlatItemId, secondFlatItemId)),
+                new MemoryGameSetup.GroupToGuess(secondFlatItemsGroupId, Set.of(thirdFlatItemId, fourthFlatItemId)))));
 
         memoryGame.turnCard(firstFlatItemId);
         memoryGame.turnCard(secondFlatItemId);
