@@ -9,9 +9,6 @@ import java.awt.geom.Point2D;
 
 public class GraphicCard extends JLabel {
 
-    public static final int REQUIRED_WIDTH = 100;
-    public static final int REQUIRED_HEIGHT = 100;
-
     ImageIcon reverseIcon;
     ImageIcon obverseIcon;
     boolean obverse = false;
@@ -19,7 +16,7 @@ public class GraphicCard extends JLabel {
     final FlatItemId flatItemId;
 
     public GraphicCard(FlatItemId flatItemId, ImageIcon reverseIcon, ImageIcon obverseIcon) {
-        setPreferredSize(new Dimension(REQUIRED_WIDTH, REQUIRED_HEIGHT));
+        setPreferredSize(new Dimension(reverseIcon.getIconWidth(), reverseIcon.getIconHeight()));
 
         this.flatItemId = flatItemId;
         this.reverseIcon = reverseIcon;
@@ -43,8 +40,8 @@ public class GraphicCard extends JLabel {
 
     public boolean contains(Point2D point) {
         Rectangle rectangle = new Rectangle(
-                this.getLocation().x, this.getLocation().y,
-                this.getWidth(), this.getHeight());
+            this.getLocation().x, this.getLocation().y,
+            this.getWidth(), this.getHeight());
         return rectangle.contains(point);
     }
 
