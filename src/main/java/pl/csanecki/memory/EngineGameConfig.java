@@ -83,6 +83,10 @@ public final class EngineGameConfig {
         return obverseImages;
     }
 
+    public int countNumbersOfCards() {
+        return columns * rows;
+    }
+
     private static boolean imageDoesNotHaveRequiredSize(ImageIcon image) {
         return image.getIconWidth() != REQUIRED_IMAGE_WIDTH || image.getIconHeight() != REQUIRED_IMAGE_HEIGHT;
     }

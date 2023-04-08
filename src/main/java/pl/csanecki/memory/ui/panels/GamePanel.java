@@ -30,7 +30,7 @@ public class GamePanel extends JPanel {
     private boolean started = false;
 
     public GamePanel(EngineGameConfig gameConfig) {
-        memoryGame = new MemoryGame(gameConfig.columns * gameConfig.rows, gameConfig.numberOfCardsInGroup);
+        memoryGame = MemoryGame.create(gameConfig.countNumbersOfCards(), gameConfig.numberOfCardsInGroup);
 
         MemoryGameCurrentState currentState = memoryGame.currentState();
         Set<GroupOfFlatItemsCurrentState> groupOfFlatItemsCurrentStates = currentState.groupOfFlatItems();

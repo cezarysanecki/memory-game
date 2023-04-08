@@ -19,7 +19,11 @@ public class MemoryGame {
 
     private FlatItemsGroup current = null;
 
-    public MemoryGame(int numberOfCards, int cardsInGroup) {
+    private MemoryGame(Set<FlatItemsGroup> groups) {
+        this.groups = groups;
+    }
+
+    public static MemoryGame create(int numberOfCards, int cardsInGroup) {
         if (numberOfCards % cardsInGroup != 0) {
             throw new IllegalArgumentException("number of cards must be dividable by cards in group");
         }
@@ -38,14 +42,7 @@ public class MemoryGame {
             }
             flatItemsGroups.add(FlatItemsGroup.allReversed(flatItemsGroupId, flatItemIds));
         }
-
-
-        this.groups = flatItemsGroups;
-    }
-
-    public void reset() {
-        current = null;
-        guessed.clear();
+        return new MemoryGame(flatItemsGroups);
     }
 
     public GuessResult turnCard(FlatItemId flatItemId) {
@@ -70,6 +67,11 @@ public class MemoryGame {
             return Guessed;
         }
         return Continue;
+    }
+
+    public void reset() {
+        current = null;
+        guessed.clear();
     }
 
     private boolean isAllGuessed() {
