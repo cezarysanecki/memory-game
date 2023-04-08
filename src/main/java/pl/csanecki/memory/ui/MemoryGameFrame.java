@@ -1,6 +1,6 @@
 package pl.csanecki.memory.ui;
 
-import pl.csanecki.memory.GamePreparer;
+import pl.csanecki.memory.EngineGameConfig;
 import pl.csanecki.memory.ui.dialogs.AboutDialog;
 import pl.csanecki.memory.ui.panels.GamePanel;
 
@@ -16,7 +16,7 @@ public class MemoryGameFrame extends JFrame {
     private static final String MAIN_MENU_ABOUT_ITEM = "O programie";
     private static final String MAIN_MENU_EXIT_ITEM = "Zamknij";
 
-    public MemoryGameFrame(GamePreparer gameConfig) {
+    public MemoryGameFrame(EngineGameConfig gameConfig) {
         JMenuBar menuBar = prepareMenuBar();
         setJMenuBar(menuBar);
 

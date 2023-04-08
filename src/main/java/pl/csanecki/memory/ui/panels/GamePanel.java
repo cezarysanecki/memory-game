@@ -1,6 +1,6 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.GamePreparer;
+import pl.csanecki.memory.EngineGameConfig;
 import pl.csanecki.memory.ScoreLabel;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
 
     private boolean started = false;
 
-    public GamePanel(GamePreparer gameConfig) {
+    public GamePanel(EngineGameConfig gameConfig) {
         GameSetupCoordinator gameSetupCoordinator = gameConfig.createGameSetupCoordinator();
         memoryGame = new MemoryGame(gameSetupCoordinator.toGameSetup());
         graphicCards = gameSetupCoordinator.toGraphicCards();
@@ -57,8 +57,9 @@ public class GamePanel extends JPanel {
         int widthGamePanel = gameConfig.columns * 110 + 10;
         int heightGamePanel = gameConfig.rows * 110 + 40;
 
-        setPreferredSize(new Dimension(widthGamePanel, heightGamePanel));
-        setMinimumSize(new Dimension(widthGamePanel, heightGamePanel));
+        Dimension dimension = new Dimension(widthGamePanel, heightGamePanel);
+        setPreferredSize(dimension);
+        setMinimumSize(dimension);
     }
 
     private class MouseClick extends MouseAdapter {
