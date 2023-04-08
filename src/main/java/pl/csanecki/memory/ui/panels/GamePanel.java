@@ -1,6 +1,6 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.GameConfig;
+import pl.csanecki.memory.GamePreparer;
 import pl.csanecki.memory.ScoreLabel;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
 
     private boolean started = false;
 
-    public GamePanel(GameConfig gameConfig) {
+    public GamePanel(GamePreparer gameConfig) {
         GameSetupCoordinator gameSetupCoordinator = gameConfig.createGameSetupCoordinator();
         memoryGame = new MemoryGame(gameSetupCoordinator.toGameSetup());
         graphicCards = gameSetupCoordinator.toGraphicCards();
