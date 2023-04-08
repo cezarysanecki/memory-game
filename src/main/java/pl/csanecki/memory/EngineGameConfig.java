@@ -76,9 +76,9 @@ public final class EngineGameConfig {
         if (obverseImages.size() != REQUIRED_NUMBER_OF_OBVERSE_IMAGES) {
             throw new IllegalArgumentException("amount of obverse images must be " + REQUIRED_NUMBER_OF_OBVERSE_IMAGES);
         }
-//        if (obverseImages.stream().anyMatch(EngineGameConfig::imageDoesNotHaveRequiredSize)) {
-//            throw new IllegalArgumentException("obverse images must have size of " + REQUIRED_IMAGE_WIDTH + "x" + REQUIRED_IMAGE_HEIGHT);
-//        }
+        if (obverseImages.stream().anyMatch(EngineGameConfig::imageDoesNotHaveRequiredSize)) {
+            throw new IllegalArgumentException("obverse images must have size of " + REQUIRED_IMAGE_WIDTH + "x" + REQUIRED_IMAGE_HEIGHT);
+        }
         Collections.shuffle(obverseImages);
         return obverseImages;
     }

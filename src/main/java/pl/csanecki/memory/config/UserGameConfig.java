@@ -16,8 +16,8 @@ public final class UserGameConfig {
 
     public static UserGameConfig defaultConfig() {
         return new UserGameConfig(
-            ReverseTheme.PremierLeague,
-            ObversesTheme.Animals,
+            ReverseTheme.Jungle,
+            ObversesTheme.EnglishClubs,
             GameSize.Small,
             NumberOfCardsInGroup.Two);
     }
