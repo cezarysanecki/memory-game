@@ -1,4 +1,4 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.ui.panels;
 
 import pl.csanecki.memory.util.MillisRefreshment;
 import pl.csanecki.memory.util.MillisTimerSubscriber;
