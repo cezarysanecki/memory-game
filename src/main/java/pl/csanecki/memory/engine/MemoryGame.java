@@ -4,7 +4,9 @@ import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static pl.csanecki.memory.engine.GuessResult.Continue;
 import static pl.csanecki.memory.engine.GuessResult.Failure;
@@ -27,21 +29,24 @@ public class MemoryGame {
         if (numberOfCards % cardsInGroup != 0) {
             throw new IllegalArgumentException("number of cards must be dividable by cards in group");
         }
+        if (numberOfCards <= 0 || cardsInGroup <= 0) {
+            throw new IllegalArgumentException("arguments must be positive");
+        }
+        if (cardsInGroup > numberOfCards) {
+            throw new IllegalArgumentException("number of cards must be grater than cards in group");
+        }
 
         int numberOfGroups = numberOfCards / cardsInGroup;
+        AtomicInteger flatItemGenerator = new AtomicInteger(0);
 
-        int itemId = 0;
-        Set<FlatItemsGroup> flatItemsGroups = new HashSet<>();
-        for (int i = 0; i < numberOfGroups; i++) {
-            FlatItemsGroupId flatItemsGroupId = FlatItemsGroupId.of(i);
-
-            Set<FlatItemId> flatItemIds = new HashSet<>();
-            for (int j = 0; j < cardsInGroup; j++) {
-                FlatItemId flatItemId = FlatItemId.of(itemId++);
-                flatItemIds.add(flatItemId);
-            }
-            flatItemsGroups.add(FlatItemsGroup.allReversed(flatItemsGroupId, flatItemIds));
-        }
+        Set<FlatItemsGroup> flatItemsGroups = IntStream.range(0, numberOfGroups)
+            .mapToObj(FlatItemsGroupId::of)
+            .map(flatItemsGroupId -> FlatItemsGroup.allReversed(
+                flatItemsGroupId,
+                IntStream.of(0, numberOfGroups)
+                    .mapToObj(index -> FlatItemId.of(flatItemGenerator.getAndIncrement()))
+                    .collect(Collectors.toUnmodifiableSet())))
+            .collect(Collectors.toUnmodifiableSet());
         return new MemoryGame(flatItemsGroups);
     }
 
