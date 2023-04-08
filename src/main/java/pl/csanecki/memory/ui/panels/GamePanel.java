@@ -1,10 +1,10 @@
 package pl.csanecki.memory.ui.panels;
 
+import pl.csanecki.memory.Divider;
 import pl.csanecki.memory.EngineGameConfig;
-import pl.csanecki.memory.ScoreLabel;
+import pl.csanecki.memory.engine.FlatItemsGroupId;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
-import pl.csanecki.memory.setup.GameSetupCoordinator;
 import pl.csanecki.memory.ui.items.GraphicCard;
 import pl.csanecki.memory.ui.items.GraphicCards;
 import pl.csanecki.memory.util.MillisTimer;
@@ -28,9 +28,10 @@ public class GamePanel extends JPanel {
     private boolean started = false;
 
     public GamePanel(EngineGameConfig gameConfig) {
-        GameSetupCoordinator gameSetupCoordinator = gameConfig.createGameSetupCoordinator();
-        memoryGame = new MemoryGame(gameSetupCoordinator.toGameSetup());
-        graphicCards = gameSetupCoordinator.toGraphicCards();
+        Divider divider = Divider.create(gameConfig);
+
+        memoryGame = new MemoryGame(divider.toMemoryGameSetup());
+        graphicCards = divider.toGraphicCards();
 
         setLayout(null);
 
@@ -62,6 +63,9 @@ public class GamePanel extends JPanel {
         setMinimumSize(dimension);
     }
 
+    private record A(FlatItemsGroupId flatItemsGroupId, ImageIcon obverseImage) {
+    }
+
     private class MouseClick extends MouseAdapter {
 
         @Override
@@ -71,17 +75,17 @@ public class GamePanel extends JPanel {
                 started = true;
             }
             graphicCards.findCardByCoordinates(event.getPoint())
-                    .ifPresent(graphicCard -> {
-                        GuessResult result = memoryGame.turnCard(graphicCard.getFlatItemId());
-                        switch (result) {
-                            case Failure -> graphicCard.turnToObverseUp();
-                            case GameOver -> {
-                                millisTimer.stop();
-                                graphicCards.refreshAll(memoryGame.currentState());
-                            }
-                            default -> graphicCards.refreshAll(memoryGame.currentState());
+                .ifPresent(graphicCard -> {
+                    GuessResult result = memoryGame.turnCard(graphicCard.getFlatItemId());
+                    switch (result) {
+                        case Failure -> graphicCard.turnToObverseUp();
+                        case GameOver -> {
+                            millisTimer.stop();
+                            graphicCards.refreshAll(memoryGame.currentState());
                         }
-                    });
+                        default -> graphicCards.refreshAll(memoryGame.currentState());
+                    }
+                });
         }
     }
 }

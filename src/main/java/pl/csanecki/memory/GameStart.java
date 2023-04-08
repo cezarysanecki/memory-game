@@ -1,10 +1,11 @@
 package pl.csanecki.memory;
 
+import pl.csanecki.memory.config.UserGameConfig;
 import pl.csanecki.memory.ui.MemoryGameFrame;
 
 public class GameStart {
 
     public static void main(String[] args) {
-        new MemoryGameFrame(EngineGameConfig.create());
+        new MemoryGameFrame(EngineGameConfig.create(UserGameConfig.defaultConfig()));
     }
 }

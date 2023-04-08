@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static pl.csanecki.memory.engine.GuessResult.*;
+import static pl.csanecki.memory.engine.GuessResult.Continue;
+import static pl.csanecki.memory.engine.GuessResult.Failure;
+import static pl.csanecki.memory.engine.GuessResult.GameOver;
+import static pl.csanecki.memory.engine.GuessResult.Guessed;
 
 public class MemoryGame {
 
@@ -26,11 +29,11 @@ public class MemoryGame {
         }
 
         this.groups = memoryGameSetup.groupsToGuesses()
-                .stream()
-                .map(groupToGuess -> FlatItemsGroup.allReversed(
-                        groupToGuess.flatItemsGroupId(),
-                        groupToGuess.flatItemIds()))
-                .collect(Collectors.toUnmodifiableSet());
+            .stream()
+            .map(groupToGuess -> FlatItemsGroup.allReversed(
+                groupToGuess.flatItemsGroupId(),
+                groupToGuess.flatItemIds()))
+            .collect(Collectors.toUnmodifiableSet());
     }
 
     public void reset() {
@@ -68,15 +71,15 @@ public class MemoryGame {
 
     private FlatItemsGroup findBy(FlatItemId flatItemId) {
         return groups.stream()
-                .filter(group -> group.contains(flatItemId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("cannot find group for flat item: " + flatItemId));
+            .filter(group -> group.contains(flatItemId))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("cannot find group for flat item: " + flatItemId));
     }
 
     public MemoryGameCurrentState currentState() {
         return new MemoryGameCurrentState(
-                groups.stream()
-                        .map(FlatItemsGroup::currentState)
-                        .collect(Collectors.toUnmodifiableSet()), isAllGuessed());
+            groups.stream()
+                .map(FlatItemsGroup::currentState)
+                .collect(Collectors.toUnmodifiableSet()), isAllGuessed());
     }
 }
