@@ -43,7 +43,7 @@ public class MemoryGame {
             .mapToObj(FlatItemsGroupId::of)
             .map(flatItemsGroupId -> FlatItemsGroup.allReversed(
                 flatItemsGroupId,
-                IntStream.of(0, numberOfGroups)
+                IntStream.range(0, cardsInGroup)
                     .mapToObj(index -> FlatItemId.of(flatItemGenerator.getAndIncrement()))
                     .collect(Collectors.toUnmodifiableSet())))
             .collect(Collectors.toUnmodifiableSet());

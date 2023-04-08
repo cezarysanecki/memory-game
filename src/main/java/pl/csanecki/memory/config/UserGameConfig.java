@@ -18,8 +18,8 @@ public final class UserGameConfig {
         return new UserGameConfig(
             ReverseTheme.Jungle,
             ObversesTheme.EnglishClubs,
-            GameSize.Small,
-            NumberOfCardsInGroup.Two);
+            GameSize.Medium,
+            NumberOfCardsInGroup.Three);
     }
 
     public static UserGameConfig userConfig(
