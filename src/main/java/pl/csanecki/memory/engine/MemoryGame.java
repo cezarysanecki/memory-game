@@ -1,7 +1,6 @@
 package pl.csanecki.memory.engine;
 
 import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
-import pl.csanecki.memory.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,20 +19,28 @@ public class MemoryGame {
 
     private FlatItemsGroup current = null;
 
-    public MemoryGame(MemoryGameSetup memoryGameSetup) {
-        if (CollectionUtils.containsDuplicates(memoryGameSetup.getAllFlatItemIds())) {
-            throw new IllegalArgumentException("flat item ids must be unique");
-        }
-        if (CollectionUtils.containsDuplicates(memoryGameSetup.getAllFlatItemsGroupIds())) {
-            throw new IllegalArgumentException("flat item groups ids must be unique");
+    public MemoryGame(int numberOfCards, int cardsInGroup) {
+        if (numberOfCards % cardsInGroup != 0) {
+            throw new IllegalArgumentException("number of cards must be dividable by cards in group");
         }
 
-        this.groups = memoryGameSetup.groupsToGuesses()
-            .stream()
-            .map(groupToGuess -> FlatItemsGroup.allReversed(
-                groupToGuess.flatItemsGroupId(),
-                groupToGuess.flatItemIds()))
-            .collect(Collectors.toUnmodifiableSet());
+        int numberOfGroups = numberOfCards / cardsInGroup;
+
+        int itemId = 0;
+        Set<FlatItemsGroup> flatItemsGroups = new HashSet<>();
+        for (int i = 0; i < numberOfGroups; i++) {
+            FlatItemsGroupId flatItemsGroupId = FlatItemsGroupId.of(i);
+
+            Set<FlatItemId> flatItemIds = new HashSet<>();
+            for (int j = 0; j < cardsInGroup; j++) {
+                FlatItemId flatItemId = FlatItemId.of(itemId++);
+                flatItemIds.add(flatItemId);
+            }
+            flatItemsGroups.add(FlatItemsGroup.allReversed(flatItemsGroupId, flatItemIds));
+        }
+
+
+        this.groups = flatItemsGroups;
     }
 
     public void reset() {

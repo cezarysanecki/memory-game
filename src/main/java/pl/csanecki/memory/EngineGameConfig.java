@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -68,14 +69,16 @@ public final class EngineGameConfig {
             .flatMap(stringStream -> stringStream)
             .filter(file -> file.endsWith(ALLOWED_IMAGE_FORMAT))
             .map(path -> obversesTheme.path + path)
+            .map(EngineGameConfig.class::getResource)
+            .filter(Objects::nonNull)
             .map(ImageIcon::new)
             .collect(Collectors.toList());
         if (obverseImages.size() != REQUIRED_NUMBER_OF_OBVERSE_IMAGES) {
             throw new IllegalArgumentException("amount of obverse images must be " + REQUIRED_NUMBER_OF_OBVERSE_IMAGES);
         }
-        if (obverseImages.stream().anyMatch(EngineGameConfig::imageDoesNotHaveRequiredSize)) {
-            throw new IllegalArgumentException("obverse images must have size of " + REQUIRED_IMAGE_WIDTH + "x" + REQUIRED_IMAGE_HEIGHT);
-        }
+//        if (obverseImages.stream().anyMatch(EngineGameConfig::imageDoesNotHaveRequiredSize)) {
+//            throw new IllegalArgumentException("obverse images must have size of " + REQUIRED_IMAGE_WIDTH + "x" + REQUIRED_IMAGE_HEIGHT);
+//        }
         Collections.shuffle(obverseImages);
         return obverseImages;
     }

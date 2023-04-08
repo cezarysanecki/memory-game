@@ -1,10 +1,11 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.Divider;
 import pl.csanecki.memory.EngineGameConfig;
-import pl.csanecki.memory.engine.FlatItemsGroupId;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
+import pl.csanecki.memory.engine.state.FlatItemCurrentState;
+import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
+import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
 import pl.csanecki.memory.ui.items.GraphicCard;
 import pl.csanecki.memory.ui.items.GraphicCards;
 import pl.csanecki.memory.util.MillisTimer;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -28,10 +30,24 @@ public class GamePanel extends JPanel {
     private boolean started = false;
 
     public GamePanel(EngineGameConfig gameConfig) {
-        Divider divider = Divider.create(gameConfig);
+        memoryGame = new MemoryGame(gameConfig.columns * gameConfig.rows, gameConfig.numberOfCardsInGroup);
 
-        memoryGame = new MemoryGame(divider.toMemoryGameSetup());
-        graphicCards = divider.toGraphicCards();
+        MemoryGameCurrentState currentState = memoryGame.currentState();
+        Set<GroupOfFlatItemsCurrentState> groupOfFlatItemsCurrentStates = currentState.groupOfFlatItems();
+
+        ImageIcon reverseImage = gameConfig.reverseImage;
+        List<ImageIcon> obverseImages = gameConfig.obverseImages;
+
+        List<GraphicCard> graphicCards = new ArrayList<>();
+        int index = 0;
+        for (GroupOfFlatItemsCurrentState groupOfFlatItemsCurrentState : groupOfFlatItemsCurrentStates) {
+            ImageIcon obverseImage = obverseImages.get(index);
+            for (FlatItemCurrentState flatItemCurrentState : groupOfFlatItemsCurrentState.flatItems()) {
+                graphicCards.add(new GraphicCard(flatItemCurrentState.flatItemId(), reverseImage, obverseImage));
+            }
+            index++;
+        }
+        Collections.shuffle(graphicCards);
 
         setLayout(null);
 
@@ -41,16 +57,14 @@ public class GamePanel extends JPanel {
         add(labelScoreLabel);
 
         addMouseListener(new MouseClick());
+        this.graphicCards = new GraphicCards(graphicCards);
 
-        List<GraphicCard> graphicCardList = graphicCards.getGraphicCards();
-
-        int sizeCards = graphicCardList.size();
-        Collections.shuffle(graphicCardList);
+        int sizeCards = graphicCards.size();
 
         for (int row = 0; row < gameConfig.rows; row++)
             for (int column = 0; column < gameConfig.columns; column++) {
                 sizeCards--;
-                GraphicCard graphicCard = graphicCardList.get(sizeCards);
+                GraphicCard graphicCard = graphicCards.get(sizeCards);
                 graphicCard.setBounds(column * 110 + 10, row * 110 + labelScoreLabel.getHeight(), 100, 100);
                 add(graphicCard, BorderLayout.CENTER);
             }
@@ -61,9 +75,6 @@ public class GamePanel extends JPanel {
         Dimension dimension = new Dimension(widthGamePanel, heightGamePanel);
         setPreferredSize(dimension);
         setMinimumSize(dimension);
-    }
-
-    private record A(FlatItemsGroupId flatItemsGroupId, ImageIcon obverseImage) {
     }
 
     private class MouseClick extends MouseAdapter {
