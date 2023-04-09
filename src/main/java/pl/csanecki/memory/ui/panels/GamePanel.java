@@ -43,7 +43,11 @@ public class GamePanel extends JPanel {
         for (GroupOfFlatItemsCurrentState groupOfFlatItemsCurrentState : groupOfFlatItemsCurrentStates) {
             ImageIcon obverseImage = obverseImages.get(index);
             for (FlatItemCurrentState flatItemCurrentState : groupOfFlatItemsCurrentState.flatItems()) {
-                graphicCards.add(new GraphicCard(flatItemCurrentState.flatItemId(), reverseImage, obverseImage));
+                graphicCards.add(new GraphicCard(
+                    flatItemCurrentState.flatItemId(),
+                    reverseImage,
+                    obverseImage,
+                    flatItemCurrentState.obverse()));
             }
             index++;
         }

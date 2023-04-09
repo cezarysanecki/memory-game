@@ -9,32 +9,29 @@ import java.awt.geom.Point2D;
 
 public class GraphicCard extends JLabel {
 
-    ImageIcon reverseIcon;
-    ImageIcon obverseIcon;
-    boolean obverse = false;
+    private final FlatItemId flatItemId;
+    private final ImageIcon reverseIcon;
+    private final ImageIcon obverseIcon;
 
-    final FlatItemId flatItemId;
-
-    public GraphicCard(FlatItemId flatItemId, ImageIcon reverseIcon, ImageIcon obverseIcon) {
+    public GraphicCard(FlatItemId flatItemId, ImageIcon reverseIcon, ImageIcon obverseIcon, boolean obverse) {
         setPreferredSize(new Dimension(reverseIcon.getIconWidth(), reverseIcon.getIconHeight()));
 
         this.flatItemId = flatItemId;
         this.reverseIcon = reverseIcon;
         this.obverseIcon = obverseIcon;
 
-        setIcon(currentIcon());
+        setIcon(currentIcon(obverse));
     }
 
     public void refresh(FlatItemCurrentState flatItem) {
-        obverse = flatItem.obverse();
-        setIcon(currentIcon());
+        setIcon(currentIcon(flatItem.obverse()));
     }
 
     public FlatItemId getFlatItemId() {
         return flatItemId;
     }
 
-    private ImageIcon currentIcon() {
+    private ImageIcon currentIcon(boolean obverse) {
         return obverse ? obverseIcon : reverseIcon;
     }
 
@@ -48,7 +45,8 @@ public class GraphicCard extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(currentIcon().getImage(), 0, 0, null);
+        ImageIcon currentImageIcon = (ImageIcon) getIcon();
+        g2.drawImage(currentImageIcon.getImage(), 0, 0, null);
     }
 
     @Override
@@ -61,7 +59,6 @@ public class GraphicCard extends JLabel {
     }
 
     public void turnToObverseUp() {
-        obverse = true;
-        setIcon(currentIcon());
+        setIcon(currentIcon(true));
     }
 }
