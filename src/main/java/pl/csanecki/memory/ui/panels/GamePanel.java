@@ -56,9 +56,9 @@ public class GamePanel extends JPanel {
 
         setLayout(null);
 
-        ScoreLabel labelScoreLabel = new ScoreLabel(gameConfig.columns * 110 + 10);
-        millisTimer.registerSubscribers(Set.of(labelScoreLabel));
-        add(labelScoreLabel);
+        ScoreLabel scoreLabel = new ScoreLabel(gameConfig.columns * 110 + 10);
+        millisTimer.registerSubscribers(Set.of(scoreLabel));
+        add(scoreLabel);
 
 
         int sizeCards = graphicCards.size();
@@ -67,12 +67,12 @@ public class GamePanel extends JPanel {
             for (int column = 0; column < gameConfig.columns; column++) {
                 sizeCards--;
                 GraphicCard graphicCard = graphicCards.get(sizeCards);
-                graphicCard.setBounds(column * 110 + 10, row * 110 + labelScoreLabel.getHeight(), 100, 100);
+                graphicCard.setBounds(column * 110 + 10, row * 110 + scoreLabel.getHeight(), 100, 100);
                 add(graphicCard, BorderLayout.CENTER);
             }
 
         int widthGamePanel = gameConfig.columns * 110 + 10;
-        int heightGamePanel = gameConfig.rows * 110 + 40;
+        int heightGamePanel = gameConfig.rows * 110 + scoreLabel.getHeight();
 
         Dimension dimension = new Dimension(widthGamePanel, heightGamePanel);
         setPreferredSize(dimension);
