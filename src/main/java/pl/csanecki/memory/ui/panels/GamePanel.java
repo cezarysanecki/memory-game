@@ -30,6 +30,7 @@ public class GamePanel extends JPanel {
     private boolean started = false;
 
     public GamePanel(EngineGameConfig gameConfig) {
+        millisTimer = MillisTimer.ofOneThousandMilliseconds();
         memoryGame = MemoryGame.create(gameConfig.countNumbersOfCards(), gameConfig.numberOfCardsInGroup);
 
         MemoryGameCurrentState currentState = memoryGame.currentState();
@@ -56,12 +57,9 @@ public class GamePanel extends JPanel {
         setLayout(null);
 
         ScoreLabel labelScoreLabel = new ScoreLabel(gameConfig.columns * 110 + 10);
-        millisTimer = MillisTimer.ofOneThousandMilliseconds();
         millisTimer.registerSubscribers(Set.of(labelScoreLabel));
         add(labelScoreLabel);
 
-        addMouseListener(new MouseClick());
-        this.graphicCards = new GraphicCards(graphicCards);
 
         int sizeCards = graphicCards.size();
 
@@ -79,9 +77,13 @@ public class GamePanel extends JPanel {
         Dimension dimension = new Dimension(widthGamePanel, heightGamePanel);
         setPreferredSize(dimension);
         setMinimumSize(dimension);
+
+
+        addMouseListener(new ClickMouseListener());
+        this.graphicCards = new GraphicCards(graphicCards);
     }
 
-    private class MouseClick extends MouseAdapter {
+    private class ClickMouseListener extends MouseAdapter {
 
         @Override
         public void mousePressed(MouseEvent event) {
