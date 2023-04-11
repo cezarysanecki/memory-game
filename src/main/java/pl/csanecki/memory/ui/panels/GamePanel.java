@@ -13,11 +13,18 @@ public class GamePanel extends JPanel {
 
         setLayout(null);
 
+        add(scoreLabel);
+        add(cardsPanel);
+
+        int width1 = cardsPanel.getWidth();
+        scoreLabel.setBounds(new Rectangle(0, 0, width1, 40));
+        cardsPanel.setBounds(0, scoreLabel.getHeight(), cardsPanel.getWidth(), cardsPanel.getHeight());
+
         int width = Math.max(cardsPanel.getWidth(), scoreLabel.getWidth());
         int height = scoreLabel.getHeight() + cardsPanel.getHeight();
 
         Dimension dimension = new Dimension(width, height);
         setPreferredSize(dimension);
-        setMinimumSize(dimension);
+
     }
 }
