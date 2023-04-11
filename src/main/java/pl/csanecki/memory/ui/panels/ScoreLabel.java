@@ -10,10 +10,13 @@ public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
 
     private static final String WELCOME_TEXT = "Let's start the game!";
 
-    public ScoreLabel(int width) {
+    private ScoreLabel() {
         super(WELCOME_TEXT);
         setHorizontalAlignment(SwingConstants.CENTER);
-        setBounds(0, 0, width, 40);
+    }
+
+    public static ScoreLabel render() {
+        return new ScoreLabel();
     }
 
     @Override
