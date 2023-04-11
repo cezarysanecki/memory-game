@@ -1,12 +1,12 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.ui.UiConfig;
 import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
 import pl.csanecki.memory.engine.state.FlatItemCurrentState;
 import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
 import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
+import pl.csanecki.memory.ui.UiConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.*;
 
 public class CardsPanel extends JPanel {
+
+    private static final int BOUND = 10;
 
     private final MemoryGame memoryGame;
     private final List<GraphicCard> graphicCards;
@@ -40,7 +42,9 @@ public class CardsPanel extends JPanel {
             for (int column = 0; column < uiConfig.columns; column++) {
                 sizeCards--;
                 GraphicCard graphicCard = graphicCards.get(sizeCards);
-                graphicCard.setBounds(column * 110 + 10, row * 110, 100, 100);
+                graphicCard.setBounds(
+                        2 * BOUND + column * graphicCard.getWidth(), 2 * BOUND + row * graphicCard.getHeight(),
+                        graphicCard.getWidth(), graphicCard.getHeight());
             }
         }
 
