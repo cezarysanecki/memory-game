@@ -1,6 +1,6 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.EngineGameConfig;
+import pl.csanecki.memory.ui.UiConfig;
 import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.GuessResult;
 import pl.csanecki.memory.engine.MemoryGame;
@@ -29,15 +29,15 @@ public class CardsPanel extends JPanel {
         addMouseListener(new ClickMouseListener());
     }
 
-    public static CardsPanel render(EngineGameConfig gameConfig) {
-        MemoryGame memoryGame = MemoryGame.create(gameConfig.countNumbersOfCards(), gameConfig.numberOfCardsInGroup);
+    public static CardsPanel render(UiConfig uiConfig) {
+        MemoryGame memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
         MemoryGameCurrentState currentState = memoryGame.currentState();
 
-        List<GraphicCard> graphicCards = prepareGraphicCards(gameConfig, currentState);
+        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
 
         int sizeCards = graphicCards.size();
-        for (int row = 0; row < gameConfig.rows; row++) {
-            for (int column = 0; column < gameConfig.columns; column++) {
+        for (int row = 0; row < uiConfig.rows; row++) {
+            for (int column = 0; column < uiConfig.columns; column++) {
                 sizeCards--;
                 GraphicCard graphicCard = graphicCards.get(sizeCards);
                 graphicCard.setBounds(column * 110 + 10, row * 110, 100, 100);
@@ -47,15 +47,15 @@ public class CardsPanel extends JPanel {
         return new CardsPanel(memoryGame, graphicCards);
     }
 
-    private static List<GraphicCard> prepareGraphicCards(EngineGameConfig gameConfig, MemoryGameCurrentState currentState) {
+    private static List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameCurrentState currentState) {
         List<GraphicCard> graphicCards = new ArrayList<>();
         int index = 0;
         for (GroupOfFlatItemsCurrentState groupOfFlatItemsCurrentState : currentState.groupOfFlatItems()) {
-            ImageIcon obverseImage = gameConfig.obverseImages.get(index);
+            ImageIcon obverseImage = uiConfig.obverseImages.get(index);
             for (FlatItemCurrentState flatItemCurrentState : groupOfFlatItemsCurrentState.flatItems()) {
                 graphicCards.add(new GraphicCard(
                         flatItemCurrentState.flatItemId(),
-                        gameConfig.reverseImage,
+                        uiConfig.reverseImage,
                         obverseImage,
                         flatItemCurrentState.obverse()));
             }

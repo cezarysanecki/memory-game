@@ -1,8 +1,8 @@
-package pl.csanecki.memory;
+package pl.csanecki.memory.ui;
 
 import pl.csanecki.memory.config.ObversesTheme;
 import pl.csanecki.memory.config.ReverseTheme;
-import pl.csanecki.memory.config.UserGameConfig;
+import pl.csanecki.memory.config.CustomConfig;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public final class EngineGameConfig {
+public final class UiConfig {
 
     private static final String ALLOWED_IMAGE_FORMAT = ".png";
     private static final int REQUIRED_IMAGE_WIDTH = 100;
@@ -28,7 +28,7 @@ public final class EngineGameConfig {
     public final List<ImageIcon> obverseImages;
     public final int numberOfCardsInGroup;
 
-    private EngineGameConfig(int rows, int columns, ImageIcon reverseImage, List<ImageIcon> obverseImages, int numberOfCardsInGroup) {
+    private UiConfig(int rows, int columns, ImageIcon reverseImage, List<ImageIcon> obverseImages, int numberOfCardsInGroup) {
         this.rows = rows;
         this.columns = columns;
         this.reverseImage = reverseImage;
@@ -36,20 +36,20 @@ public final class EngineGameConfig {
         this.numberOfCardsInGroup = numberOfCardsInGroup;
     }
 
-    public static EngineGameConfig create(UserGameConfig userGameConfig) {
-        ImageIcon reverseImage = resolveReverseImage(userGameConfig);
-        List<ImageIcon> obverseImages = resolveObverseImages(userGameConfig);
-        return new EngineGameConfig(
-            userGameConfig.gameSize.numberOfRows,
-            userGameConfig.gameSize.numberOfColumns,
+    public static UiConfig create(CustomConfig customConfig) {
+        ImageIcon reverseImage = resolveReverseImage(customConfig);
+        List<ImageIcon> obverseImages = resolveObverseImages(customConfig);
+        return new UiConfig(
+            customConfig.gameSize.numberOfRows,
+            customConfig.gameSize.numberOfColumns,
             reverseImage,
             obverseImages,
-            userGameConfig.numberOfCardsInGroup.numberOfCards);
+            customConfig.numberOfCardsInGroup.numberOfCards);
     }
 
-    private static ImageIcon resolveReverseImage(UserGameConfig userGameConfig) {
-        ReverseTheme reverseTheme = userGameConfig.reverseTheme;
-        ImageIcon reverseImage = Optional.ofNullable(EngineGameConfig.class.getResource(reverseTheme.path))
+    private static ImageIcon resolveReverseImage(CustomConfig customConfig) {
+        ReverseTheme reverseTheme = customConfig.reverseTheme;
+        ImageIcon reverseImage = Optional.ofNullable(UiConfig.class.getResource(reverseTheme.path))
             .map(ImageIcon::new)
             .orElseThrow(() -> new IllegalArgumentException("cannot find resource path: " + reverseTheme.path));
         if (imageDoesNotHaveRequiredSize(reverseImage)) {
@@ -58,9 +58,9 @@ public final class EngineGameConfig {
         return reverseImage;
     }
 
-    private static List<ImageIcon> resolveObverseImages(UserGameConfig userGameConfig) {
-        ObversesTheme obversesTheme = userGameConfig.obversesTheme;
-        List<ImageIcon> obverseImages = Optional.ofNullable(EngineGameConfig.class.getResource(obversesTheme.path))
+    private static List<ImageIcon> resolveObverseImages(CustomConfig customConfig) {
+        ObversesTheme obversesTheme = customConfig.obversesTheme;
+        List<ImageIcon> obverseImages = Optional.ofNullable(UiConfig.class.getResource(obversesTheme.path))
             .map(URL::getPath)
             .map(File::new)
             .map(File::list)
@@ -69,14 +69,14 @@ public final class EngineGameConfig {
             .flatMap(stringStream -> stringStream)
             .filter(file -> file.endsWith(ALLOWED_IMAGE_FORMAT))
             .map(path -> obversesTheme.path + path)
-            .map(EngineGameConfig.class::getResource)
+            .map(UiConfig.class::getResource)
             .filter(Objects::nonNull)
             .map(ImageIcon::new)
             .collect(Collectors.toList());
         if (obverseImages.size() != REQUIRED_NUMBER_OF_OBVERSE_IMAGES) {
             throw new IllegalArgumentException("amount of obverse images must be " + REQUIRED_NUMBER_OF_OBVERSE_IMAGES);
         }
-        if (obverseImages.stream().anyMatch(EngineGameConfig::imageDoesNotHaveRequiredSize)) {
+        if (obverseImages.stream().anyMatch(UiConfig::imageDoesNotHaveRequiredSize)) {
             throw new IllegalArgumentException("obverse images must have size of " + REQUIRED_IMAGE_WIDTH + "x" + REQUIRED_IMAGE_HEIGHT);
         }
         Collections.shuffle(obverseImages);

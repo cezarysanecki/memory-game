@@ -1,6 +1,5 @@
 package pl.csanecki.memory.ui;
 
-import pl.csanecki.memory.EngineGameConfig;
 import pl.csanecki.memory.ui.panels.GamePanel;
 import pl.csanecki.memory.ui.panels.MenuBar;
 
@@ -12,11 +11,11 @@ public class MemoryGameFrame extends JFrame {
     private static final int WIDTH_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int HEIGHT_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().height;
 
-    public MemoryGameFrame(EngineGameConfig gameConfig) {
-        setJMenuBar(MenuBar.create(this));
+    public MemoryGameFrame(UiConfig uiConfig) {
+        MenuBar menubar = MenuBar.create(this);
+        GamePanel gamePanel = new GamePanel(uiConfig);
 
-        GamePanel gamePanel = new GamePanel(gameConfig);
-
+        setJMenuBar(menubar);
         add(gamePanel, BorderLayout.CENTER);
 
         pack();
