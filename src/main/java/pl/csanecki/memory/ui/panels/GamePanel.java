@@ -6,16 +6,18 @@ import pl.csanecki.memory.util.MillisTimer;
 import javax.swing.*;
 import java.awt.*;
 
-public class GamePanel extends JPanel implements CardsPanelSubscriber {
+public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSubscriber {
 
     private static final int HEIGHT_OF_SCORE_PANEL = 40;
 
     private final MillisTimer millisTimer = MillisTimer.ofTenMilliseconds();
+    private final ScoreLabel scoreLabel;
+    private final CardsPanel cardsPanel;
     private boolean underway = false;
 
     public GamePanel(UiConfig uiConfig) {
-        ScoreLabel scoreLabel = ScoreLabel.render();
-        CardsPanel cardsPanel = CardsPanel.render(uiConfig);
+        scoreLabel = ScoreLabel.render();
+        cardsPanel = CardsPanel.render(uiConfig);
 
         millisTimer.registerSubscriber(scoreLabel);
         cardsPanel.registerSubscriber(this);
@@ -44,6 +46,15 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber {
         }
         if (finished) {
             millisTimer.stop();
+        }
+    }
+
+    @Override
+    public void update(MenuOption menuOption) {
+        if (menuOption == MenuOption.Reset) {
+            underway = false;
+            scoreLabel.reset();
+            cardsPanel.reset();
         }
     }
 }

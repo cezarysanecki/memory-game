@@ -19,6 +19,10 @@ public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
         return new ScoreLabel();
     }
 
+    public void reset() {
+        setText(WELCOME_TEXT);
+    }
+
     @Override
     public void update(Duration passed, MillisRefreshment millisRefreshment) {
         String scoreText = switch (millisRefreshment) {

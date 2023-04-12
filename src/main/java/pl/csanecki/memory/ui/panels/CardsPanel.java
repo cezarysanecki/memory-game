@@ -89,6 +89,12 @@ public class CardsPanel extends JPanel {
         }
     }
 
+    public void reset() {
+        memoryGame.reset();
+        MemoryGameCurrentState currentState = memoryGame.currentState();
+        refreshAll(currentState);
+    }
+
     public void registerSubscriber(CardsPanelSubscriber cardsPanelSubscriber) {
         this.cardsPanelSubscribers.add(cardsPanelSubscriber);
     }
