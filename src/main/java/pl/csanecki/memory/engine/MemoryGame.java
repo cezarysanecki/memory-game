@@ -77,6 +77,7 @@ public class MemoryGame {
     public void reset() {
         current = null;
         guessed.clear();
+        groups.forEach(FlatItemsGroup::turnAllToReverseUp);
     }
 
     private boolean isAllGuessed() {

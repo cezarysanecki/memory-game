@@ -57,6 +57,16 @@ public class CardsPanel extends JPanel {
         return new CardsPanel(memoryGame, graphicCards, width, height);
     }
 
+    public void reset() {
+        memoryGame.reset();
+        MemoryGameCurrentState currentState = memoryGame.currentState();
+        refreshAll(currentState);
+    }
+
+    public void registerSubscriber(CardsPanelSubscriber cardsPanelSubscriber) {
+        this.cardsPanelSubscribers.add(cardsPanelSubscriber);
+    }
+
     private static List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameCurrentState currentState) {
         List<GraphicCard> graphicCards = new ArrayList<>();
         int index = 0;
@@ -87,16 +97,6 @@ public class CardsPanel extends JPanel {
                         graphicCard.getWidth(), graphicCard.getHeight());
             }
         }
-    }
-
-    public void reset() {
-        memoryGame.reset();
-        MemoryGameCurrentState currentState = memoryGame.currentState();
-        refreshAll(currentState);
-    }
-
-    public void registerSubscriber(CardsPanelSubscriber cardsPanelSubscriber) {
-        this.cardsPanelSubscribers.add(cardsPanelSubscriber);
     }
 
     private Optional<GraphicCard> findCardByCoordinates(Point2D point) {

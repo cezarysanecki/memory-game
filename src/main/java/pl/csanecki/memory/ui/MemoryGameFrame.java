@@ -12,15 +12,17 @@ public class MemoryGameFrame extends JFrame {
     private static final int HEIGHT_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().height;
 
     public MemoryGameFrame(UiConfig uiConfig) {
-        MenuBar menubar = MenuBar.create(this);
+        MenuBar menubar = new MenuBar(this);
         GamePanel gamePanel = new GamePanel(uiConfig);
 
         setJMenuBar(menubar);
         add(gamePanel, BorderLayout.CENTER);
 
+        menubar.register(gamePanel);
+
         setBounds(
-            (WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2,
-            getWidth(), getHeight());
+                (WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2,
+                getWidth(), getHeight());
 
         pack();
         setVisible(true);

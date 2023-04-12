@@ -53,6 +53,7 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
     public void update(MenuOption menuOption) {
         if (menuOption == MenuOption.Reset) {
             underway = false;
+            millisTimer.stop();
             scoreLabel.reset();
             cardsPanel.reset();
         }

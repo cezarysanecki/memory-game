@@ -3,35 +3,43 @@ package pl.csanecki.memory.ui.panels;
 import pl.csanecki.memory.ui.dialogs.AboutDialog;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MenuBar extends JMenuBar {
 
     private static final String MAIN_MENU = "Plik";
+    private static final String MAIN_MENU_RESET_ITEM = "Od nowa";
     private static final String MAIN_MENU_ABOUT_ITEM = "O programie";
     private static final String MAIN_MENU_EXIT_ITEM = "Zamknij";
 
-    private MenuBar() {
-    }
+    private final Collection<MenuBarSubscriber> subscribers = new ArrayList<>();
 
-    public static MenuBar create(JFrame owner) {
-        MenuBar menuBar = new MenuBar();
-        menuBar.add(prepareMainMenu(owner));
-        return menuBar;
-    }
-
-    private static JMenu prepareMainMenu(JFrame owner) {
+    public MenuBar(JFrame owner) {
         JMenu main = new JMenu(MAIN_MENU);
 
-        JMenuItem aboutItem = new JMenuItem(MAIN_MENU_ABOUT_ITEM);
-        aboutItem.addActionListener(event -> new AboutDialog(owner));
-        main.add(aboutItem);
+        JMenuItem resetItem = createMenuItem(MAIN_MENU_RESET_ITEM, event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
+        JMenuItem aboutItem = createMenuItem(MAIN_MENU_ABOUT_ITEM, event -> new AboutDialog(owner));
+        JMenuItem exitItem = createMenuItem(MAIN_MENU_EXIT_ITEM, event -> System.exit(0));
+
+        main.add(resetItem);
 
         main.addSeparator();
 
-        JMenuItem exitItem = new JMenuItem(MAIN_MENU_EXIT_ITEM);
-        exitItem.addActionListener(event -> System.exit(0));
+        main.add(aboutItem);
         main.add(exitItem);
 
-        return main;
+        add(main);
+    }
+
+    public void register(MenuBarSubscriber subscriber) {
+        this.subscribers.add(subscriber);
+    }
+
+    private static JMenuItem createMenuItem(String text, ActionListener listener) {
+        JMenuItem menuItem = new JMenuItem(text);
+        menuItem.addActionListener(listener);
+        return menuItem;
     }
 }
