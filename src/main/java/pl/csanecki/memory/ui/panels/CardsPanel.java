@@ -24,9 +24,14 @@ public class CardsPanel extends JPanel {
     private final MemoryGame memoryGame;
     private final List<GraphicCard> graphicCards;
 
-    private CardsPanel(MemoryGame memoryGame, List<GraphicCard> graphicCards, int width, int height) {
+    private final int columns;
+    private final int rows;
+
+    private CardsPanel(MemoryGame memoryGame, List<GraphicCard> graphicCards, int width, int height, int columns, int rows) {
         this.memoryGame = memoryGame;
         this.graphicCards = graphicCards;
+        this.columns = columns;
+        this.rows = rows;
 
         graphicCards.forEach(this::add);
         addMouseListener(new ClickMouseListener());
@@ -41,7 +46,7 @@ public class CardsPanel extends JPanel {
         MemoryGameCurrentState currentState = memoryGame.currentState();
 
         List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
-        setGraphicCardsBounds(uiConfig, graphicCards);
+        setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
 
         Integer maxCardsX = graphicCards.stream()
                 .map(JComponent::getX)
@@ -54,13 +59,15 @@ public class CardsPanel extends JPanel {
         int width = maxCardsX + uiConfig.reverseImage.getIconWidth() + BOUND;
         int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
 
-        return new CardsPanel(memoryGame, graphicCards, width, height);
+        return new CardsPanel(memoryGame, graphicCards, width, height, uiConfig.columns, uiConfig.rows);
     }
 
     public void reset() {
         memoryGame.reset();
         MemoryGameCurrentState currentState = memoryGame.currentState();
         refreshAll(currentState);
+        Collections.shuffle(graphicCards);
+        setGraphicCardsBounds(columns, rows, graphicCards);
     }
 
     public void registerSubscriber(CardsPanelSubscriber cardsPanelSubscriber) {
@@ -85,10 +92,10 @@ public class CardsPanel extends JPanel {
         return graphicCards;
     }
 
-    private static void setGraphicCardsBounds(UiConfig uiConfig, List<GraphicCard> graphicCards) {
+    private static void setGraphicCardsBounds(int columns, int rows, List<GraphicCard> graphicCards) {
         int sizeCards = graphicCards.size();
-        for (int row = 0; row < uiConfig.rows; row++) {
-            for (int column = 0; column < uiConfig.columns; column++) {
+        for (int column = 0; column < columns; column++) {
+            for (int row = 0; row < rows; row++) {
                 sizeCards--;
                 GraphicCard graphicCard = graphicCards.get(sizeCards);
                 graphicCard.setBounds(
