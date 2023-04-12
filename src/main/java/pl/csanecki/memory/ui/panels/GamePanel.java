@@ -7,6 +7,8 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
 
+    private static final int HEIGHT_OF_SCORE_PANEL = 40;
+
     public GamePanel(UiConfig uiConfig) {
         ScoreLabel scoreLabel = ScoreLabel.render();
         CardsPanel cardsPanel = CardsPanel.render(uiConfig);
@@ -16,8 +18,8 @@ public class GamePanel extends JPanel {
         add(scoreLabel);
         add(cardsPanel);
 
-        int width1 = cardsPanel.getWidth();
-        scoreLabel.setBounds(new Rectangle(0, 0, width1, 40));
+        int calculatedCardsPanelWidth = cardsPanel.getWidth();
+        scoreLabel.setBounds(new Rectangle(0, 0, calculatedCardsPanelWidth, HEIGHT_OF_SCORE_PANEL));
         cardsPanel.setBounds(0, scoreLabel.getHeight(), cardsPanel.getWidth(), cardsPanel.getHeight());
 
         int width = Math.max(cardsPanel.getWidth(), scoreLabel.getWidth());
@@ -25,6 +27,5 @@ public class GamePanel extends JPanel {
 
         Dimension dimension = new Dimension(width, height);
         setPreferredSize(dimension);
-
     }
 }
