@@ -20,6 +20,7 @@ public class CardsPanel extends JPanel {
 
     private static final int BOUND = 10;
 
+    private final Collection<CardsPanelSubscriber> cardsPanelSubscribers = new ArrayList<>();
     private final MemoryGame memoryGame;
     private final List<GraphicCard> graphicCards;
 
@@ -88,6 +89,10 @@ public class CardsPanel extends JPanel {
         }
     }
 
+    public void registerSubscriber(CardsPanelSubscriber cardsPanelSubscriber) {
+        this.cardsPanelSubscribers.add(cardsPanelSubscriber);
+    }
+
     private Optional<GraphicCard> findCardByCoordinates(Point2D point) {
         return graphicCards.stream()
                 .filter(graphicCard -> graphicCard.contains(point))
@@ -111,11 +116,13 @@ public class CardsPanel extends JPanel {
             findCardByCoordinates(event.getPoint())
                     .ifPresent(graphicCard -> {
                         GuessResult result = memoryGame.turnCard(graphicCard.flatItemId);
+                        MemoryGameCurrentState currentState = memoryGame.currentState();
                         if (result == GuessResult.Failure) {
                             graphicCard.turnToObverseUp();
                         } else {
-                            refreshAll(memoryGame.currentState());
+                            refreshAll(currentState);
                         }
+                        cardsPanelSubscribers.forEach(subscriber -> subscriber.update(currentState.isFinished()));
                     });
         }
     }

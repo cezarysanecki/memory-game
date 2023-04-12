@@ -1,6 +1,7 @@
 package pl.csanecki.memory.util;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -9,10 +10,10 @@ import java.util.concurrent.TimeUnit;
 public class MillisTimer {
 
     private final MillisRefreshment millisRefreshment;
-    private Collection<MillisTimerSubscriber> millisTimerSubscribers;
+    private final Collection<MillisTimerSubscriber> millisTimerSubscribers = new ArrayList<>();
 
     private ScheduledExecutorService timer;
-    private long passed;
+    private long passedMillis;
 
     private MillisTimer(MillisRefreshment millisRefreshment) {
         this.millisRefreshment = millisRefreshment;
@@ -30,15 +31,15 @@ public class MillisTimer {
         return new MillisTimer(MillisRefreshment.OneThousand);
     }
 
-    public void registerSubscribers(Collection<MillisTimerSubscriber> millisTimerSubscribers) {
-        this.millisTimerSubscribers = millisTimerSubscribers;
+    public void registerSubscriber(MillisTimerSubscriber millisTimerSubscriber) {
+        this.millisTimerSubscribers.add(millisTimerSubscriber);
     }
 
     public void start() {
-        passed = 0;
+        passedMillis = 0;
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(() -> {
-            passed += millisRefreshment.millis;
+            passedMillis += millisRefreshment.millis;
             millisTimerSubscribers.forEach(millisTimerSubscriber -> millisTimerSubscriber.update(getResultAsMilliseconds(), millisRefreshment));
         }, 0, millisRefreshment.millis, TimeUnit.MILLISECONDS);
     }
@@ -48,7 +49,7 @@ public class MillisTimer {
     }
 
     public Duration getResultAsMilliseconds() {
-        return Duration.ofMillis(passed);
+        return Duration.ofMillis(passedMillis);
     }
 
 }
