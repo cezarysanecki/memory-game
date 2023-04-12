@@ -13,12 +13,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class CardsPanel extends JPanel {
 
@@ -35,7 +31,7 @@ public class CardsPanel extends JPanel {
         addMouseListener(new ClickMouseListener());
 
         setLayout(null);
-        setBounds(new Rectangle(0,0,width, height));
+        setBounds(new Rectangle(0, 0, width, height));
         setBackground(Color.BLUE);
     }
 
@@ -44,20 +40,18 @@ public class CardsPanel extends JPanel {
         MemoryGameCurrentState currentState = memoryGame.currentState();
 
         List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
+        setGraphicCardsBounds(uiConfig, graphicCards);
 
-        int sizeCards = graphicCards.size();
-        for (int row = 0; row < uiConfig.rows; row++) {
-            for (int column = 0; column < uiConfig.columns; column++) {
-                sizeCards--;
-                GraphicCard graphicCard = graphicCards.get(sizeCards);
-                graphicCard.setBounds(
-                        BOUND * (column + 1) + column * graphicCard.getWidth(), BOUND * (row + 1) + row * graphicCard.getHeight(),
-                        graphicCard.getWidth(), graphicCard.getHeight());
-            }
-        }
-
-        int width = graphicCards.stream().map(JComponent::getX).max(Comparator.comparingInt(a -> a)).orElse(0) + 100 + BOUND;
-        int height = graphicCards.stream().map(JComponent::getY).max(Comparator.comparingInt(a -> a)).orElse(0) + 100 + BOUND;
+        Integer maxCardsX = graphicCards.stream()
+                .map(JComponent::getX)
+                .max(Comparator.comparingInt(x -> x))
+                .orElse(0);
+        Integer maxCardsY = graphicCards.stream()
+                .map(JComponent::getY)
+                .max(Comparator.comparingInt(y -> y))
+                .orElse(0);
+        int width = maxCardsX + uiConfig.reverseImage.getIconWidth() + BOUND;
+        int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
 
         return new CardsPanel(memoryGame, graphicCards, width, height);
     }
@@ -69,10 +63,10 @@ public class CardsPanel extends JPanel {
             ImageIcon obverseImage = uiConfig.obverseImages.get(index);
             for (FlatItemCurrentState flatItemCurrentState : groupOfFlatItemsCurrentState.flatItems()) {
                 graphicCards.add(new GraphicCard(
-                    flatItemCurrentState.flatItemId(),
-                    uiConfig.reverseImage,
-                    obverseImage,
-                    flatItemCurrentState.obverse()));
+                        flatItemCurrentState.flatItemId(),
+                        uiConfig.reverseImage,
+                        obverseImage,
+                        flatItemCurrentState.obverse()));
             }
             index++;
         }
@@ -80,20 +74,34 @@ public class CardsPanel extends JPanel {
         return graphicCards;
     }
 
+    private static void setGraphicCardsBounds(UiConfig uiConfig, List<GraphicCard> graphicCards) {
+        int sizeCards = graphicCards.size();
+        for (int row = 0; row < uiConfig.rows; row++) {
+            for (int column = 0; column < uiConfig.columns; column++) {
+                sizeCards--;
+                GraphicCard graphicCard = graphicCards.get(sizeCards);
+                graphicCard.setBounds(
+                        BOUND * (column + 1) + column * graphicCard.getWidth(),
+                        BOUND * (row + 1) + row * graphicCard.getHeight(),
+                        graphicCard.getWidth(), graphicCard.getHeight());
+            }
+        }
+    }
+
     private Optional<GraphicCard> findCardByCoordinates(Point2D point) {
         return graphicCards.stream()
-            .filter(graphicCard -> graphicCard.contains(point))
-            .findFirst();
+                .filter(graphicCard -> graphicCard.contains(point))
+                .findFirst();
     }
 
     private void refreshAll(MemoryGameCurrentState currentState) {
         graphicCards.forEach(graphicCard -> currentState.groupOfFlatItems()
-            .stream()
-            .map(GroupOfFlatItemsCurrentState::flatItems)
-            .flatMap(Collection::stream)
-            .filter(flatItem -> flatItem.flatItemId().equals(graphicCard.flatItemId))
-            .findFirst()
-            .ifPresent(graphicCard::refresh));
+                .stream()
+                .map(GroupOfFlatItemsCurrentState::flatItems)
+                .flatMap(Collection::stream)
+                .filter(flatItem -> flatItem.flatItemId().equals(graphicCard.flatItemId))
+                .findFirst()
+                .ifPresent(graphicCard::refresh));
     }
 
     private class ClickMouseListener extends MouseAdapter {
@@ -101,14 +109,14 @@ public class CardsPanel extends JPanel {
         @Override
         public void mousePressed(MouseEvent event) {
             findCardByCoordinates(event.getPoint())
-                .ifPresent(graphicCard -> {
-                    GuessResult result = memoryGame.turnCard(graphicCard.flatItemId);
-                    if (result == GuessResult.Failure) {
-                        graphicCard.turnToObverseUp();
-                    } else {
-                        refreshAll(memoryGame.currentState());
-                    }
-                });
+                    .ifPresent(graphicCard -> {
+                        GuessResult result = memoryGame.turnCard(graphicCard.flatItemId);
+                        if (result == GuessResult.Failure) {
+                            graphicCard.turnToObverseUp();
+                        } else {
+                            refreshAll(memoryGame.currentState());
+                        }
+                    });
         }
     }
 
@@ -142,8 +150,8 @@ public class CardsPanel extends JPanel {
 
         boolean contains(Point2D point) {
             Rectangle rectangle = new Rectangle(
-                this.getLocation().x, this.getLocation().y,
-                this.getWidth(), this.getHeight());
+                    this.getLocation().x, this.getLocation().y,
+                    this.getWidth(), this.getHeight());
             return rectangle.contains(point);
         }
 
