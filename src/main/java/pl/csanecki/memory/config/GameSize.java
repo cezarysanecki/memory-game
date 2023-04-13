@@ -2,9 +2,9 @@ package pl.csanecki.memory.config;
 
 public enum GameSize {
 
-    Small(4, 5),
-    Medium(6, 5),
-    Large(8, 5);
+    Small(4, 3),
+    Medium(4, 6),
+    Large(6, 6);
 
     public final int numberOfColumns;
     public final int numberOfRows;
