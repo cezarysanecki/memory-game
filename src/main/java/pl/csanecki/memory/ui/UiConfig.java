@@ -20,6 +20,7 @@ public final class UiConfig {
     public static final Color CARDS_PANEL_BACKGROUND_COLOR = Color.decode("#F6D59F");
     public static final Color SCORE_LABEL_BACKGROUND_COLOR = Color.decode("#FF9904");
     public static final Color SCORE_LABEL_FOREGROUND_COLOR = Color.decode("#F8FFFE");
+    public static final Font GLOBAL_FONT = new Font("Courier", Font.BOLD, 15);
 
     private static final String ALLOWED_IMAGE_FORMAT = ".png";
     private static final int REQUIRED_IMAGE_WIDTH = 100;

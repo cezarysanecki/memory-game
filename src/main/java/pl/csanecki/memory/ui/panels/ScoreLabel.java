@@ -4,11 +4,9 @@ import pl.csanecki.memory.util.MillisRefreshment;
 import pl.csanecki.memory.util.MillisTimerSubscriber;
 
 import javax.swing.*;
-import java.awt.*;
 import java.time.Duration;
 
-import static pl.csanecki.memory.ui.UiConfig.SCORE_LABEL_BACKGROUND_COLOR;
-import static pl.csanecki.memory.ui.UiConfig.SCORE_LABEL_FOREGROUND_COLOR;
+import static pl.csanecki.memory.ui.UiConfig.*;
 
 public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
 
@@ -20,7 +18,7 @@ public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
         setOpaque(true);
         setBackground(SCORE_LABEL_BACKGROUND_COLOR);
         setForeground(SCORE_LABEL_FOREGROUND_COLOR);
-        setFont(new Font("Arial", Font.BOLD, 15));
+        setFont(GLOBAL_FONT);
     }
 
     public static ScoreLabel render() {
