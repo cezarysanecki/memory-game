@@ -7,14 +7,17 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class MenuBar extends JMenuBar {
+public class MenuBar extends JMenuBar implements GamePanelSubscriber {
 
     private final Collection<MenuBarSubscriber> subscribers = new ArrayList<>();
+    private final JMenuItem resetItem;
+    private final JMenu options;
 
     public MenuBar(JFrame owner) {
         JMenu main = new JMenu("Plik");
 
-        JMenuItem resetItem = createMenuItem("Od nowa", event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
+        this.resetItem = createMenuItem("Od nowa", event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
+        this.resetItem.setEnabled(false);
         JMenuItem aboutItem = createMenuItem("O programie", event -> new AboutDialog(owner));
         JMenuItem exitItem = createMenuItem("Zamknij", event -> System.exit(0));
 
@@ -23,7 +26,7 @@ public class MenuBar extends JMenuBar {
         main.add(aboutItem);
         main.add(exitItem);
 
-        JMenu options = new JMenu("Opcje");
+        this.options = new JMenu("Opcje");
         JMenu gameSizeMenu = new JMenu("Rozmiar planszy");
 
         JMenuItem gameSizeMenuSmall = new JMenuItem("Mały");
@@ -71,7 +74,7 @@ public class MenuBar extends JMenuBar {
         add(options);
     }
 
-    public void register(MenuBarSubscriber subscriber) {
+    public void registerSubscriber(MenuBarSubscriber subscriber) {
         this.subscribers.add(subscriber);
     }
 
@@ -79,5 +82,11 @@ public class MenuBar extends JMenuBar {
         JMenuItem menuItem = new JMenuItem(text);
         menuItem.addActionListener(listener);
         return menuItem;
+    }
+
+    @Override
+    public void update(CurrentGameState gameState) {
+        options.setEnabled(gameState == CurrentGameState.Idle);
+        resetItem.setEnabled(gameState == CurrentGameState.Running);
     }
 }

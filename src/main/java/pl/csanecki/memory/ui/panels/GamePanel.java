@@ -5,11 +5,14 @@ import pl.csanecki.memory.util.MillisTimer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSubscriber {
 
     private static final int HEIGHT_OF_SCORE_PANEL = 40;
 
+    private final Collection<GamePanelSubscriber> subscribers = new ArrayList<>();
     private final MillisTimer millisTimer = MillisTimer.ofTenMilliseconds();
     private final ScoreLabel scoreLabel;
     private final CardsPanel cardsPanel;
@@ -38,15 +41,21 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
         setPreferredSize(dimension);
     }
 
+    public void registerSubscriber(GamePanelSubscriber subscriber) {
+        this.subscribers.add(subscriber);
+    }
+
     @Override
-    public void update(boolean finished) {
+    public void update(CurrentGameState gameState) {
         if (!underway) {
             underway = true;
             millisTimer.start();
         }
-        if (finished) {
+        if (gameState != CurrentGameState.Running) {
             millisTimer.stop();
+            underway = false;
         }
+        subscribers.forEach(subscriber -> subscriber.update(gameState));
     }
 
     @Override

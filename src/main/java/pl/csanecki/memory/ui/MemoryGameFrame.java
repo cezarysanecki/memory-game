@@ -18,7 +18,8 @@ public class MemoryGameFrame extends JFrame {
         setJMenuBar(menubar);
         add(gamePanel, BorderLayout.CENTER);
 
-        menubar.register(gamePanel);
+        menubar.registerSubscriber(gamePanel);
+        gamePanel.registerSubscriber(menubar);
 
         pack();
         setLocation((WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2);

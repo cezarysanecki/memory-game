@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class MillisTimer {
 
     private final MillisRefreshment millisRefreshment;
-    private final Collection<MillisTimerSubscriber> millisTimerSubscribers = new ArrayList<>();
+    private final Collection<MillisTimerSubscriber> subscribers = new ArrayList<>();
 
     private ScheduledExecutorService timer;
     private long passedMillis;
@@ -31,8 +31,8 @@ public class MillisTimer {
         return new MillisTimer(MillisRefreshment.OneThousand);
     }
 
-    public void registerSubscriber(MillisTimerSubscriber millisTimerSubscriber) {
-        this.millisTimerSubscribers.add(millisTimerSubscriber);
+    public void registerSubscriber(MillisTimerSubscriber subscriber) {
+        this.subscribers.add(subscriber);
     }
 
     public void start() {
@@ -40,7 +40,7 @@ public class MillisTimer {
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(() -> {
             passedMillis += millisRefreshment.millis;
-            millisTimerSubscribers.forEach(millisTimerSubscriber -> millisTimerSubscriber.update(getResultAsMilliseconds(), millisRefreshment));
+            subscribers.forEach(millisTimerSubscriber -> millisTimerSubscriber.update(getResultAsMilliseconds(), millisRefreshment));
         }, 0, millisRefreshment.millis, TimeUnit.MILLISECONDS);
     }
 

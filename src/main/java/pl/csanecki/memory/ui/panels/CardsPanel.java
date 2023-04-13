@@ -20,7 +20,7 @@ public class CardsPanel extends JPanel {
 
     private static final int BOUND = 10;
 
-    private final Collection<CardsPanelSubscriber> cardsPanelSubscribers = new ArrayList<>();
+    private final Collection<CardsPanelSubscriber> subscribers = new ArrayList<>();
     private final MemoryGame memoryGame;
     private final List<GraphicCard> graphicCards;
 
@@ -68,10 +68,11 @@ public class CardsPanel extends JPanel {
         refreshAll(currentState);
         Collections.shuffle(graphicCards);
         setGraphicCardsBounds(columns, rows, graphicCards);
+        subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Idle));
     }
 
-    public void registerSubscriber(CardsPanelSubscriber cardsPanelSubscriber) {
-        this.cardsPanelSubscribers.add(cardsPanelSubscriber);
+    public void registerSubscriber(CardsPanelSubscriber subscriber) {
+        this.subscribers.add(subscriber);
     }
 
     private static List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameCurrentState currentState) {
@@ -135,7 +136,8 @@ public class CardsPanel extends JPanel {
                         } else {
                             refreshAll(currentState);
                         }
-                        cardsPanelSubscribers.forEach(subscriber -> subscriber.update(currentState.isFinished()));
+                        subscribers.forEach(subscriber -> subscriber.update(
+                                currentState.isFinished() ? CurrentGameState.Ended : CurrentGameState.Running));
                     });
         }
     }
