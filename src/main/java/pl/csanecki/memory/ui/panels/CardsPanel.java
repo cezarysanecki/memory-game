@@ -35,37 +35,40 @@ public class CardsPanel extends JPanel {
         List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
         setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
 
-        Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
-
         this.memoryGame = memoryGame;
         this.graphicCards = graphicCards;
+        this.columns = uiConfig.columns;
+        this.rows = uiConfig.rows;
+
+        Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
+        setSize(panelDimension);
 
         graphicCards.forEach(this::add);
         addMouseListener(new ClickMouseListener());
 
         setLayout(null);
         setLocation(0, 0);
-        setSize(panelDimension);
         setBackground(Color.BLUE);
     }
 
     public void adjustToConfig(UiConfig uiConfig) {
-        memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
+        MemoryGame memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
         MemoryGameCurrentState currentState = memoryGame.currentState();
 
         List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
         setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
 
+        this.memoryGame = memoryGame;
         this.graphicCards = graphicCards;
         this.columns = uiConfig.columns;
         this.rows = uiConfig.rows;
 
         Dimension newPanelDimension = resolvePanelDimension(uiConfig, graphicCards);
-
         setSize(newPanelDimension);
 
         removeAll();
         graphicCards.forEach(this::add);
+
         repaint();
     }
 
