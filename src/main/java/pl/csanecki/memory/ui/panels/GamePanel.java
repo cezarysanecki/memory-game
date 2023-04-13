@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
 
     public GamePanel(UiConfig uiConfig) {
         scoreLabel = ScoreLabel.render();
-        cardsPanel = CardsPanel.render(uiConfig);
+        cardsPanel = new CardsPanel(uiConfig);
 
         millisTimer.registerSubscriber(scoreLabel);
         cardsPanel.registerSubscriber(this);

@@ -28,22 +28,7 @@ public class CardsPanel extends JPanel {
     private int columns;
     private int rows;
 
-    private CardsPanel(MemoryGame memoryGame, List<GraphicCard> graphicCards, Dimension panelDimension, int columns, int rows) {
-        this.memoryGame = memoryGame;
-        this.graphicCards = graphicCards;
-        this.columns = columns;
-        this.rows = rows;
-
-        graphicCards.forEach(this::add);
-        addMouseListener(new ClickMouseListener());
-
-        setLayout(null);
-        setLocation(0, 0);
-        setSize(panelDimension);
-        setBackground(Color.BLUE);
-    }
-
-    public static CardsPanel render(UiConfig uiConfig) {
+    public CardsPanel(UiConfig uiConfig) {
         MemoryGame memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
         MemoryGameCurrentState currentState = memoryGame.currentState();
 
@@ -52,7 +37,16 @@ public class CardsPanel extends JPanel {
 
         Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
 
-        return new CardsPanel(memoryGame, graphicCards, panelDimension, uiConfig.columns, uiConfig.rows);
+        this.memoryGame = memoryGame;
+        this.graphicCards = graphicCards;
+
+        graphicCards.forEach(this::add);
+        addMouseListener(new ClickMouseListener());
+
+        setLayout(null);
+        setLocation(0, 0);
+        setSize(panelDimension);
+        setBackground(Color.BLUE);
     }
 
     public void adjustToConfig(UiConfig uiConfig) {
@@ -88,7 +82,7 @@ public class CardsPanel extends JPanel {
         this.subscribers.add(subscriber);
     }
 
-    private static Dimension resolvePanelDimension(UiConfig uiConfig, List<GraphicCard> graphicCards) {
+    private Dimension resolvePanelDimension(UiConfig uiConfig, List<GraphicCard> graphicCards) {
         Integer maxCardsX = graphicCards.stream()
                 .map(JComponent::getX)
                 .max(Comparator.comparingInt(x -> x))
@@ -103,7 +97,7 @@ public class CardsPanel extends JPanel {
         return new Dimension(width, height);
     }
 
-    private static List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameCurrentState currentState) {
+    private List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameCurrentState currentState) {
         List<GraphicCard> graphicCards = new ArrayList<>();
         int index = 0;
         for (GroupOfFlatItemsCurrentState groupOfFlatItemsCurrentState : currentState.groupOfFlatItems()) {
@@ -121,7 +115,7 @@ public class CardsPanel extends JPanel {
         return graphicCards;
     }
 
-    private static void setGraphicCardsBounds(int columns, int rows, List<GraphicCard> graphicCards) {
+    private void setGraphicCardsBounds(int columns, int rows, List<GraphicCard> graphicCards) {
         int sizeCards = graphicCards.size();
         for (int column = 0; column < columns; column++) {
             for (int row = 0; row < rows; row++) {
