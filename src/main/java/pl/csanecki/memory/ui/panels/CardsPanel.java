@@ -28,7 +28,7 @@ public class CardsPanel extends JPanel {
     private int columns;
     private int rows;
 
-    private CardsPanel(MemoryGame memoryGame, List<GraphicCard> graphicCards, int width, int height, int columns, int rows) {
+    private CardsPanel(MemoryGame memoryGame, List<GraphicCard> graphicCards, Dimension panelDimension, int columns, int rows) {
         this.memoryGame = memoryGame;
         this.graphicCards = graphicCards;
         this.columns = columns;
@@ -38,7 +38,8 @@ public class CardsPanel extends JPanel {
         addMouseListener(new ClickMouseListener());
 
         setLayout(null);
-        setBounds(new Rectangle(0, 0, width, height));
+        setLocation(0, 0);
+        setSize(panelDimension);
         setBackground(Color.BLUE);
     }
 
@@ -49,18 +50,9 @@ public class CardsPanel extends JPanel {
         List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
         setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
 
-        Integer maxCardsX = graphicCards.stream()
-                .map(JComponent::getX)
-                .max(Comparator.comparingInt(x -> x))
-                .orElse(0);
-        Integer maxCardsY = graphicCards.stream()
-                .map(JComponent::getY)
-                .max(Comparator.comparingInt(y -> y))
-                .orElse(0);
-        int width = maxCardsX + uiConfig.reverseImage.getIconWidth() + BOUND;
-        int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
+        Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
 
-        return new CardsPanel(memoryGame, graphicCards, width, height, uiConfig.columns, uiConfig.rows);
+        return new CardsPanel(memoryGame, graphicCards, panelDimension, uiConfig.columns, uiConfig.rows);
     }
 
     public void adjustToConfig(UiConfig uiConfig) {
@@ -74,18 +66,9 @@ public class CardsPanel extends JPanel {
         this.columns = uiConfig.columns;
         this.rows = uiConfig.rows;
 
-        Integer maxCardsX = graphicCards.stream()
-                .map(JComponent::getX)
-                .max(Comparator.comparingInt(x -> x))
-                .orElse(0);
-        Integer maxCardsY = graphicCards.stream()
-                .map(JComponent::getY)
-                .max(Comparator.comparingInt(y -> y))
-                .orElse(0);
-        int width = maxCardsX + uiConfig.reverseImage.getIconWidth() + BOUND;
-        int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
+        Dimension newPanelDimension = resolvePanelDimension(uiConfig, graphicCards);
 
-        setSize(new Dimension(width, height));
+        setSize(newPanelDimension);
 
         removeAll();
         graphicCards.forEach(this::add);
@@ -103,6 +86,21 @@ public class CardsPanel extends JPanel {
 
     public void registerSubscriber(CardsPanelSubscriber subscriber) {
         this.subscribers.add(subscriber);
+    }
+
+    private static Dimension resolvePanelDimension(UiConfig uiConfig, List<GraphicCard> graphicCards) {
+        Integer maxCardsX = graphicCards.stream()
+                .map(JComponent::getX)
+                .max(Comparator.comparingInt(x -> x))
+                .orElse(0);
+        Integer maxCardsY = graphicCards.stream()
+                .map(JComponent::getY)
+                .max(Comparator.comparingInt(y -> y))
+                .orElse(0);
+        int width = maxCardsX + uiConfig.reverseImage.getIconWidth() + BOUND;
+        int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
+
+        return new Dimension(width, height);
     }
 
     private static List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameCurrentState currentState) {
