@@ -5,6 +5,7 @@ import pl.csanecki.memory.config.ReverseTheme;
 import pl.csanecki.memory.config.CustomConfig;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
@@ -15,6 +16,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class UiConfig {
+
+    public static final Color CARDS_PANEL_BACKGROUND_COLOR = Color.decode("#F6D59F");
+    public static final Color SCORE_LABEL_BACKGROUND_COLOR = Color.decode("#FF9904");
+    public static final Color SCORE_LABEL_FOREGROUND_COLOR = Color.decode("#F8FFFE");
 
     private static final String ALLOWED_IMAGE_FORMAT = ".png";
     private static final int REQUIRED_IMAGE_WIDTH = 100;

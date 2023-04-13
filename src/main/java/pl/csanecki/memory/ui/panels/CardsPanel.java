@@ -16,6 +16,8 @@ import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.*;
 
+import static pl.csanecki.memory.ui.UiConfig.CARDS_PANEL_BACKGROUND_COLOR;
+
 public class CardsPanel extends JPanel {
 
     private static final int BOUND = 10;
@@ -36,7 +38,7 @@ public class CardsPanel extends JPanel {
 
         setLayout(null);
         setLocation(0, 0);
-        setBackground(Color.decode("#F6D59F"));
+        setBackground(CARDS_PANEL_BACKGROUND_COLOR);
     }
 
     public void adjustToConfig(UiConfig uiConfig) {

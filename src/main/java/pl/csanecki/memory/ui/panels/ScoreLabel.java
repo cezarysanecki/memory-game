@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.Duration;
 
+import static pl.csanecki.memory.ui.UiConfig.SCORE_LABEL_BACKGROUND_COLOR;
+import static pl.csanecki.memory.ui.UiConfig.SCORE_LABEL_FOREGROUND_COLOR;
+
 public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
 
     private static final String WELCOME_TEXT = "Let's start the game!";
@@ -15,9 +18,9 @@ public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
         super(WELCOME_TEXT);
         setHorizontalAlignment(SwingConstants.CENTER);
         setOpaque(true);
-        setBackground(Color.decode("#FF9904"));
-        setForeground(Color.decode("#F8FFFE"));
-        setFont(new Font("Arial", Font.BOLD, 12));
+        setBackground(SCORE_LABEL_BACKGROUND_COLOR);
+        setForeground(SCORE_LABEL_FOREGROUND_COLOR);
+        setFont(new Font("Arial", Font.BOLD, 15));
     }
 
     public static ScoreLabel render() {
