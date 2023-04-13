@@ -24,13 +24,25 @@ public class MenuBar extends JMenuBar {
         JMenuItem exitItem = createMenuItem(MAIN_MENU_EXIT_ITEM, event -> System.exit(0));
 
         main.add(resetItem);
-
         main.addSeparator();
-
         main.add(aboutItem);
         main.add(exitItem);
 
+        JMenu options = new JMenu("Opcje");
+        JMenu gameSizeMenu = new JMenu("Rozmiar planszy");
+
+        JMenuItem gameSizeMenuSmall = new JMenuItem("Mały");
+        JMenuItem gameSizeMenuMedium = new JMenuItem("Średni");
+        JMenuItem gameSizeMenuLarge = new JMenuItem("Duży");
+
+        gameSizeMenu.add(gameSizeMenuSmall);
+        gameSizeMenu.add(gameSizeMenuMedium);
+        gameSizeMenu.add(gameSizeMenuLarge);
+
+        options.add(gameSizeMenu);
+
         add(main);
+        add(options);
     }
 
     public void register(MenuBarSubscriber subscriber) {
