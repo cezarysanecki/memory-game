@@ -20,11 +20,9 @@ public class MemoryGameFrame extends JFrame {
 
         menubar.register(gamePanel);
 
-        setBounds(
-                (WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2,
-                getWidth(), getHeight());
-
         pack();
+        setLocation((WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2);
+
         setVisible(true);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
