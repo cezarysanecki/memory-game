@@ -21,11 +21,12 @@ public class CardsPanel extends JPanel {
     private static final int BOUND = 10;
 
     private final Collection<CardsPanelSubscriber> subscribers = new ArrayList<>();
-    private final MemoryGame memoryGame;
-    private final List<GraphicCard> graphicCards;
 
-    private final int columns;
-    private final int rows;
+    private MemoryGame memoryGame;
+    private List<GraphicCard> graphicCards;
+
+    private int columns;
+    private int rows;
 
     private CardsPanel(MemoryGame memoryGame, List<GraphicCard> graphicCards, int width, int height, int columns, int rows) {
         this.memoryGame = memoryGame;
@@ -60,6 +61,22 @@ public class CardsPanel extends JPanel {
         int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
 
         return new CardsPanel(memoryGame, graphicCards, width, height, uiConfig.columns, uiConfig.rows);
+    }
+
+    public void adjustToConfig(UiConfig uiConfig) {
+        memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
+        MemoryGameCurrentState currentState = memoryGame.currentState();
+
+        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
+        setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
+
+        this.graphicCards = graphicCards;
+        this.columns = uiConfig.columns;
+        this.rows = uiConfig.rows;
+
+        removeAll();
+        graphicCards.forEach(this::add);
+        repaint();
     }
 
     public void reset() {

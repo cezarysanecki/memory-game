@@ -1,5 +1,7 @@
 package pl.csanecki.memory.ui.panels;
 
+import pl.csanecki.memory.config.CustomConfig;
+import pl.csanecki.memory.config.ReverseTheme;
 import pl.csanecki.memory.ui.dialogs.AboutDialog;
 
 import javax.swing.*;
@@ -12,8 +14,11 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
     private final Collection<MenuBarSubscriber> subscribers = new ArrayList<>();
     private final JMenuItem resetItem;
     private final JMenu options;
+    private CustomConfig customConfig;
 
-    public MenuBar(JFrame owner) {
+    public MenuBar(JFrame owner, CustomConfig customConfig) {
+        this.customConfig = customConfig;
+
         JMenu main = new JMenu("Plik");
 
         this.resetItem = createMenuItem("Od nowa", event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
@@ -39,7 +44,7 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
 
         JMenu reverseThemeMenu = new JMenu("Motyw rewersu");
 
-        JMenuItem reverseThemeMenuEarth = new JMenuItem("Ziemia");
+        JMenuItem reverseThemeMenuEarth = createMenuItem("Ziemia", event -> subscribers.forEach(subscriber -> subscriber.update(customConfig.changeReverseTheme(ReverseTheme.Earth))));
         JMenuItem reverseThemeMenuJungle = new JMenuItem("Dżungla");
         JMenuItem reverseThemeMenuPremierLeague = new JMenuItem("Premier League");
 

@@ -1,5 +1,6 @@
 package pl.csanecki.memory.ui.panels;
 
+import pl.csanecki.memory.config.CustomConfig;
 import pl.csanecki.memory.ui.UiConfig;
 import pl.csanecki.memory.util.MillisTimer;
 
@@ -56,6 +57,12 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
             underway = false;
         }
         subscribers.forEach(subscriber -> subscriber.update(gameState));
+    }
+
+    @Override
+    public void update(CustomConfig customConfig) {
+        UiConfig uiConfig = UiConfig.create(customConfig);
+        cardsPanel.adjustToConfig(uiConfig);
     }
 
     @Override

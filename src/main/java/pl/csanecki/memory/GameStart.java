@@ -8,7 +8,6 @@ public class GameStart {
 
     public static void main(String[] args) {
         CustomConfig customConfig = CustomConfig.defaultConfig();
-        UiConfig uiConfig = UiConfig.create(customConfig);
-        new MemoryGameFrame(uiConfig);
+        new MemoryGameFrame(customConfig);
     }
 }
