@@ -16,22 +16,42 @@ public final class CustomConfig {
 
     public static CustomConfig defaultConfig() {
         return new CustomConfig(
-            ReverseTheme.Jungle,
-            ObversesTheme.EnglishClubs,
-            GameSize.Medium,
-            NumberOfCardsInGroup.Three);
+                ReverseTheme.Jungle,
+                ObversesTheme.EnglishClubs,
+                GameSize.Medium,
+                NumberOfCardsInGroup.Three);
     }
 
-    public static CustomConfig userConfig(
-        ReverseTheme reverseTheme,
-        ObversesTheme obversesTheme,
-        GameSize gameSize,
-        NumberOfCardsInGroup numberOfCardsInGroup) {
+    public CustomConfig changeReverseTheme(ReverseTheme reverseTheme) {
         return new CustomConfig(
-            reverseTheme,
-            obversesTheme,
-            gameSize,
-            numberOfCardsInGroup);
+                reverseTheme,
+                obversesTheme,
+                gameSize,
+                numberOfCardsInGroup);
+    }
+
+    public CustomConfig changeObversesTheme(ObversesTheme obversesTheme) {
+        return new CustomConfig(
+                reverseTheme,
+                obversesTheme,
+                gameSize,
+                numberOfCardsInGroup);
+    }
+
+    public CustomConfig changeGameSize(GameSize gameSize) {
+        return new CustomConfig(
+                reverseTheme,
+                obversesTheme,
+                gameSize,
+                numberOfCardsInGroup);
+    }
+
+    public CustomConfig changeNumberOfCardsInGroup(NumberOfCardsInGroup numberOfCardsInGroup) {
+        return new CustomConfig(
+                reverseTheme,
+                obversesTheme,
+                gameSize,
+                numberOfCardsInGroup);
     }
 
 }
