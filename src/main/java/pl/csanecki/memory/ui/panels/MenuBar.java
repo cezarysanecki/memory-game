@@ -132,6 +132,6 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
     @Override
     public void update(CurrentGameState gameState) {
         options.setEnabled(gameState == CurrentGameState.Idle);
-        resetItem.setEnabled(gameState == CurrentGameState.Running);
+        resetItem.setEnabled(gameState != CurrentGameState.Idle);
     }
 }
