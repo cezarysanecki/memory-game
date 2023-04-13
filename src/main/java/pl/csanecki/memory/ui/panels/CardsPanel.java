@@ -36,7 +36,7 @@ public class CardsPanel extends JPanel {
 
         setLayout(null);
         setLocation(0, 0);
-        setBackground(Color.BLUE);
+        setBackground(Color.decode("#F6D59F"));
     }
 
     public void adjustToConfig(UiConfig uiConfig) {
