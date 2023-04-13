@@ -9,19 +9,14 @@ import java.util.Collection;
 
 public class MenuBar extends JMenuBar {
 
-    private static final String MAIN_MENU = "Plik";
-    private static final String MAIN_MENU_RESET_ITEM = "Od nowa";
-    private static final String MAIN_MENU_ABOUT_ITEM = "O programie";
-    private static final String MAIN_MENU_EXIT_ITEM = "Zamknij";
-
     private final Collection<MenuBarSubscriber> subscribers = new ArrayList<>();
 
     public MenuBar(JFrame owner) {
-        JMenu main = new JMenu(MAIN_MENU);
+        JMenu main = new JMenu("Plik");
 
-        JMenuItem resetItem = createMenuItem(MAIN_MENU_RESET_ITEM, event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
-        JMenuItem aboutItem = createMenuItem(MAIN_MENU_ABOUT_ITEM, event -> new AboutDialog(owner));
-        JMenuItem exitItem = createMenuItem(MAIN_MENU_EXIT_ITEM, event -> System.exit(0));
+        JMenuItem resetItem = createMenuItem("Od nowa", event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
+        JMenuItem aboutItem = createMenuItem("O programie", event -> new AboutDialog(owner));
+        JMenuItem exitItem = createMenuItem("Zamknij", event -> System.exit(0));
 
         main.add(resetItem);
         main.addSeparator();
@@ -39,7 +34,38 @@ public class MenuBar extends JMenuBar {
         gameSizeMenu.add(gameSizeMenuMedium);
         gameSizeMenu.add(gameSizeMenuLarge);
 
+        JMenu reverseThemeMenu = new JMenu("Motyw rewersu");
+
+        JMenuItem reverseThemeMenuEarth = new JMenuItem("Ziemia");
+        JMenuItem reverseThemeMenuJungle = new JMenuItem("Dżungla");
+        JMenuItem reverseThemeMenuPremierLeague = new JMenuItem("Premier League");
+
+        reverseThemeMenu.add(reverseThemeMenuEarth);
+        reverseThemeMenu.add(reverseThemeMenuJungle);
+        reverseThemeMenu.add(reverseThemeMenuPremierLeague);
+
+        JMenu obversesThemeMenu = new JMenu("Motyw awersu");
+
+        JMenuItem obversesThemeMenuEnglishClubs = new JMenuItem("Kluby angielskie");
+        JMenuItem obversesThemeMenuAnimals = new JMenuItem("Zwierzęta");
+
+        obversesThemeMenu.add(obversesThemeMenuEnglishClubs);
+        obversesThemeMenu.add(obversesThemeMenuAnimals);
+
+        JMenu numberOfCardsInGroupMenu = new JMenu("Ilość kart w grupie");
+
+        JMenuItem numberOfCardsInGroupMenuTwo = new JMenuItem("Dwie");
+        JMenuItem numberOfCardsInGroupMenuThree = new JMenuItem("Trzy");
+        JMenuItem numberOfCardsInGroupMenuFour = new JMenuItem("Cztery");
+
+        numberOfCardsInGroupMenu.add(numberOfCardsInGroupMenuTwo);
+        numberOfCardsInGroupMenu.add(numberOfCardsInGroupMenuThree);
+        numberOfCardsInGroupMenu.add(numberOfCardsInGroupMenuFour);
+
         options.add(gameSizeMenu);
+        options.add(reverseThemeMenu);
+        options.add(obversesThemeMenu);
+        options.add(numberOfCardsInGroupMenu);
 
         add(main);
         add(options);
