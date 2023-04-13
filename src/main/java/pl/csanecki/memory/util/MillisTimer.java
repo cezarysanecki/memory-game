@@ -45,7 +45,9 @@ public class MillisTimer {
     }
 
     public void stop() {
-        timer.shutdown();
+        if (timer != null) {
+            timer.shutdown();
+        }
     }
 
     public Duration getResultAsMilliseconds() {
