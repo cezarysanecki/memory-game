@@ -85,7 +85,7 @@ public class CardsPanel extends JPanel {
         int width = maxCardsX + uiConfig.reverseImage.getIconWidth() + BOUND;
         int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
 
-        setBounds(new Rectangle(0, 0, width, height));
+        setSize(new Dimension(width, height));
 
         removeAll();
         graphicCards.forEach(this::add);
