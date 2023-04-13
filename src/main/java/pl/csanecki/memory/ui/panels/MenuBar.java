@@ -1,7 +1,6 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.config.CustomConfig;
-import pl.csanecki.memory.config.ReverseTheme;
+import pl.csanecki.memory.config.*;
 import pl.csanecki.memory.ui.dialogs.AboutDialog;
 
 import javax.swing.*;
@@ -14,11 +13,8 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
     private final Collection<MenuBarSubscriber> subscribers = new ArrayList<>();
     private final JMenuItem resetItem;
     private final JMenu options;
-    private CustomConfig customConfig;
 
     public MenuBar(JFrame owner, CustomConfig customConfig) {
-        this.customConfig = customConfig;
-
         JMenu main = new JMenu("Plik");
 
         this.resetItem = createMenuItem("Od nowa", event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
@@ -34,9 +30,21 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
         this.options = new JMenu("Opcje");
         JMenu gameSizeMenu = new JMenu("Rozmiar planszy");
 
-        JMenuItem gameSizeMenuSmall = new JMenuItem("Mały");
-        JMenuItem gameSizeMenuMedium = new JMenuItem("Średni");
-        JMenuItem gameSizeMenuLarge = new JMenuItem("Duży");
+        JMenuItem gameSizeMenuSmall = createMenuItem("Mały",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeGameSize(GameSize.Small);
+                    subscriber.update(customConfig);
+                }));
+        JMenuItem gameSizeMenuMedium = createMenuItem("Średni",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeGameSize(GameSize.Medium);
+                    subscriber.update(customConfig);
+                }));
+        JMenuItem gameSizeMenuLarge = createMenuItem("Duży",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeGameSize(GameSize.Large);
+                    subscriber.update(customConfig);
+                }));
 
         gameSizeMenu.add(gameSizeMenuSmall);
         gameSizeMenu.add(gameSizeMenuMedium);
@@ -44,9 +52,21 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
 
         JMenu reverseThemeMenu = new JMenu("Motyw rewersu");
 
-        JMenuItem reverseThemeMenuEarth = createMenuItem("Ziemia", event -> subscribers.forEach(subscriber -> subscriber.update(customConfig.changeReverseTheme(ReverseTheme.Earth))));
-        JMenuItem reverseThemeMenuJungle = new JMenuItem("Dżungla");
-        JMenuItem reverseThemeMenuPremierLeague = new JMenuItem("Premier League");
+        JMenuItem reverseThemeMenuEarth = createMenuItem("Ziemia",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeReverseTheme(ReverseTheme.Earth);
+                    subscriber.update(customConfig);
+                }));
+        JMenuItem reverseThemeMenuJungle = createMenuItem("Dżungla",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeReverseTheme(ReverseTheme.Jungle);
+                    subscriber.update(customConfig);
+                }));
+        JMenuItem reverseThemeMenuPremierLeague = createMenuItem("Premier League",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeReverseTheme(ReverseTheme.PremierLeague);
+                    subscriber.update(customConfig);
+                }));
 
         reverseThemeMenu.add(reverseThemeMenuEarth);
         reverseThemeMenu.add(reverseThemeMenuJungle);
@@ -54,17 +74,37 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
 
         JMenu obversesThemeMenu = new JMenu("Motyw awersu");
 
-        JMenuItem obversesThemeMenuEnglishClubs = new JMenuItem("Kluby angielskie");
-        JMenuItem obversesThemeMenuAnimals = new JMenuItem("Zwierzęta");
+        JMenuItem obversesThemeMenuEnglishClubs = createMenuItem("Kluby angielskie",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeObversesTheme(ObversesTheme.EnglishClubs);
+                    subscriber.update(customConfig);
+                }));
+        JMenuItem obversesThemeMenuAnimals = createMenuItem("Zwierzęta",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeObversesTheme(ObversesTheme.Animals);
+                    subscriber.update(customConfig);
+                }));
 
         obversesThemeMenu.add(obversesThemeMenuEnglishClubs);
         obversesThemeMenu.add(obversesThemeMenuAnimals);
 
         JMenu numberOfCardsInGroupMenu = new JMenu("Ilość kart w grupie");
 
-        JMenuItem numberOfCardsInGroupMenuTwo = new JMenuItem("Dwie");
-        JMenuItem numberOfCardsInGroupMenuThree = new JMenuItem("Trzy");
-        JMenuItem numberOfCardsInGroupMenuFour = new JMenuItem("Cztery");
+        JMenuItem numberOfCardsInGroupMenuTwo = createMenuItem("Dwie",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeNumberOfCardsInGroup(NumberOfCardsInGroup.Two);
+                    subscriber.update(customConfig);
+                }));
+        JMenuItem numberOfCardsInGroupMenuThree = createMenuItem("Trzy",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeNumberOfCardsInGroup(NumberOfCardsInGroup.Three);
+                    subscriber.update(customConfig);
+                }));
+        JMenuItem numberOfCardsInGroupMenuFour = createMenuItem("Cztery",
+                event -> subscribers.forEach(subscriber -> {
+                    customConfig.changeNumberOfCardsInGroup(NumberOfCardsInGroup.Four);
+                    subscriber.update(customConfig);
+                }));
 
         numberOfCardsInGroupMenu.add(numberOfCardsInGroupMenuTwo);
         numberOfCardsInGroupMenu.add(numberOfCardsInGroupMenuThree);

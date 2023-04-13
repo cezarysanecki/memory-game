@@ -2,10 +2,10 @@ package pl.csanecki.memory.config;
 
 public final class CustomConfig {
 
-    public final ReverseTheme reverseTheme;
-    public final ObversesTheme obversesTheme;
-    public final GameSize gameSize;
-    public final NumberOfCardsInGroup numberOfCardsInGroup;
+    public ReverseTheme reverseTheme;
+    public ObversesTheme obversesTheme;
+    public GameSize gameSize;
+    public NumberOfCardsInGroup numberOfCardsInGroup;
 
     private CustomConfig(ReverseTheme reverseTheme, ObversesTheme obversesTheme, GameSize gameSize, NumberOfCardsInGroup numberOfCardsInGroup) {
         this.reverseTheme = reverseTheme;
@@ -22,36 +22,20 @@ public final class CustomConfig {
                 NumberOfCardsInGroup.Three);
     }
 
-    public CustomConfig changeReverseTheme(ReverseTheme reverseTheme) {
-        return new CustomConfig(
-                reverseTheme,
-                obversesTheme,
-                gameSize,
-                numberOfCardsInGroup);
+    public void changeReverseTheme(ReverseTheme reverseTheme) {
+        this.reverseTheme = reverseTheme;
     }
 
-    public CustomConfig changeObversesTheme(ObversesTheme obversesTheme) {
-        return new CustomConfig(
-                reverseTheme,
-                obversesTheme,
-                gameSize,
-                numberOfCardsInGroup);
+    public void changeObversesTheme(ObversesTheme obversesTheme) {
+        this.obversesTheme = obversesTheme;
     }
 
-    public CustomConfig changeGameSize(GameSize gameSize) {
-        return new CustomConfig(
-                reverseTheme,
-                obversesTheme,
-                gameSize,
-                numberOfCardsInGroup);
+    public void changeGameSize(GameSize gameSize) {
+        this.gameSize = gameSize;
     }
 
-    public CustomConfig changeNumberOfCardsInGroup(NumberOfCardsInGroup numberOfCardsInGroup) {
-        return new CustomConfig(
-                reverseTheme,
-                obversesTheme,
-                gameSize,
-                numberOfCardsInGroup);
+    public void changeNumberOfCardsInGroup(NumberOfCardsInGroup numberOfCardsInGroup) {
+        this.numberOfCardsInGroup = numberOfCardsInGroup;
     }
 
 }
