@@ -29,19 +29,7 @@ public class CardsPanel extends JPanel {
     private int rows;
 
     public CardsPanel(UiConfig uiConfig) {
-        MemoryGame memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
-        MemoryGameCurrentState currentState = memoryGame.currentState();
-
-        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
-        setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
-
-        this.memoryGame = memoryGame;
-        this.graphicCards = graphicCards;
-        this.columns = uiConfig.columns;
-        this.rows = uiConfig.rows;
-
-        Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
-        setSize(panelDimension);
+        prepareCardsPanel(uiConfig);
 
         graphicCards.forEach(this::add);
         addMouseListener(new ClickMouseListener());
@@ -52,24 +40,28 @@ public class CardsPanel extends JPanel {
     }
 
     public void adjustToConfig(UiConfig uiConfig) {
+        prepareCardsPanel(uiConfig);
+
+        removeAll();
+        graphicCards.forEach(this::add);
+
+        repaint();
+    }
+
+    private void prepareCardsPanel(UiConfig uiConfig) {
         MemoryGame memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
         MemoryGameCurrentState currentState = memoryGame.currentState();
 
         List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, currentState);
         setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
 
+        Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
+        setSize(panelDimension);
+
         this.memoryGame = memoryGame;
         this.graphicCards = graphicCards;
         this.columns = uiConfig.columns;
         this.rows = uiConfig.rows;
-
-        Dimension newPanelDimension = resolvePanelDimension(uiConfig, graphicCards);
-        setSize(newPanelDimension);
-
-        removeAll();
-        graphicCards.forEach(this::add);
-
-        repaint();
     }
 
     public void reset() {
