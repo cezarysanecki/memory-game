@@ -74,6 +74,19 @@ public class CardsPanel extends JPanel {
         this.columns = uiConfig.columns;
         this.rows = uiConfig.rows;
 
+        Integer maxCardsX = graphicCards.stream()
+                .map(JComponent::getX)
+                .max(Comparator.comparingInt(x -> x))
+                .orElse(0);
+        Integer maxCardsY = graphicCards.stream()
+                .map(JComponent::getY)
+                .max(Comparator.comparingInt(y -> y))
+                .orElse(0);
+        int width = maxCardsX + uiConfig.reverseImage.getIconWidth() + BOUND;
+        int height = maxCardsY + uiConfig.reverseImage.getIconWidth() + BOUND;
+
+        setBounds(new Rectangle(0, 0, width, height));
+
         removeAll();
         graphicCards.forEach(this::add);
         repaint();

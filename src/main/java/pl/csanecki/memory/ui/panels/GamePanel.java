@@ -63,6 +63,7 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
     public void update(CustomConfig customConfig) {
         UiConfig uiConfig = UiConfig.create(customConfig);
         cardsPanel.adjustToConfig(uiConfig);
+        cardsPanel.setBounds(0, scoreLabel.getHeight(), cardsPanel.getWidth(), cardsPanel.getHeight());
     }
 
     @Override
