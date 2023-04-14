@@ -101,5 +101,19 @@ class MemoryGameTest {
         assertEquals(GameOver, result);
     }
 
+    @Test
+    void guess_cards_are_not_counting_as_mistake() {
+        MemoryGame memoryGame = new MemoryGame(new MemoryGameSetup(Set.of(
+                new GroupToGuess(firstFlatItemsGroupId, Set.of(firstFlatItemId, secondFlatItemId)),
+                new GroupToGuess(secondFlatItemsGroupId, Set.of(thirdFlatItemId, fourthFlatItemId)))));
+
+        memoryGame.turnCard(firstFlatItemId);
+        memoryGame.turnCard(secondFlatItemId);
+        memoryGame.turnCard(thirdFlatItemId);
+        GuessResult result = memoryGame.turnCard(firstFlatItemId);
+
+        assertEquals(Continue, result);
+    }
+
 
 }
