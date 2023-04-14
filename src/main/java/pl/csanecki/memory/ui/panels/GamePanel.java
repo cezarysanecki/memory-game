@@ -67,11 +67,13 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
         UiConfig uiConfig = UiConfig.create(customConfig);
         cardsPanel.adjustToConfig(uiConfig);
 
-        int width = Math.max(cardsPanel.getWidth(), scoreLabel.getWidth());
+        int width = cardsPanel.getWidth();
         int height = scoreLabel.getHeight() + cardsPanel.getHeight();
 
         Dimension dimension = new Dimension(width, height);
         setPreferredSize(dimension);
+
+        scoreLabel.setSize(new Dimension(width, HEIGHT_OF_SCORE_PANEL));
     }
 
     @Override
@@ -82,5 +84,16 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
             scoreLabel.reset();
             cardsPanel.reset();
         }
+    }
+
+    @Override
+    public void repaint() {
+        if (cardsPanel != null) {
+            cardsPanel.repaint();
+        }
+        if (scoreLabel != null) {
+            scoreLabel.reset();
+        }
+        super.repaint();
     }
 }

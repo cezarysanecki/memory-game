@@ -49,4 +49,12 @@ public class MemoryGameFrame extends JFrame implements MenuBarSubscriber {
         setLocation((WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2);
         repaint();
     }
+
+    @Override
+    public void repaint() {
+        if (gamePanel != null) {
+            gamePanel.repaint();
+        }
+        super.repaint();
+    }
 }
