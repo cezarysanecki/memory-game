@@ -1,18 +1,15 @@
 package pl.csanecki.memory.ui;
 
+import pl.csanecki.memory.config.CustomConfig;
 import pl.csanecki.memory.config.ObversesTheme;
 import pl.csanecki.memory.config.ReverseTheme;
-import pl.csanecki.memory.config.CustomConfig;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class UiConfig {
@@ -26,7 +23,6 @@ public final class UiConfig {
     private static final int REQUIRED_IMAGE_WIDTH = 100;
     private static final int REQUIRED_IMAGE_HEIGHT = 100;
     private static final int REQUIRED_NUMBER_OF_OBVERSE_IMAGES = 20;
-
 
     public final int rows;
     public final int columns;
@@ -46,18 +42,18 @@ public final class UiConfig {
         ImageIcon reverseImage = resolveReverseImage(customConfig);
         List<ImageIcon> obverseImages = resolveObverseImages(customConfig);
         return new UiConfig(
-            customConfig.gameSize.numberOfRows,
-            customConfig.gameSize.numberOfColumns,
-            reverseImage,
-            obverseImages,
-            customConfig.numberOfCardsInGroup.numberOfCards);
+                customConfig.gameSize.numberOfRows,
+                customConfig.gameSize.numberOfColumns,
+                reverseImage,
+                obverseImages,
+                customConfig.numberOfCardsInGroup.numberOfCards);
     }
 
     private static ImageIcon resolveReverseImage(CustomConfig customConfig) {
         ReverseTheme reverseTheme = customConfig.reverseTheme;
         ImageIcon reverseImage = Optional.ofNullable(UiConfig.class.getResource(reverseTheme.path))
-            .map(ImageIcon::new)
-            .orElseThrow(() -> new IllegalArgumentException("cannot find resource path: " + reverseTheme.path));
+                .map(ImageIcon::new)
+                .orElseThrow(() -> new IllegalArgumentException("cannot find resource path: " + reverseTheme.path));
         if (imageDoesNotHaveRequiredSize(reverseImage)) {
             throw new IllegalArgumentException("reverse image must have size of " + REQUIRED_IMAGE_WIDTH + "x" + REQUIRED_IMAGE_HEIGHT);
         }
@@ -67,18 +63,18 @@ public final class UiConfig {
     private static List<ImageIcon> resolveObverseImages(CustomConfig customConfig) {
         ObversesTheme obversesTheme = customConfig.obversesTheme;
         List<ImageIcon> obverseImages = Optional.ofNullable(UiConfig.class.getResource(obversesTheme.path))
-            .map(URL::getPath)
-            .map(File::new)
-            .map(File::list)
-            .map(Arrays::stream)
-            .stream()
-            .flatMap(stringStream -> stringStream)
-            .filter(file -> file.endsWith(ALLOWED_IMAGE_FORMAT))
-            .map(path -> obversesTheme.path + path)
-            .map(UiConfig.class::getResource)
-            .filter(Objects::nonNull)
-            .map(ImageIcon::new)
-            .collect(Collectors.toList());
+                .map(URL::getPath)
+                .map(File::new)
+                .map(File::list)
+                .map(Arrays::stream)
+                .stream()
+                .flatMap(stringStream -> stringStream)
+                .filter(file -> file.endsWith(ALLOWED_IMAGE_FORMAT))
+                .map(path -> obversesTheme.path + path)
+                .map(UiConfig.class::getResource)
+                .filter(Objects::nonNull)
+                .map(ImageIcon::new)
+                .collect(Collectors.toList());
         if (obverseImages.size() != REQUIRED_NUMBER_OF_OBVERSE_IMAGES) {
             throw new IllegalArgumentException("amount of obverse images must be " + REQUIRED_NUMBER_OF_OBVERSE_IMAGES);
         }
