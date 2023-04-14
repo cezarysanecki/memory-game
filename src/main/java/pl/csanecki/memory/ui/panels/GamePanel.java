@@ -92,7 +92,7 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
             cardsPanel.repaint();
         }
         if (scoreLabel != null) {
-            scoreLabel.reset();
+            scoreLabel.repaint();
         }
         super.repaint();
     }

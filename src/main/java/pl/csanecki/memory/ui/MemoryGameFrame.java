@@ -52,6 +52,9 @@ public class MemoryGameFrame extends JFrame implements MenuBarSubscriber {
 
     @Override
     public void repaint() {
+        if (menubar != null) {
+            menubar.repaint();
+        }
         if (gamePanel != null) {
             gamePanel.repaint();
         }
