@@ -24,6 +24,15 @@ class MemoryGameTest {
                 () -> MemoryGame.create(numberOfCards, cardsInGroup));
     }
 
+    @ParameterizedTest
+    @CsvSource({"-16,8", "4,-2","0,2"})
+    void cannot_create_game_for_not_positive_values(
+            int numberOfCards, int cardsInGroup
+    ) {
+        assertThrows(IllegalArgumentException.class,
+                () -> MemoryGame.create(numberOfCards, cardsInGroup));
+    }
+
     @Test
     void turning_first_card_from_group_informs_to_continue_guessing() {
         MemoryGame memoryGame = MemoryGame.create(4, 2);
