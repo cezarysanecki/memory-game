@@ -29,9 +29,6 @@ public class MemoryGame {
         if (numberOfCards <= 0 || cardsInGroup <= 0) {
             throw new IllegalArgumentException("arguments must be positive");
         }
-        if (cardsInGroup > numberOfCards) {
-            throw new IllegalArgumentException("number of cards must be grater than cards in group");
-        }
 
         int numberOfGroups = numberOfCards / cardsInGroup;
         AtomicInteger flatItemGenerator = new AtomicInteger(0);
