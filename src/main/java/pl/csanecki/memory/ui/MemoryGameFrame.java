@@ -59,5 +59,6 @@ public class MemoryGameFrame extends JFrame implements MenuBarSubscriber {
             gamePanel.repaint();
         }
         super.repaint();
+        validate();
     }
 }
