@@ -1,6 +1,8 @@
 package pl.csanecki.memory.engine;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import pl.csanecki.memory.engine.state.FlatItemCurrentState;
 import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
 import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
@@ -8,11 +10,19 @@ import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
 import java.util.Collection;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static pl.csanecki.memory.engine.GuessResult.*;
 
 class MemoryGameTest {
+
+    @ParameterizedTest
+    @CsvSource({"7,2", "2,7"})
+    void cannot_create_game_for_not_dividable_number_of_cards_by_cards_in_group(
+            int numberOfCards, int cardsInGroup
+    ) {
+        assertThrows(IllegalArgumentException.class,
+                () -> MemoryGame.create(numberOfCards, cardsInGroup));
+    }
 
     @Test
     void turning_first_card_from_group_informs_to_continue_guessing() {
