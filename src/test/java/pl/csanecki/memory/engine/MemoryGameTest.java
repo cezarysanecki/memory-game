@@ -149,6 +149,34 @@ class MemoryGameTest {
         assertEquals(Continue, result);
     }
 
+    @Test
+    void reset_game_when_it_is_underway_makes_it_back_to_initial_state() {
+        MemoryGame memoryGame = MemoryGame.create(4, 2);
+        MemoryGameCurrentState currentState = memoryGame.currentState();
+
+        GroupOfFlatItemsCurrentState firstGroupOfFlatItems = getFirstGroup(currentState);
+        firstGroupOfFlatItems.flatItems()
+                .forEach(flatItem -> memoryGame.turnCard(flatItem.flatItemId()));
+
+        boolean result = memoryGame.currentState()
+                .groupOfFlatItems()
+                .stream()
+                .map(GroupOfFlatItemsCurrentState::flatItems)
+                .flatMap(Collection::stream)
+                .anyMatch(FlatItemCurrentState::obverse);
+        assertTrue(result);
+
+        memoryGame.reset();
+
+        result = memoryGame.currentState()
+                .groupOfFlatItems()
+                .stream()
+                .map(GroupOfFlatItemsCurrentState::flatItems)
+                .flatMap(Collection::stream)
+                .anyMatch(FlatItemCurrentState::obverse);
+        assertFalse(result);
+    }
+
     private static GroupOfFlatItemsCurrentState getFirstGroup(MemoryGameCurrentState currentState) {
         return currentState.groupOfFlatItems()
                 .stream()
