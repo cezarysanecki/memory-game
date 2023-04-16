@@ -1,6 +1,8 @@
-package pl.csanecki.memory.ui.panels;
+package pl.csanecki.memory.ui.menu;
 
 import pl.csanecki.memory.ui.dialogs.AboutDialog;
+import pl.csanecki.memory.ui.panels.CurrentGameState;
+import pl.csanecki.memory.ui.panels.GamePanelSubscriber;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;

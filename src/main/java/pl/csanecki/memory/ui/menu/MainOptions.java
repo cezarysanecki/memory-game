@@ -1,4 +1,4 @@
-package pl.csanecki.memory.ui.panels;
+package pl.csanecki.memory.ui.menu;
 
 public enum MainOptions {
     Reset

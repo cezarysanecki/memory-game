@@ -2,8 +2,8 @@ package pl.csanecki.memory.ui;
 
 import pl.csanecki.memory.config.CustomConfig;
 import pl.csanecki.memory.ui.panels.GamePanel;
-import pl.csanecki.memory.ui.panels.GraphicOptionsMenuSubscriber;
-import pl.csanecki.memory.ui.panels.MenuBar;
+import pl.csanecki.memory.ui.menu.GraphicOptionsMenuSubscriber;
+import pl.csanecki.memory.ui.menu.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
