@@ -50,6 +50,15 @@ public class CardsPanel extends JPanel {
         repaint();
     }
 
+    public void reset() {
+        memoryGame.reset();
+        MemoryGameCurrentState currentState = memoryGame.currentState();
+        refreshAll(currentState);
+        Collections.shuffle(graphicCards);
+        setGraphicCardsBounds(columns, rows, graphicCards);
+        subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Idle));
+    }
+
     private void prepareCardsPanel(UiConfig uiConfig) {
         MemoryGame memoryGame = MemoryGame.create(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
         MemoryGameCurrentState currentState = memoryGame.currentState();
@@ -64,15 +73,6 @@ public class CardsPanel extends JPanel {
         this.graphicCards = graphicCards;
         this.columns = uiConfig.columns;
         this.rows = uiConfig.rows;
-    }
-
-    public void reset() {
-        memoryGame.reset();
-        MemoryGameCurrentState currentState = memoryGame.currentState();
-        refreshAll(currentState);
-        Collections.shuffle(graphicCards);
-        setGraphicCardsBounds(columns, rows, graphicCards);
-        subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Idle));
     }
 
     public void registerSubscriber(CardsPanelSubscriber subscriber) {

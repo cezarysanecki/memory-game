@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSubscriber {
+public class GamePanel extends JPanel implements CardsPanelSubscriber, MainOptionsMenuSubscriber {
 
     private static final int HEIGHT_OF_SCORE_PANEL = 40;
 
@@ -59,10 +59,6 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
         subscribers.forEach(subscriber -> subscriber.update(gameState));
     }
 
-    @Override
-    public void update(CustomConfig customConfig) {
-    }
-
     public void extracted(CustomConfig customConfig) {
         UiConfig uiConfig = UiConfig.create(customConfig);
         cardsPanel.adjustToConfig(uiConfig);
@@ -77,8 +73,8 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MenuBarSu
     }
 
     @Override
-    public void update(MenuOption menuOption) {
-        if (menuOption == MenuOption.Reset) {
+    public void update(MainOptions mainOptions) {
+        if (mainOptions == MainOptions.Reset) {
             underway = false;
             millisTimer.stop();
             scoreLabel.reset();
