@@ -1,6 +1,5 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.config.CustomConfig;
 import pl.csanecki.memory.ui.UiConfig;
 import pl.csanecki.memory.ui.menu.MainOptions;
 import pl.csanecki.memory.ui.menu.MainOptionsMenuSubscriber;
@@ -33,15 +32,10 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MainOptio
         add(scoreLabel);
         add(cardsPanel);
 
-        int calculatedCardsPanelWidth = cardsPanel.getWidth();
-        scoreLabel.setBounds(new Rectangle(0, 0, calculatedCardsPanelWidth, HEIGHT_OF_SCORE_PANEL));
-        cardsPanel.setBounds(0, scoreLabel.getHeight(), cardsPanel.getWidth(), cardsPanel.getHeight());
+        setSizes();
 
-        int width = Math.max(cardsPanel.getWidth(), scoreLabel.getWidth());
-        int height = scoreLabel.getHeight() + cardsPanel.getHeight();
-
-        Dimension dimension = new Dimension(width, height);
-        setPreferredSize(dimension);
+        scoreLabel.setLocation(0, 0);
+        cardsPanel.setLocation(0, scoreLabel.getHeight());
     }
 
     public void registerSubscriber(GamePanelSubscriber subscriber) {
@@ -61,17 +55,9 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MainOptio
         subscribers.forEach(subscriber -> subscriber.update(gameState));
     }
 
-    public void extracted(CustomConfig customConfig) {
-        UiConfig uiConfig = UiConfig.create(customConfig);
-        cardsPanel.adjustToConfig(uiConfig);
-
-        int width = cardsPanel.getWidth();
-        int height = scoreLabel.getHeight() + cardsPanel.getHeight();
-
-        Dimension dimension = new Dimension(width, height);
-        setPreferredSize(dimension);
-
-        scoreLabel.setSize(new Dimension(width, HEIGHT_OF_SCORE_PANEL));
+    public void adjustTo(UiConfig uiConfig) {
+        cardsPanel.adjustTo(uiConfig);
+        setSizes();
     }
 
     @Override
@@ -93,5 +79,18 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MainOptio
             scoreLabel.repaint();
         }
         super.repaint();
+    }
+
+    private void setSizes() {
+        Dimension dimension = resolveDimension();
+        setPreferredSize(dimension);
+
+        scoreLabel.setSize(new Dimension((int) dimension.getWidth(), HEIGHT_OF_SCORE_PANEL));
+    }
+
+    private Dimension resolveDimension() {
+        int width = cardsPanel.getWidth();
+        int height = scoreLabel.getHeight() + cardsPanel.getHeight();
+        return new Dimension(width, height);
     }
 }

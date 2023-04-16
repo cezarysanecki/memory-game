@@ -1,9 +1,9 @@
 package pl.csanecki.memory.ui;
 
 import pl.csanecki.memory.config.CustomConfig;
-import pl.csanecki.memory.ui.panels.GamePanel;
 import pl.csanecki.memory.ui.menu.GraphicOptionsMenuSubscriber;
 import pl.csanecki.memory.ui.menu.MenuBar;
+import pl.csanecki.memory.ui.panels.GamePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +37,8 @@ public class MemoryGameFrame extends JFrame implements GraphicOptionsMenuSubscri
 
     @Override
     public void update(CustomConfig customConfig) {
-        gamePanel.extracted(customConfig);
+        UiConfig uiConfig = UiConfig.create(customConfig);
+        gamePanel.adjustTo(uiConfig);
 
         pack();
         setLocation((WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2);

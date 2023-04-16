@@ -41,7 +41,7 @@ public class CardsPanel extends JPanel {
         setBackground(CARDS_PANEL_BACKGROUND_COLOR);
     }
 
-    public void adjustToConfig(UiConfig uiConfig) {
+    public void adjustTo(UiConfig uiConfig) {
         prepareCardsPanel(uiConfig);
 
         removeAll();
