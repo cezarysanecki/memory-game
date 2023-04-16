@@ -13,13 +13,15 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
     private final Collection<MenuBarSubscriber> subscribers = new ArrayList<>();
     private final JMenuItem resetItem;
     private final JMenu options;
+    private final AboutDialog aboutDialog;
 
     public MenuBar(JFrame owner, CustomConfig customConfig) {
+        this.aboutDialog = new AboutDialog(owner);
+
         JMenu main = new JMenu("Plik");
 
         this.resetItem = createMenuItem("Od nowa", event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
         this.resetItem.setEnabled(false);
-        AboutDialog aboutDialog = new AboutDialog(owner);
         JMenuItem aboutItem = createMenuItem("O programie", event -> aboutDialog.setVisible(true));
         JMenuItem exitItem = createMenuItem("Zamknij", event -> System.exit(0));
 
