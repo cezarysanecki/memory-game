@@ -19,7 +19,8 @@ public class MenuBar extends JMenuBar implements GamePanelSubscriber {
 
         this.resetItem = createMenuItem("Od nowa", event -> subscribers.forEach(subscriber -> subscriber.update(MenuOption.Reset)));
         this.resetItem.setEnabled(false);
-        JMenuItem aboutItem = createMenuItem("O programie", event -> new AboutDialog(owner));
+        AboutDialog aboutDialog = new AboutDialog(owner);
+        JMenuItem aboutItem = createMenuItem("O programie", event -> aboutDialog.setVisible(true));
         JMenuItem exitItem = createMenuItem("Zamknij", event -> System.exit(0));
 
         main.add(resetItem);

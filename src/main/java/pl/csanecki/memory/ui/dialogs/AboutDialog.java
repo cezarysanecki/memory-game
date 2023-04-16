@@ -1,13 +1,18 @@
 package pl.csanecki.memory.ui.dialogs;
 
+import pl.csanecki.memory.ui.UiConfig;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Line2D;
 
 public class AboutDialog extends GenericModalDialog {
 
+    private static final int WIDTH_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static final int HEIGHT_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().height;
+    private static final int DIALOG_WIDTH = 400;
+    private static final int DIALOG_HEIGHT = 175;
+
     private static final String TITLE = "O programie";
-    private static final String FONT_SERIF_NAME = "Serif";
     private static final String R_SYMBOL = "®";
     private static final String AUTHOR = "Cezary Sanecki";
     private static final String GAME_TITLE = "Memory: Animals";
@@ -15,30 +20,29 @@ public class AboutDialog extends GenericModalDialog {
 
     public AboutDialog(JFrame owner) {
         super(owner, TITLE);
-        setLayout(new GridLayout(4, 1));
+        setVisible(false);
+        setLayout(new GridLayout(3, 1));
 
         add(gamePanel());
-        add(new LineComponent());
         add(authorPanel());
         add(buttonPanel());
 
-        setVisible(true);
+        setSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
+        setLocation((WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2);
     }
 
     private JPanel gamePanel() {
         JPanel gamePanel = new JPanel();
-        Font font = new Font(FONT_SERIF_NAME, Font.BOLD, 25);
         JLabel text = new JLabel(GAME_TITLE);
-        text.setFont(font);
+        text.setFont(UiConfig.GLOBAL_FONT);
         gamePanel.add(text, BorderLayout.SOUTH);
         return gamePanel;
     }
 
     private JPanel authorPanel() {
         JPanel authorPanel = new JPanel();
-        Font font = new Font(FONT_SERIF_NAME, Font.ITALIC, 18);
         JLabel text = new JLabel(R_SYMBOL + " " + AUTHOR);
-        text.setFont(font);
+        text.setFont(UiConfig.GLOBAL_FONT);
         authorPanel.add(text, BorderLayout.SOUTH);
         return authorPanel;
     }
@@ -50,14 +54,5 @@ public class AboutDialog extends GenericModalDialog {
         JPanel helperPanel = new JPanel();
         helperPanel.add(okButton);
         return helperPanel;
-    }
-
-    private static class LineComponent extends JComponent {
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g;
-            Line2D line = new Line2D.Double(0, 0, getWidth(), 0);
-            g2.draw(line);
-        }
     }
 }
