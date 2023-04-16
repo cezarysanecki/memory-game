@@ -9,8 +9,6 @@ public class AboutDialog extends GenericModalDialog {
 
     private static final int WIDTH_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int HEIGHT_SCREEN = Toolkit.getDefaultToolkit().getScreenSize().height;
-    private static final int DIALOG_WIDTH = 400;
-    private static final int DIALOG_HEIGHT = 175;
 
     private static final String TITLE = "O programie";
     private static final String R_SYMBOL = "®";
@@ -20,14 +18,13 @@ public class AboutDialog extends GenericModalDialog {
 
     public AboutDialog(JFrame owner) {
         super(owner, TITLE);
-        setVisible(false);
         setLayout(new GridLayout(3, 1));
 
         add(gamePanel());
         add(authorPanel());
         add(buttonPanel());
 
-        setSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
+        pack();
         setLocation((WIDTH_SCREEN - getWidth()) / 2, (HEIGHT_SCREEN - getHeight()) / 2);
     }
 
@@ -36,6 +33,7 @@ public class AboutDialog extends GenericModalDialog {
         JLabel text = new JLabel(GAME_TITLE);
         text.setFont(UiConfig.GLOBAL_FONT);
         gamePanel.add(text, BorderLayout.SOUTH);
+        gamePanel.setBackground(UiConfig.CARDS_PANEL_BACKGROUND_COLOR);
         return gamePanel;
     }
 
@@ -44,6 +42,7 @@ public class AboutDialog extends GenericModalDialog {
         JLabel text = new JLabel(R_SYMBOL + " " + AUTHOR);
         text.setFont(UiConfig.GLOBAL_FONT);
         authorPanel.add(text, BorderLayout.SOUTH);
+        authorPanel.setBackground(UiConfig.CARDS_PANEL_BACKGROUND_COLOR);
         return authorPanel;
     }
 
@@ -53,6 +52,7 @@ public class AboutDialog extends GenericModalDialog {
 
         JPanel helperPanel = new JPanel();
         helperPanel.add(okButton);
+        helperPanel.setBackground(UiConfig.CARDS_PANEL_BACKGROUND_COLOR);
         return helperPanel;
     }
 }

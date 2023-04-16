@@ -6,6 +6,7 @@ abstract class GenericModalDialog extends JDialog {
 
     GenericModalDialog(JFrame owner, String title) {
         super(owner, title, true);
+        setVisible(false);
 
         setSize(owner.getWidth() / 2, owner.getHeight() / 3);
         setLocation(
