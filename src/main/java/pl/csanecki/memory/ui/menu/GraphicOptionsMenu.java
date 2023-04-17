@@ -50,20 +50,25 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
             super("Rozmiar planszy");
 
             JMenuItem gameSizeMenuSmall = new JMenuItem("Mały");
+            JMenuItem gameSizeMenuMedium = new JMenuItem("Średni");
+            JMenuItem gameSizeMenuLarge = new JMenuItem("Duży");
+
+            items.add(gameSizeMenuSmall);
+            items.add(gameSizeMenuMedium);
+            items.add(gameSizeMenuLarge);
+
             gameSizeMenuSmall.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeGameSize(GameSize.Small);
                 subscriber.update(customConfig);
                 items.forEach(item -> item.setEnabled(true));
                 gameSizeMenuSmall.setEnabled(false);
             }));
-            JMenuItem gameSizeMenuMedium = new JMenuItem("Średni");
             gameSizeMenuMedium.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeGameSize(GameSize.Medium);
                 subscriber.update(customConfig);
                 items.forEach(item -> item.setEnabled(true));
                 gameSizeMenuMedium.setEnabled(false);
             }));
-            JMenuItem gameSizeMenuLarge = new JMenuItem("Duży");
             gameSizeMenuLarge.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeGameSize(GameSize.Large);
                 subscriber.update(customConfig);
@@ -71,11 +76,13 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
                 gameSizeMenuLarge.setEnabled(false);
             }));
 
-            items.add(gameSizeMenuSmall);
-            items.add(gameSizeMenuMedium);
-            items.add(gameSizeMenuLarge);
-
             items.forEach(this::add);
+
+            switch (customConfig.gameSize) {
+                case Small -> gameSizeMenuSmall.setEnabled(false);
+                case Medium -> gameSizeMenuMedium.setEnabled(false);
+                case Large -> gameSizeMenuLarge.setEnabled(false);
+            }
         }
 
         private void registerSubscriber(GraphicOptionsMenuSubscriber subscriber) {
@@ -93,20 +100,25 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
             super("Motyw rewersu");
 
             JMenuItem reverseThemeMenuEarth = new JMenuItem("Ziemia");
+            JMenuItem reverseThemeMenuJungle = new JMenuItem("Dżungla");
+            JMenuItem reverseThemeMenuPremierLeague = new JMenuItem("Premier League");
+
+            items.add(reverseThemeMenuEarth);
+            items.add(reverseThemeMenuJungle);
+            items.add(reverseThemeMenuPremierLeague);
+
             reverseThemeMenuEarth.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeReverseTheme(ReverseTheme.Earth);
                 subscriber.update(customConfig);
                 items.forEach(item -> item.setEnabled(true));
                 reverseThemeMenuEarth.setEnabled(false);
             }));
-            JMenuItem reverseThemeMenuJungle = new JMenuItem("Dżungla");
             reverseThemeMenuJungle.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeReverseTheme(ReverseTheme.Jungle);
                 subscriber.update(customConfig);
                 items.forEach(item -> item.setEnabled(true));
                 reverseThemeMenuJungle.setEnabled(false);
             }));
-            JMenuItem reverseThemeMenuPremierLeague = new JMenuItem("Premier League");
             reverseThemeMenuPremierLeague.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeReverseTheme(ReverseTheme.PremierLeague);
                 subscriber.update(customConfig);
@@ -114,11 +126,13 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
                 reverseThemeMenuPremierLeague.setEnabled(false);
             }));
 
-            items.add(reverseThemeMenuEarth);
-            items.add(reverseThemeMenuJungle);
-            items.add(reverseThemeMenuPremierLeague);
-
             items.forEach(this::add);
+
+            switch (customConfig.reverseTheme) {
+                case Earth -> reverseThemeMenuEarth.setEnabled(false);
+                case Jungle -> reverseThemeMenuJungle.setEnabled(false);
+                case PremierLeague -> reverseThemeMenuPremierLeague.setEnabled(false);
+            }
         }
 
         private void registerSubscriber(GraphicOptionsMenuSubscriber subscriber) {
@@ -135,13 +149,17 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
             super("Motyw awersu");
 
             JMenuItem obversesThemeMenuEnglishClubs = new JMenuItem("Kluby angielskie");
+            JMenuItem obversesThemeMenuAnimals = new JMenuItem("Zwierzęta");
+
+            items.add(obversesThemeMenuEnglishClubs);
+            items.add(obversesThemeMenuAnimals);
+
             obversesThemeMenuEnglishClubs.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeObversesTheme(ObversesTheme.EnglishClubs);
                 subscriber.update(customConfig);
                 items.forEach(item -> item.setEnabled(true));
                 obversesThemeMenuEnglishClubs.setEnabled(false);
             }));
-            JMenuItem obversesThemeMenuAnimals = new JMenuItem("Zwierzęta");
             obversesThemeMenuAnimals.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeObversesTheme(ObversesTheme.Animals);
                 subscriber.update(customConfig);
@@ -149,10 +167,12 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
                 obversesThemeMenuAnimals.setEnabled(false);
             }));
 
-            items.add(obversesThemeMenuEnglishClubs);
-            items.add(obversesThemeMenuAnimals);
-
             items.forEach(this::add);
+
+            switch (customConfig.obversesTheme) {
+                case EnglishClubs -> obversesThemeMenuEnglishClubs.setEnabled(false);
+                case Animals -> obversesThemeMenuAnimals.setEnabled(false);
+            }
         }
 
         private void registerSubscriber(GraphicOptionsMenuSubscriber subscriber) {
@@ -169,20 +189,25 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
             super("Ilość kart w grupie");
 
             JMenuItem numberOfCardsInGroupMenuTwo = new JMenuItem("Dwie");
+            JMenuItem numberOfCardsInGroupMenuThree = new JMenuItem("Trzy");
+            JMenuItem numberOfCardsInGroupMenuFour = new JMenuItem("Cztery");
+
+            items.add(numberOfCardsInGroupMenuTwo);
+            items.add(numberOfCardsInGroupMenuThree);
+            items.add(numberOfCardsInGroupMenuFour);
+
             numberOfCardsInGroupMenuTwo.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeNumberOfCardsInGroup(NumberOfCardsInGroup.Two);
                 subscriber.update(customConfig);
                 items.forEach(item -> item.setEnabled(true));
                 numberOfCardsInGroupMenuTwo.setEnabled(false);
             }));
-            JMenuItem numberOfCardsInGroupMenuThree = new JMenuItem("Trzy");
             numberOfCardsInGroupMenuThree.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeNumberOfCardsInGroup(NumberOfCardsInGroup.Three);
                 subscriber.update(customConfig);
                 items.forEach(item -> item.setEnabled(true));
                 numberOfCardsInGroupMenuThree.setEnabled(false);
             }));
-            JMenuItem numberOfCardsInGroupMenuFour = new JMenuItem("Cztery");
             numberOfCardsInGroupMenuFour.addActionListener(event -> subscribers.forEach(subscriber -> {
                 customConfig.changeNumberOfCardsInGroup(NumberOfCardsInGroup.Four);
                 subscriber.update(customConfig);
@@ -190,11 +215,13 @@ public class GraphicOptionsMenu extends JMenu implements GamePanelSubscriber {
                 numberOfCardsInGroupMenuFour.setEnabled(false);
             }));
 
-            items.add(numberOfCardsInGroupMenuTwo);
-            items.add(numberOfCardsInGroupMenuThree);
-            items.add(numberOfCardsInGroupMenuFour);
-
             items.forEach(this::add);
+
+            switch (customConfig.numberOfCardsInGroup) {
+                case Two -> numberOfCardsInGroupMenuTwo.setEnabled(false);
+                case Three -> numberOfCardsInGroupMenuThree.setEnabled(false);
+                case Four -> numberOfCardsInGroupMenuFour.setEnabled(false);
+            }
         }
 
         private void registerSubscriber(GraphicOptionsMenuSubscriber subscriber) {
