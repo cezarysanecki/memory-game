@@ -82,15 +82,13 @@ public class GamePanel extends JPanel implements CardsPanelSubscriber, MainOptio
     }
 
     private void setSizes() {
-        Dimension dimension = resolveDimension();
-        setPreferredSize(dimension);
+        scoreLabel.setSize(new Dimension(cardsPanel.getWidth(), HEIGHT_OF_SCORE_PANEL));
 
-        scoreLabel.setSize(new Dimension((int) dimension.getWidth(), HEIGHT_OF_SCORE_PANEL));
-    }
-
-    private Dimension resolveDimension() {
         int width = cardsPanel.getWidth();
-        int height = scoreLabel.getHeight() + cardsPanel.getHeight();
-        return new Dimension(width, height);
+        int height = HEIGHT_OF_SCORE_PANEL + cardsPanel.getHeight();
+
+        Dimension dimension = new Dimension(width, height);
+        setPreferredSize(dimension);
     }
+
 }
