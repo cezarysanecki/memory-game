@@ -1,14 +1,10 @@
-MemoryGame
+Memory Game
 ==========
 
-**Projekt powstał w celu zapoznania się z:**
+Project initially has been created to **learn basics of Java**. However recently I have decided to **refactor it**. Code became legacy, but helped me with begining my IT career.
 
-- językiem Java
+Project is just a famous game, memory. Frequently speaking, it is a card game in which all of the cards are laid face down on a surface and two cards are flipped face up over each turn. The object of the game is to turn over pairs of matching cards. That's all.
 
-Jest to implementacja słynnej gry w pamięć, która polega na odnajdywaniu par zwierzą spośród zakrytych kart.
-Sam kod nie jest napisany według standardów, ale był to **pierwszy, większy projekt w Javie**. Interfejs graficzny jest
-wymieszany z logiką biznesową. Jednak było to programowanie w myśli: *"Aby programować trzeba programować"*.
-Po wielu latach można zauważyć różnice jak wzrosły własne umiejętności oraz od czego się wyszło. Posiada się 
-pewien punkt odniesienia.
+![Old version of Memory Game](/doc/memory.png)
 
-![Wygląd aplikacji MemoryGame](/doc/memory.png)
+After first iteration, code was just a mess. UI was tangled with game logic. But it was working! Code was created according to the idea, "to learn how to program, just program". But nowadays it looks terrible. It shows me how much I have learnt since writing last line of code for this repository.
