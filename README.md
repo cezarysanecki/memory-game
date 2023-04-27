@@ -61,9 +61,9 @@ Then there is group of flat items, which aggregates them. Just like for flat ite
 
 Last one element of game is class `MemoryGame` which aggregates all defined groups. There are also rules of the game. We check if we can continue guessing or we wrongly turned next card. Also there is mechanism to decide if game is over. But there is **no UI or even gaining points for game**. It is just pure engine of the memory game called [Concentration](https://en.wikipedia.org/wiki/Concentration_\(card_game\)).
 
-Then we have GUI made in old, good Swing. I've defined some components, but the most important one is `CardsPanel'. This is hearth of GUI. In this section we show user cards to guess. What is worth to mention is that I use design pattern `Observer`. Using this pattern allowed me to exchange information between GUI components dinamically.
+Then we have GUI made in old, good Swing. I've defined some components, but the most important one is `CardsPanel`. This is hearth of GUI. In this section we show user cards to guess. What is worth to mention is that I use design pattern `Observer`. Using this pattern allowed me to exchange information between GUI components dinamically.
 
-But how the `CardsPanel` renders elements? First of all it sends commands to engine which changes it state. Then this component queries engine for current state. It sounds just like **CQS**. This separation simplifies code which lowers cognitive load of programmer.
+But how the `CardsPanel` renders elements? First of all it sends commands to engine which changes it state. Then this component queries engine for current state. It sounds just like [CQS](https://en.wikipedia.org/wiki/Command%E2%80%93query_separation). This separation simplifies code which lowers cognitive load of programmer.
 
 ![Jungle version of large size game](/doc/new_memory_1.png)
 
