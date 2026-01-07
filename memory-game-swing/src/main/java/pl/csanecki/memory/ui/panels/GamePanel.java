@@ -3,7 +3,7 @@ package pl.csanecki.memory.ui.panels;
 import pl.csanecki.memory.ui.UiConfig;
 import pl.csanecki.memory.ui.menu.MainOptions;
 import pl.csanecki.memory.ui.menu.MainOptionsMenuSubscriber;
-import pl.csanecki.memory.util.MillisTimer;
+import pl.csanecki.memory.ui.util.MillisTimer;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package pl.csanecki.memory.util;
+package pl.csanecki.memory.ui.util;
 
 import java.time.Duration;
 

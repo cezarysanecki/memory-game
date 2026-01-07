@@ -1,4 +1,4 @@
-package pl.csanecki.memory.util;
+package pl.csanecki.memory.ui.util;
 
 public enum MillisRefreshment {
     Ten(10), OneHundred(100), OneThousand(1_000);

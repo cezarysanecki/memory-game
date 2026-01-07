@@ -1,7 +1,7 @@
 package pl.csanecki.memory.ui.panels;
 
-import pl.csanecki.memory.util.MillisRefreshment;
-import pl.csanecki.memory.util.MillisTimerSubscriber;
+import pl.csanecki.memory.ui.util.MillisRefreshment;
+import pl.csanecki.memory.ui.util.MillisTimerSubscriber;
 
 import javax.swing.*;
 import java.time.Duration;
