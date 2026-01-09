@@ -8,7 +8,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static pl.csanecki.memory.engine.GuessResult.*;
+import static pl.csanecki.memory.engine.GuessResult.Continue;
+import static pl.csanecki.memory.engine.GuessResult.Failure;
+import static pl.csanecki.memory.engine.GuessResult.GameOver;
+import static pl.csanecki.memory.engine.GuessResult.Guessed;
 
 public class MemoryGame {
 
