@@ -16,9 +16,21 @@ class MemoryGameController(
     fun getCurrentState(): CurrentStateResponse = memoryGame.currentState().asResponse()
 
     @PostMapping("/turn-card/{cardId}")
-    fun turnCard(@PathVariable cardId: Int): GuessResult = memoryGame.turnCard(FlatItemId.of(cardId))
+    fun turnCard(@PathVariable cardId: Int): TurnedCardResponse {
+        val result = memoryGame.turnCard(FlatItemId.of(cardId))
+        val currentState = memoryGame.currentState()
+        return TurnedCardResponse(
+            guessResult = result,
+            currentState = currentState.asResponse()
+        )
+    }
 
 }
+
+data class TurnedCardResponse(
+    val guessResult: GuessResult,
+    val currentState: CurrentStateResponse
+)
 
 data class CurrentStateResponse(
     val cards: List<Card>,
@@ -32,6 +44,7 @@ data class CurrentStateResponse(
 
 fun MemoryGameCurrentState.asResponse() = CurrentStateResponse(
     cards = groupOfFlatItems.flatMap { it.flatItems }
-        .map { CurrentStateResponse.Card(it.flatItemId.toString(), it.obverse()) },
+        .map { CurrentStateResponse.Card(it.flatItemId.toString(), it.obverse()) }
+        .sortedBy { it.id },
     finished = isFinished
 )
