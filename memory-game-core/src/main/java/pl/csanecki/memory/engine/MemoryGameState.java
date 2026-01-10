@@ -1,20 +1,18 @@
 package pl.csanecki.memory.engine;
 
-import java.util.Optional;
 import java.util.Set;
 
-public interface MemoryGameState {
+public record MemoryGameState(
+        MemoryGameId memoryGameId,
+        Set<FlatItem> flatItemStates
+) {
 
-    void create(Set<FlatItemsGroup> groups);
+    public record FlatItem(
+            FlatItemId flatItemId,
+            FlatItemsGroupId flatItemsGroupId,
+            boolean obverseUp
+    ) {
 
-    void storeGuessed(FlatItemsGroup flatItemsGroup);
-
-    FlatItemsGroup findBy(FlatItemId flatItemId);
-
-    void setCurrent(FlatItemsGroup flatItemsGroup);
-
-    Optional<FlatItemsGroup> current();
-
-    boolean isAllGuessed();
+    }
 
 }

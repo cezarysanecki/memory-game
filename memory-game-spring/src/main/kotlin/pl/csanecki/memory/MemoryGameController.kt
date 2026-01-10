@@ -3,7 +3,7 @@ package pl.csanecki.memory
 import org.springframework.web.bind.annotation.*
 import pl.csanecki.memory.engine.FlatItemId
 import pl.csanecki.memory.engine.GuessResult
-import pl.csanecki.memory.engine.MemoryGame
+import pl.csanecki.memory.engine.game.MemoryGame
 import pl.csanecki.memory.engine.state.MemoryGameCurrentState
 
 @RestController

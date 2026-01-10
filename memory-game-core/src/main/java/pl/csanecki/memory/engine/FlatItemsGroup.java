@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public final class FlatItemsGroup {
 
-    private final FlatItemsGroupId flatItemsGroupId;
-    private final Set<FlatItem> flatItems;
+    public final FlatItemsGroupId flatItemsGroupId;
+    public final Set<FlatItem> flatItems;
 
     private FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
         if (flatItemIds.isEmpty()) {
@@ -68,9 +68,4 @@ public final class FlatItemsGroup {
         return Objects.hash(flatItemsGroupId);
     }
 
-    public GroupOfFlatItemsCurrentState currentState() {
-        return new GroupOfFlatItemsCurrentState(flatItems.stream()
-                .map(FlatItem::currentState)
-                .collect(Collectors.toUnmodifiableSet()));
-    }
 }

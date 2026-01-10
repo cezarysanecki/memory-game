@@ -2,7 +2,7 @@ package pl.csanecki.memory
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import pl.csanecki.memory.engine.MemoryGame
+import pl.csanecki.memory.engine.game.MemoryGame
 
 @Configuration
 class MemoryGameConfig {

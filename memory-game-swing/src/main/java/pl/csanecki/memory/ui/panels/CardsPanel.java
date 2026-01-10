@@ -2,7 +2,7 @@ package pl.csanecki.memory.ui.panels;
 
 import pl.csanecki.memory.engine.FlatItemId;
 import pl.csanecki.memory.engine.GuessResult;
-import pl.csanecki.memory.engine.MemoryGame;
+import pl.csanecki.memory.engine.game.MemoryGame;
 import pl.csanecki.memory.engine.state.FlatItemCurrentState;
 import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
 import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
