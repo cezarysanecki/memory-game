@@ -28,7 +28,7 @@ class FlatItemsGroupTest {
                 flatItemsGroupId,
                 Set.of(firstFlatItemId, secondFlatItemId));
 
-        flatItemsGroup.turnToObverse(firstFlatItemId);
+        flatItemsGroup.turnObverseUp(firstFlatItemId);
 
         assertFalse(flatItemsGroup.isAllReverseUp());
         assertFalse(flatItemsGroup.isAllObverseUp());
@@ -40,8 +40,8 @@ class FlatItemsGroupTest {
                 flatItemsGroupId,
                 Set.of(firstFlatItemId, secondFlatItemId));
 
-        flatItemsGroup.turnToObverse(firstFlatItemId);
-        flatItemsGroup.turnToObverse(secondFlatItemId);
+        flatItemsGroup.turnObverseUp(firstFlatItemId);
+        flatItemsGroup.turnObverseUp(secondFlatItemId);
 
         assertTrue(flatItemsGroup.isAllObverseUp());
     }
@@ -52,7 +52,7 @@ class FlatItemsGroupTest {
                 flatItemsGroupId,
                 Set.of(firstFlatItemId, secondFlatItemId));
 
-        flatItemsGroup.turnToObverse(firstFlatItemId);
+        flatItemsGroup.turnObverseUp(firstFlatItemId);
         flatItemsGroup.turnAllToReverseUp();
 
         assertTrue(flatItemsGroup.isAllReverseUp());
@@ -73,7 +73,7 @@ class FlatItemsGroupTest {
                 Set.of(firstFlatItemId, secondFlatItemId));
 
         assertThrows(IllegalStateException.class,
-                () -> flatItemsGroup.turnToObverse(notConsideredFlatItem));
+                () -> flatItemsGroup.turnObverseUp(notConsideredFlatItem));
     }
 
 }

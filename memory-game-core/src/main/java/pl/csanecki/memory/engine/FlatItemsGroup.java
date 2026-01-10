@@ -13,10 +13,11 @@ public final class FlatItemsGroup {
     private final Set<FlatItem> flatItems;
 
     private FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
-        this.flatItemsGroupId = flatItemsGroupId;
         if (flatItemIds.isEmpty()) {
             throw new IllegalStateException("group of flat items cannot be empty");
         }
+
+        this.flatItemsGroupId = flatItemsGroupId;
         this.flatItems = flatItemIds.stream()
                 .map(creator)
                 .collect(Collectors.toUnmodifiableSet());
@@ -30,11 +31,12 @@ public final class FlatItemsGroup {
         flatItems.forEach(FlatItem::turnReverseUp);
     }
 
-    public void turnToObverse(FlatItemId flatItemId) {
+    public void turnObverseUp(FlatItemId flatItemId) {
         FlatItem flatItem = flatItems.stream()
                 .filter(item -> item.getFlatItemId().equals(flatItemId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("flat item " + flatItemId + " does not belong to group"));
+
         flatItem.turnObverseUp();
     }
 

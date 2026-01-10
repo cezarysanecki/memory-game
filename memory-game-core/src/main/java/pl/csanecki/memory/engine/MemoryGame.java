@@ -19,29 +19,29 @@ public class MemoryGame {
 
     private final Set<FlatItemsGroup> guessed = new HashSet<>();
 
-    private FlatItemsGroup current = null;
+    private FlatItemsGroup searchedGroup = null;
 
     private MemoryGame(Set<FlatItemsGroup> groups) {
         this.groups = groups;
     }
 
     public static MemoryGame create(int numberOfCards, int cardsInGroup) {
-        if (numberOfCards % cardsInGroup != 0) {
-            throw new IllegalArgumentException("number of cards must be dividable by cards in group");
-        }
         if (numberOfCards <= 0 || cardsInGroup <= 0) {
             throw new IllegalArgumentException("arguments must be positive");
         }
+        if (numberOfCards % cardsInGroup != 0) {
+            throw new IllegalArgumentException("number of cards must be dividable by cards in group");
+        }
 
         int numberOfGroups = numberOfCards / cardsInGroup;
-        AtomicInteger flatItemGenerator = new AtomicInteger(0);
+        AtomicInteger flatItemIdSequenceGenerator = new AtomicInteger(0);
 
         Set<FlatItemsGroup> flatItemsGroups = IntStream.range(0, numberOfGroups)
                 .mapToObj(FlatItemsGroupId::of)
                 .map(flatItemsGroupId -> FlatItemsGroup.allReversed(
                         flatItemsGroupId,
                         IntStream.range(0, cardsInGroup)
-                                .mapToObj(index -> FlatItemId.of(flatItemGenerator.getAndIncrement()))
+                                .mapToObj(index -> FlatItemId.of(flatItemIdSequenceGenerator.getAndIncrement()))
                                 .collect(Collectors.toUnmodifiableSet())))
                 .collect(Collectors.toUnmodifiableSet());
         return new MemoryGame(flatItemsGroups);
@@ -50,33 +50,37 @@ public class MemoryGame {
     public GuessResult turnCard(FlatItemId flatItemId) {
         if (isAllGuessed()) {
             return GameOver;
-        } else if (current == null) {
-            current = findBy(flatItemId);
-        } else if (!current.contains(flatItemId)) {
-            FlatItemsGroup different = findBy(flatItemId);
+        }
+
+        if (searchedGroup == null) {
+            searchedGroup = findGroupBy(flatItemId);
+        } else if (!searchedGroup.contains(flatItemId)) {
+            FlatItemsGroup different = findGroupBy(flatItemId);
             if (different.isAllObverseUp()) {
                 return Continue;
             }
-            current.turnAllToReverseUp();
-            current = null;
+            searchedGroup.turnAllToReverseUp();
+            searchedGroup = null;
             return Failure;
         }
 
-        current.turnToObverse(flatItemId);
+        searchedGroup.turnObverseUp(flatItemId);
 
-        if (current.isAllObverseUp()) {
-            guessed.add(current);
-            current = null;
+        if (searchedGroup.isAllObverseUp()) {
+            guessed.add(searchedGroup);
+
+            searchedGroup = null;
             if (isAllGuessed()) {
                 return GameOver;
             }
             return Guessed;
         }
+
         return Continue;
     }
 
     public void reset() {
-        current = null;
+        searchedGroup = null;
         guessed.clear();
         groups.forEach(FlatItemsGroup::turnAllToReverseUp);
     }
@@ -85,7 +89,7 @@ public class MemoryGame {
         return guessed.containsAll(groups);
     }
 
-    private FlatItemsGroup findBy(FlatItemId flatItemId) {
+    private FlatItemsGroup findGroupBy(FlatItemId flatItemId) {
         return groups.stream()
                 .filter(group -> group.contains(flatItemId))
                 .findFirst()
