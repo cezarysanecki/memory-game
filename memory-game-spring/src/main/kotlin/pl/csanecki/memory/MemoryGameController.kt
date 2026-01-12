@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*
 import pl.cezarysanecki.memory.engine.MemoryGameApp
 import pl.cezarysanecki.memory.engine.api.FlatItemId
 import pl.cezarysanecki.memory.engine.api.MemoryGameId
-import pl.cezarysanecki.memory.engine.api.MemoryGameView
+import pl.cezarysanecki.memory.engine.api.MemoryGameState
 import java.util.*
 
 @RestController
@@ -14,39 +14,42 @@ class MemoryGameController(
 ) {
 
     @PostMapping
-    fun start(): MemoryGameResponse {
-        val memoryGameId = memoryGameApp.start(12, 3)
-        return memoryGameApp.getState(memoryGameId).toResponse()
+    fun start(): MemoryGameStateResponse {
+        val gameState = memoryGameApp.start(12, 3)
+        return gameState.toResponse()
     }
 
     @PostMapping("/{memoryGameId}/turn-card/{cardId}")
     fun turnCard(
         @PathVariable memoryGameId: String,
         @PathVariable cardId: Int,
-    ): MemoryGameResponse {
+    ): TurningCardResponse {
         val memoryGameIdValue = MemoryGameId(UUID.fromString(memoryGameId))
-        memoryGameApp.turnCard(memoryGameIdValue, FlatItemId.of(cardId))
-        return memoryGameApp.getState(memoryGameIdValue).toResponse()
+        val guessResult = memoryGameApp.turnCard(memoryGameIdValue, FlatItemId.of(cardId))
+        return TurningCardResponse(
+            result = guessResult.actionResult.name,
+            state = guessResult.state.toResponse()
+        )
     }
 
     @GetMapping("/{memoryGameId}")
-    fun getCurrentState(@PathVariable memoryGameId: String): MemoryGameResponse = memoryGameApp.getState(
+    fun getCurrentState(@PathVariable memoryGameId: String): MemoryGameStateResponse = memoryGameApp.getState(
         MemoryGameId(UUID.fromString(memoryGameId))
     ).toResponse()
 
 }
 
-fun MemoryGameView.toResponse(): MemoryGameResponse = MemoryGameResponse(
+fun MemoryGameState.toResponse(): MemoryGameStateResponse = MemoryGameStateResponse(
     memoryGameId = this.memoryGameId.value().toString(),
     cards = this.flatItems.map {
-        MemoryGameResponse.Card(
+        MemoryGameStateResponse.Card(
             id = it.flatItemId.id.toString(),
             obverse = it.obverseUp()
         )
     }
 )
 
-data class MemoryGameResponse(
+data class MemoryGameStateResponse(
     val memoryGameId: String,
     val cards: List<Card>
 ) {
@@ -55,3 +58,8 @@ data class MemoryGameResponse(
         val obverse: Boolean
     )
 }
+
+data class TurningCardResponse(
+    val result: String,
+    val state: MemoryGameStateResponse
+)

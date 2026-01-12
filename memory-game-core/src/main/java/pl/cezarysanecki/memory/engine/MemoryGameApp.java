@@ -3,11 +3,8 @@ package pl.cezarysanecki.memory.engine;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.GuessResult;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
-import pl.cezarysanecki.memory.engine.api.MemoryGameView;
-import pl.cezarysanecki.memory.engine.db.MemoryGameEntity;
+import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 import pl.cezarysanecki.memory.engine.db.MemoryGameRepository;
-
-import java.util.stream.Collectors;
 
 public class MemoryGameApp {
 
@@ -21,38 +18,28 @@ public class MemoryGameApp {
         return new MemoryGameApp(new InMemoryMemoryGameRepository());
     }
 
-    public MemoryGameId start(int numberOfCards, int cardsInGroup) {
-        MemoryGameEntity game = MemoryGameFactory.create(numberOfCards, cardsInGroup);
+    public MemoryGameState start(int numberOfCards, int cardsInGroup) {
+        MemoryGame memoryGame = MemoryGameFactory.create(numberOfCards, cardsInGroup);
 
-        memoryGameRepository.save(game);
+        MemoryGameState gameState = memoryGame.state();
+        memoryGameRepository.save(gameState);
 
-        return game.memoryGameId();
+        return gameState;
     }
 
     public GuessResult turnCard(MemoryGameId memoryGameId, FlatItemId flatItemId) {
-        MemoryGameEntity gameState = memoryGameRepository.load(memoryGameId);
+        MemoryGameState gameState = memoryGameRepository.load(memoryGameId);
         MemoryGame game = MemoryGameFactory.restore(gameState);
 
         GuessResult guessResult = game.turnCard(flatItemId);
 
-        MemoryGameEntity newState = gameState.applyResult(flatItemId, guessResult);
-        memoryGameRepository.save(newState);
+        memoryGameRepository.save(guessResult.state());
 
         return guessResult;
     }
 
-    public MemoryGameView getState(MemoryGameId memoryGameId) {
-        MemoryGameEntity entity = memoryGameRepository.load(memoryGameId);
-        return new MemoryGameView(
-                entity.memoryGameId(),
-                entity.flatItems().stream()
-                        .map(flatItem -> new MemoryGameView.FlatItem(
-                                flatItem.flatItemId(),
-                                flatItem.assignedGroupId(),
-                                flatItem.obverseUp()
-                        ))
-                        .collect(Collectors.toUnmodifiableSet())
-        );
+    public MemoryGameState getState(MemoryGameId memoryGameId) {
+        return memoryGameRepository.load(memoryGameId);
     }
 
 }

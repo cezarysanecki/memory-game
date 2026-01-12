@@ -2,25 +2,36 @@ package pl.cezarysanecki.memory.engine;
 
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.GuessResult;
+import pl.cezarysanecki.memory.engine.api.MemoryGameId;
+import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static pl.cezarysanecki.memory.engine.api.GuessResult.Continue;
-import static pl.cezarysanecki.memory.engine.api.GuessResult.Failure;
-import static pl.cezarysanecki.memory.engine.api.GuessResult.GameOver;
-import static pl.cezarysanecki.memory.engine.api.GuessResult.Guessed;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Continue;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Failure;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.State.GameOver;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Guessed;
 
 class MemoryGame {
 
-    private Set<FlatItemsGroup> groups;
-    private Set<FlatItemsGroup> guessed;
+    private final MemoryGameId memoryGameId;
+    private final Set<FlatItemsGroup> groups;
+    private final Set<FlatItemsGroup> guessed;
     private FlatItemsGroup current;
 
+    MemoryGame(MemoryGameId memoryGameId, Set<FlatItemsGroup> groups) {
+        this(memoryGameId, groups, new HashSet<>(), null);
+    }
+
     MemoryGame(
+            MemoryGameId memoryGameId,
             Set<FlatItemsGroup> groups,
             Set<FlatItemsGroup> guessed,
             FlatItemsGroup current
     ) {
+        this.memoryGameId = memoryGameId;
         this.groups = groups;
         this.guessed = guessed;
         this.current = current;
@@ -28,17 +39,17 @@ class MemoryGame {
 
     GuessResult turnCard(FlatItemId flatItemId) {
         if (isAllGuessed()) {
-            return GameOver;
+            return new GuessResult(GameOver, state());
         } else if (current == null) {
             current = findBy(flatItemId);
         } else if (!current.contains(flatItemId)) {
             FlatItemsGroup different = findBy(flatItemId);
             if (different.isAllObverseUp()) {
-                return Continue;
+                return new GuessResult(Continue, state());
             }
             current.turnAllToReverseUp();
             current = null;
-            return Failure;
+            return new GuessResult(Failure, state());
         }
 
         current.turnToObverse(flatItemId);
@@ -47,11 +58,11 @@ class MemoryGame {
             guessed.add(current);
             current = null;
             if (isAllGuessed()) {
-                return GameOver;
+                return new GuessResult(GameOver, state());
             }
-            return Guessed;
+            return new GuessResult(Guessed, state());
         }
-        return Continue;
+        return new GuessResult(Continue, state());
     }
 
     private boolean isAllGuessed() {
@@ -63,6 +74,21 @@ class MemoryGame {
                 .filter(group -> group.contains(flatItemId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("cannot find group for flat item: " + flatItemId));
+    }
+
+    MemoryGameState state() {
+        return new MemoryGameState(
+                memoryGameId,
+                groups.stream()
+                        .flatMap(group -> group.flatItems().stream()
+                                .map(flatItem -> new MemoryGameState.FlatItem(
+                                        flatItem.getFlatItemId(),
+                                        group.flatItemsGroupId(),
+                                        flatItem.isObverseUp()
+                                ))
+                        )
+                        .collect(Collectors.toUnmodifiableSet())
+        );
     }
 
 }

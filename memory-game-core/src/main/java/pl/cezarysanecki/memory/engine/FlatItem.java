@@ -18,6 +18,10 @@ final class FlatItem {
         this.side = side;
     }
 
+    static FlatItem restore(FlatItemId flatItemId, boolean obverseUp) {
+        return new FlatItem(flatItemId, obverseUp ? Side.Obverse : Side.Reverse);
+    }
+
     static FlatItem obverseUp(FlatItemId flatItemId) {
         return new FlatItem(flatItemId, Side.Obverse);
     }

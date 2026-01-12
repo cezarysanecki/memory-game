@@ -1,5 +1,12 @@
 package pl.cezarysanecki.memory.engine.api;
 
-public enum GuessResult {
-    Continue, Guessed, GameOver, Failure
+public record GuessResult(
+        State actionResult,
+        MemoryGameState state
+) {
+
+    public enum State {
+        Continue, Guessed, GameOver, Failure
+    }
+
 }

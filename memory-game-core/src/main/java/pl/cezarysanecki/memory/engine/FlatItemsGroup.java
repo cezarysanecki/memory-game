@@ -8,28 +8,36 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-final class FlatItemsGroup {
+record FlatItemsGroup(
+        FlatItemsGroupId flatItemsGroupId,
+        Set<FlatItem> flatItems
+) {
 
-    private final FlatItemsGroupId flatItemsGroupId;
-    private final Set<FlatItem> flatItems;
-
-    FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItem> flatItems) {
-        this.flatItemsGroupId = flatItemsGroupId;
-        this.flatItems = flatItems;
-    }
-
-    private FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
-        this.flatItemsGroupId = flatItemsGroupId;
-        if (flatItemIds.isEmpty()) {
+    FlatItemsGroup {
+        if (flatItems.isEmpty()) {
             throw new IllegalStateException("group of flat items cannot be empty");
         }
-        this.flatItems = flatItemIds.stream()
-                .map(creator)
-                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    static FlatItemsGroup create(
+            FlatItemsGroupId flatItemsGroupId,
+            Set<FlatItemId> flatItemIds,
+            Function<FlatItemId, FlatItem> creator
+    ) {
+        return new FlatItemsGroup(
+                flatItemsGroupId,
+                flatItemIds.stream()
+                        .map(creator)
+                        .collect(Collectors.toUnmodifiableSet())
+        );
     }
 
     static FlatItemsGroup allReversed(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds) {
-        return new FlatItemsGroup(flatItemsGroupId, flatItemIds, FlatItem::reverseUp);
+        return create(
+                flatItemsGroupId,
+                flatItemIds,
+                FlatItem::reverseUp
+        );
     }
 
     void turnAllToReverseUp() {
