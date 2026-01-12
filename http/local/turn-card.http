@@ -1,0 +1,6 @@
+@memoryGameId = b1f14975-92c4-4794-9bbf-1511c5f0e0ff
+@cardId = 2
+
+POST http://localhost:8080/memory-game/{{memoryGameId}}/turn-card/{{cardId}}
+Accept: application/json
+

@@ -2,3 +2,4 @@ rootProject.name = 'memory-game'
 
 include 'memory-game-core'
 include 'memory-game-swing'
+include 'memory-game-spring'
