@@ -1,4 +1,4 @@
-package pl.cezarysanecki.memory;
+package pl.cezarysanecki.memory.engine;
 
 import org.junit.jupiter.api.Test;
 

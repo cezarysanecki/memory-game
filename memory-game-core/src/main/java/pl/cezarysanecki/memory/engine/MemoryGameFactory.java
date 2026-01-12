@@ -1,15 +1,13 @@
 package pl.cezarysanecki.memory.engine;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class MemoryGameFactory {
 
-    public static MemoryGame create(int numberOfCards, int cardsInGroup) {
+    public static MemoryGameState create(int numberOfCards, int cardsInGroup) {
         if (numberOfCards % cardsInGroup != 0) {
             throw new IllegalArgumentException("number of cards must be dividable by cards in group");
         }
@@ -17,19 +15,15 @@ public class MemoryGameFactory {
             throw new IllegalArgumentException("arguments must be positive");
         }
 
-        int numberOfGroups = numberOfCards / cardsInGroup;
-        AtomicInteger flatItemGenerator = new AtomicInteger(0);
+        Set<MemoryGameState.FlatItem> flatItemsGroups = IntStream.range(0, numberOfCards)
+                .mapToObj(flatItemId -> new MemoryGameState.FlatItem(
+                                FlatItemId.of(flatItemId),
+                                FlatItemsGroupId.of(flatItemId % (numberOfCards / cardsInGroup)),
+                                false
+                        )
+                ).collect(Collectors.toUnmodifiableSet());
 
-        Set<FlatItemsGroup> flatItemsGroups = IntStream.range(0, numberOfGroups)
-                .mapToObj(FlatItemsGroupId::of)
-                .map(flatItemsGroupId -> FlatItemsGroup.allReversed(
-                        flatItemsGroupId,
-                        IntStream.range(0, cardsInGroup)
-                                .mapToObj(_ -> FlatItemId.of(flatItemGenerator.getAndIncrement()))
-                                .collect(Collectors.toUnmodifiableSet())))
-                .collect(Collectors.toUnmodifiableSet());
-
-        return new MemoryGame(flatItemsGroups, new HashSet<>(), null);
+        return new MemoryGameState(MemoryGameId.create(), flatItemsGroups);
     }
 
     public static MemoryGame restore(MemoryGameState memoryGameState) {
