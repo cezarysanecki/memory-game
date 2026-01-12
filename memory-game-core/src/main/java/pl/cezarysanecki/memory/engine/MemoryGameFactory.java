@@ -1,13 +1,18 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.api.FlatItemId;
+import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
+import pl.cezarysanecki.memory.engine.api.MemoryGameId;
+import pl.cezarysanecki.memory.engine.api.MemoryGameState;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class MemoryGameFactory {
+class MemoryGameFactory {
 
-    public static MemoryGameState create(int numberOfCards, int cardsInGroup) {
+    static MemoryGameState create(int numberOfCards, int cardsInGroup) {
         if (numberOfCards % cardsInGroup != 0) {
             throw new IllegalArgumentException("number of cards must be dividable by cards in group");
         }
@@ -26,7 +31,7 @@ public class MemoryGameFactory {
         return new MemoryGameState(MemoryGameId.create(), flatItemsGroups);
     }
 
-    public static MemoryGame restore(MemoryGameState memoryGameState) {
+    static MemoryGame restore(MemoryGameState memoryGameState) {
         Set<FlatItemsGroup> flatItemsGroups = memoryGameState.flatItems().stream()
                 .collect(Collectors.groupingBy(
                         MemoryGameState.FlatItem::assignedGroupId

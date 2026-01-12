@@ -1,4 +1,8 @@
-package pl.cezarysanecki.memory.engine;
+package pl.cezarysanecki.memory.engine.state;
+
+import pl.cezarysanecki.memory.engine.api.MemoryGameId;
+import pl.cezarysanecki.memory.engine.MemoryGameRepository;
+import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 
 import java.util.Map;
 import java.util.Optional;

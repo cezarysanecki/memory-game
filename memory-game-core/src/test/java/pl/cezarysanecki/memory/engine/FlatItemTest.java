@@ -1,6 +1,7 @@
 package pl.cezarysanecki.memory.engine;
 
 import org.junit.jupiter.api.Test;
+import pl.cezarysanecki.memory.engine.api.FlatItemId;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

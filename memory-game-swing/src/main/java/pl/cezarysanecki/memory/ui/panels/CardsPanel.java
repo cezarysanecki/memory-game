@@ -1,11 +1,11 @@
 package pl.cezarysanecki.memory.ui.panels;
 
-import pl.cezarysanecki.memory.engine.FlatItemId;
-import pl.cezarysanecki.memory.engine.GuessResult;
-import pl.cezarysanecki.memory.engine.InMemoryMemoryGameRepository;
+import pl.cezarysanecki.memory.engine.api.FlatItemId;
+import pl.cezarysanecki.memory.engine.api.GuessResult;
+import pl.cezarysanecki.memory.engine.state.InMemoryMemoryGameRepository;
 import pl.cezarysanecki.memory.engine.MemoryGameApp;
-import pl.cezarysanecki.memory.engine.MemoryGameId;
-import pl.cezarysanecki.memory.engine.MemoryGameState;
+import pl.cezarysanecki.memory.engine.api.MemoryGameId;
+import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 import pl.cezarysanecki.memory.ui.UiConfig;
 
 import javax.swing.*;

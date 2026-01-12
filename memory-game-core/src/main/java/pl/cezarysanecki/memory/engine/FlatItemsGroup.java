@@ -1,11 +1,14 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.api.FlatItemId;
+import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
+
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public final class FlatItemsGroup {
+final class FlatItemsGroup {
 
     private final FlatItemsGroupId flatItemsGroupId;
     private final Set<FlatItem> flatItems;
@@ -25,15 +28,15 @@ public final class FlatItemsGroup {
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    public static FlatItemsGroup allReversed(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds) {
+    static FlatItemsGroup allReversed(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds) {
         return new FlatItemsGroup(flatItemsGroupId, flatItemIds, FlatItem::reverseUp);
     }
 
-    public void turnAllToReverseUp() {
+    void turnAllToReverseUp() {
         flatItems.forEach(FlatItem::turnReverseUp);
     }
 
-    public void turnToObverse(FlatItemId flatItemId) {
+    void turnToObverse(FlatItemId flatItemId) {
         FlatItem flatItem = flatItems.stream()
                 .filter(item -> item.getFlatItemId().equals(flatItemId))
                 .findFirst()
@@ -41,17 +44,17 @@ public final class FlatItemsGroup {
         flatItem.turnObverseUp();
     }
 
-    public boolean contains(FlatItemId flatItemId) {
+    boolean contains(FlatItemId flatItemId) {
         return flatItems.stream()
                 .anyMatch(flatItem -> flatItem.getFlatItemId().equals(flatItemId));
     }
 
-    public boolean isAllReverseUp() {
+    boolean isAllReverseUp() {
         return flatItems.stream()
                 .allMatch(FlatItem::isReverseUp);
     }
 
-    public boolean isAllObverseUp() {
+    boolean isAllObverseUp() {
         return flatItems.stream()
                 .allMatch(FlatItem::isObverseUp);
     }

@@ -1,4 +1,4 @@
-package pl.cezarysanecki.memory.engine;
+package pl.cezarysanecki.memory.engine.api;
 
 public record FlatItemsGroupId(int id) {
 

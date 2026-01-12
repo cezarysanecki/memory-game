@@ -1,5 +1,10 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.api.FlatItemId;
+import pl.cezarysanecki.memory.engine.api.GuessResult;
+import pl.cezarysanecki.memory.engine.api.MemoryGameId;
+import pl.cezarysanecki.memory.engine.api.MemoryGameState;
+
 public class MemoryGameApp {
 
     private final MemoryGameRepository memoryGameRepository;

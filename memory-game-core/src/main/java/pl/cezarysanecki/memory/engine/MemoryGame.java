@@ -1,13 +1,16 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.api.FlatItemId;
+import pl.cezarysanecki.memory.engine.api.GuessResult;
+
 import java.util.Set;
 
-import static pl.cezarysanecki.memory.engine.GuessResult.Continue;
-import static pl.cezarysanecki.memory.engine.GuessResult.Failure;
-import static pl.cezarysanecki.memory.engine.GuessResult.GameOver;
-import static pl.cezarysanecki.memory.engine.GuessResult.Guessed;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.Continue;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.Failure;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.GameOver;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.Guessed;
 
-public class MemoryGame {
+class MemoryGame {
 
     private Set<FlatItemsGroup> groups;
     private Set<FlatItemsGroup> guessed;
@@ -23,7 +26,7 @@ public class MemoryGame {
         this.current = current;
     }
 
-    public GuessResult turnCard(FlatItemId flatItemId) {
+    GuessResult turnCard(FlatItemId flatItemId) {
         if (isAllGuessed()) {
             return GameOver;
         } else if (current == null) {
@@ -49,12 +52,6 @@ public class MemoryGame {
             return Guessed;
         }
         return Continue;
-    }
-
-    public void reset() {
-        current = null;
-        guessed.clear();
-        groups.forEach(FlatItemsGroup::turnAllToReverseUp);
     }
 
     private boolean isAllGuessed() {

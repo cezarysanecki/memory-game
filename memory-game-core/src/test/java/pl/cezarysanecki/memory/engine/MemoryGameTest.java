@@ -3,6 +3,7 @@ package pl.cezarysanecki.memory.engine;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import pl.cezarysanecki.memory.engine.api.GuessResult;
 import pl.csanecki.memory.engine.state.FlatItemCurrentState;
 import pl.csanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
 import pl.csanecki.memory.engine.state.MemoryGameCurrentState;

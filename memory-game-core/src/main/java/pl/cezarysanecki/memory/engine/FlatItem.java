@@ -1,8 +1,10 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.api.FlatItemId;
+
 import java.util.Objects;
 
-public final class FlatItem {
+final class FlatItem {
 
     private enum Side {
         Reverse, Obverse
@@ -16,35 +18,35 @@ public final class FlatItem {
         this.side = side;
     }
 
-    public static FlatItem obverseUp(FlatItemId flatItemId) {
+    static FlatItem obverseUp(FlatItemId flatItemId) {
         return new FlatItem(flatItemId, Side.Obverse);
     }
 
-    public static FlatItem reverseUp(FlatItemId flatItemId) {
+    static FlatItem reverseUp(FlatItemId flatItemId) {
         return new FlatItem(flatItemId, Side.Reverse);
     }
 
-    public void flip() {
+    void flip() {
         side = side == Side.Obverse ? Side.Reverse : Side.Obverse;
     }
 
-    public void turnObverseUp() {
+    void turnObverseUp() {
         side = Side.Obverse;
     }
 
-    public void turnReverseUp() {
+    void turnReverseUp() {
         side = Side.Reverse;
     }
 
-    public boolean isObverseUp() {
+    boolean isObverseUp() {
         return side == Side.Obverse;
     }
 
-    public boolean isReverseUp() {
+    boolean isReverseUp() {
         return side == Side.Reverse;
     }
 
-    public FlatItemId getFlatItemId() {
+    FlatItemId getFlatItemId() {
         return flatItemId;
     }
 

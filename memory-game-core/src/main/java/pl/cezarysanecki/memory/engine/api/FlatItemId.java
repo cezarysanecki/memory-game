@@ -1,14 +1,6 @@
-package pl.cezarysanecki.memory.engine;
+package pl.cezarysanecki.memory.engine.api;
 
-import java.util.Objects;
-
-public final class FlatItemId {
-
-    private final int id;
-
-    private FlatItemId(int id) {
-        this.id = id;
-    }
+public record FlatItemId(int id) {
 
     public static FlatItemId of(int id) {
         return new FlatItemId(id);
@@ -20,11 +12,6 @@ public final class FlatItemId {
         if (o == null || getClass() != o.getClass()) return false;
         FlatItemId that = (FlatItemId) o;
         return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 
     @Override

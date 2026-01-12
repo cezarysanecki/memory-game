@@ -1,4 +1,4 @@
-package pl.cezarysanecki.memory.engine;
+package pl.cezarysanecki.memory.engine.api;
 
 import java.util.Collection;
 import java.util.List;
