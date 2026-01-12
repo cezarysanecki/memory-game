@@ -12,6 +12,10 @@ public final class FlatItemsGroup {
     private final FlatItemsGroupId flatItemsGroupId;
     private final Set<FlatItem> flatItems;
 
+    FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItem> flatItems) {
+        this.flatItemsGroupId = flatItemsGroupId;
+        this.flatItems = flatItems;
+    }
     private FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
         this.flatItemsGroupId = flatItemsGroupId;
         if (flatItemIds.isEmpty()) {

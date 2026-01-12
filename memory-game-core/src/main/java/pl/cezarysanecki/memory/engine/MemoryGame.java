@@ -12,36 +12,18 @@ import static pl.cezarysanecki.memory.engine.GuessResult.*;
 
 public class MemoryGame {
 
-    private final Set<FlatItemsGroup> groups;
+    private Set<FlatItemsGroup> groups;
+    private Set<FlatItemsGroup> guessed;
+    private FlatItemsGroup current;
 
-    private final Set<FlatItemsGroup> guessed = new HashSet<>();
-
-    private FlatItemsGroup current = null;
-
-    private MemoryGame(Set<FlatItemsGroup> groups) {
+    MemoryGame(
+            Set<FlatItemsGroup> groups,
+            Set<FlatItemsGroup> guessed,
+            FlatItemsGroup current
+    ) {
         this.groups = groups;
-    }
-
-    public static MemoryGame create(int numberOfCards, int cardsInGroup) {
-        if (numberOfCards % cardsInGroup != 0) {
-            throw new IllegalArgumentException("number of cards must be dividable by cards in group");
-        }
-        if (numberOfCards <= 0 || cardsInGroup <= 0) {
-            throw new IllegalArgumentException("arguments must be positive");
-        }
-
-        int numberOfGroups = numberOfCards / cardsInGroup;
-        AtomicInteger flatItemGenerator = new AtomicInteger(0);
-
-        Set<FlatItemsGroup> flatItemsGroups = IntStream.range(0, numberOfGroups)
-                .mapToObj(FlatItemsGroupId::of)
-                .map(flatItemsGroupId -> FlatItemsGroup.allReversed(
-                        flatItemsGroupId,
-                        IntStream.range(0, cardsInGroup)
-                                .mapToObj(index -> FlatItemId.of(flatItemGenerator.getAndIncrement()))
-                                .collect(Collectors.toUnmodifiableSet())))
-                .collect(Collectors.toUnmodifiableSet());
-        return new MemoryGame(flatItemsGroups);
+        this.guessed = guessed;
+        this.current = current;
     }
 
     public GuessResult turnCard(FlatItemId flatItemId) {
