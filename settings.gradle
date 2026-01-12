@@ -1,1 +1,3 @@
 rootProject.name = 'memory-game'
+
+include 'memory-game-core'
