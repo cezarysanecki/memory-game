@@ -1,14 +1,11 @@
 package pl.cezarysanecki.memory.engine;
 
-import pl.cezarysanecki.memory.engine.state.MemoryGameCurrentState;
-
-import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import static pl.cezarysanecki.memory.engine.GuessResult.*;
+import static pl.cezarysanecki.memory.engine.GuessResult.Continue;
+import static pl.cezarysanecki.memory.engine.GuessResult.Failure;
+import static pl.cezarysanecki.memory.engine.GuessResult.GameOver;
+import static pl.cezarysanecki.memory.engine.GuessResult.Guessed;
 
 public class MemoryGame {
 
@@ -71,10 +68,4 @@ public class MemoryGame {
                 .orElseThrow(() -> new IllegalArgumentException("cannot find group for flat item: " + flatItemId));
     }
 
-    public MemoryGameCurrentState currentState() {
-        return new MemoryGameCurrentState(
-                groups.stream()
-                        .map(FlatItemsGroup::currentState)
-                        .collect(Collectors.toUnmodifiableSet()), isAllGuessed());
-    }
 }

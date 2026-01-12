@@ -1,7 +1,5 @@
 package pl.cezarysanecki.memory.engine;
 
-import pl.cezarysanecki.memory.engine.state.GroupOfFlatItemsCurrentState;
-
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -16,6 +14,7 @@ public final class FlatItemsGroup {
         this.flatItemsGroupId = flatItemsGroupId;
         this.flatItems = flatItems;
     }
+
     private FlatItemsGroup(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds, Function<FlatItemId, FlatItem> creator) {
         this.flatItemsGroupId = flatItemsGroupId;
         if (flatItemIds.isEmpty()) {
@@ -70,9 +69,4 @@ public final class FlatItemsGroup {
         return Objects.hash(flatItemsGroupId);
     }
 
-    public GroupOfFlatItemsCurrentState currentState() {
-        return new GroupOfFlatItemsCurrentState(flatItems.stream()
-                .map(FlatItem::currentState)
-                .collect(Collectors.toUnmodifiableSet()));
-    }
 }

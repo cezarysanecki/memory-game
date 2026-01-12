@@ -1,7 +1,5 @@
 package pl.cezarysanecki.memory.engine;
 
-import pl.cezarysanecki.memory.engine.state.FlatItemCurrentState;
-
 import java.util.Objects;
 
 public final class FlatItem {
@@ -63,7 +61,4 @@ public final class FlatItem {
         return Objects.hash(flatItemId);
     }
 
-    public FlatItemCurrentState currentState() {
-        return new FlatItemCurrentState(flatItemId, side == Side.Obverse);
-    }
 }
