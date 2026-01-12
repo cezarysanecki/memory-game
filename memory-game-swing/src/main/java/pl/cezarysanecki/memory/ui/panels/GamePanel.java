@@ -3,7 +3,7 @@ package pl.cezarysanecki.memory.ui.panels;
 import pl.cezarysanecki.memory.ui.UiConfig;
 import pl.cezarysanecki.memory.ui.menu.MainOptions;
 import pl.cezarysanecki.memory.ui.menu.MainOptionsMenuSubscriber;
-import pl.cezarysanecki.memory.util.MillisTimer;
+import pl.cezarysanecki.memory.ui.util.MillisTimer;
 
 import javax.swing.*;
 import java.awt.*;

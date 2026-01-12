@@ -1,12 +1,14 @@
 package pl.cezarysanecki.memory.ui.panels;
 
-import pl.cezarysanecki.memory.util.MillisRefreshment;
-import pl.cezarysanecki.memory.util.MillisTimerSubscriber;
+import pl.cezarysanecki.memory.ui.util.MillisRefreshment;
+import pl.cezarysanecki.memory.ui.util.MillisTimerSubscriber;
 
 import javax.swing.*;
 import java.time.Duration;
 
-import static pl.cezarysanecki.memory.ui.UiConfig.*;
+import static pl.cezarysanecki.memory.ui.UiConfig.GLOBAL_FONT;
+import static pl.cezarysanecki.memory.ui.UiConfig.SCORE_LABEL_BACKGROUND_COLOR;
+import static pl.cezarysanecki.memory.ui.UiConfig.SCORE_LABEL_FOREGROUND_COLOR;
 
 public class ScoreLabel extends JLabel implements MillisTimerSubscriber {
 

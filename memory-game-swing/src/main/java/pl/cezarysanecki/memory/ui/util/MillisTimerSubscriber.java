@@ -1,4 +1,4 @@
-package pl.cezarysanecki.memory.util;
+package pl.cezarysanecki.memory.ui.util;
 
 import java.time.Duration;
 

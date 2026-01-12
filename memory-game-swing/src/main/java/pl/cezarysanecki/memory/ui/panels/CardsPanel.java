@@ -1,11 +1,10 @@
 package pl.cezarysanecki.memory.ui.panels;
 
+import pl.cezarysanecki.memory.engine.MemoryGameApp;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.GuessResult;
-import pl.cezarysanecki.memory.engine.state.InMemoryMemoryGameRepository;
-import pl.cezarysanecki.memory.engine.MemoryGameApp;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
-import pl.cezarysanecki.memory.engine.api.MemoryGameState;
+import pl.cezarysanecki.memory.engine.api.MemoryGameView;
 import pl.cezarysanecki.memory.ui.UiConfig;
 
 import javax.swing.*;
@@ -28,17 +27,16 @@ public class CardsPanel extends JPanel {
 
     private final Collection<CardsPanelSubscriber> subscribers = new ArrayList<>();
 
+    private final MemoryGameApp memoryGameApp = MemoryGameApp.inMemory();
+
     private UiConfig uiConfig;
-    private MemoryGameId memoryGameId;
-    private MemoryGameApp memoryGameApp;
+    private MemoryGameId currentGameId;
     private List<GraphicCard> graphicCards;
 
     private int columns;
     private int rows;
 
     public CardsPanel(UiConfig uiConfig) {
-        this.memoryGameApp = new MemoryGameApp(new InMemoryMemoryGameRepository());
-
         prepareCardsPanel(uiConfig);
 
         graphicCards.forEach(this::add);
@@ -60,10 +58,11 @@ public class CardsPanel extends JPanel {
 
     public void reset() {
         MemoryGameId memoryGameId = memoryGameApp.start(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
-        this.memoryGameId = memoryGameId;
+        this.currentGameId = memoryGameId;
 
-        MemoryGameState currentState = memoryGameApp.getState(memoryGameId);
-        refreshAll(currentState);
+        MemoryGameView view = memoryGameApp.getState(memoryGameId);
+        refreshAll(view);
+
         Collections.shuffle(graphicCards);
         setGraphicCardsBounds(columns, rows, graphicCards);
         subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Idle));
@@ -71,16 +70,16 @@ public class CardsPanel extends JPanel {
 
     private void prepareCardsPanel(UiConfig uiConfig) {
         MemoryGameId memoryGameId = memoryGameApp.start(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
-        MemoryGameState gameState = memoryGameApp.getState(memoryGameId);
+        MemoryGameView view = memoryGameApp.getState(memoryGameId);
 
-        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, gameState);
+        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, view);
         setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
 
         Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
         setSize(panelDimension);
 
         this.uiConfig = uiConfig;
-        this.memoryGameId = memoryGameId;
+        this.currentGameId = memoryGameId;
         this.graphicCards = graphicCards;
         this.columns = uiConfig.columns;
         this.rows = uiConfig.rows;
@@ -105,9 +104,9 @@ public class CardsPanel extends JPanel {
         return new Dimension(width, height);
     }
 
-    private List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameState currentState) {
+    private List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameView view) {
         List<GraphicCard> graphicCards = new ArrayList<>();
-        for (MemoryGameState.FlatItem flatItem : currentState.flatItems()) {
+        for (MemoryGameView.FlatItem flatItem : view.flatItems()) {
             ImageIcon obverseImage = uiConfig.obverseImages.get(flatItem.assignedGroupId().id());
             graphicCards.add(new GraphicCard(
                     flatItem.flatItemId(),
@@ -139,8 +138,8 @@ public class CardsPanel extends JPanel {
                 .findFirst();
     }
 
-    private void refreshAll(MemoryGameState currentState) {
-        graphicCards.forEach(graphicCard -> currentState.flatItems()
+    private void refreshAll(MemoryGameView view) {
+        graphicCards.forEach(graphicCard -> view.flatItems()
                 .stream()
                 .filter(flatItem -> flatItem.flatItemId().equals(graphicCard.flatItemId))
                 .findFirst()
@@ -153,15 +152,16 @@ public class CardsPanel extends JPanel {
         public void mousePressed(MouseEvent event) {
             findCardByCoordinates(event.getPoint())
                     .ifPresent(graphicCard -> {
-                        GuessResult result = memoryGameApp.turnCard(memoryGameId, graphicCard.flatItemId);
-                        MemoryGameState currentState = memoryGameApp.getState(memoryGameId);
+                        GuessResult result = memoryGameApp.turnCard(currentGameId, graphicCard.flatItemId);
+                        MemoryGameView view = memoryGameApp.getState(currentGameId);
                         if (result == GuessResult.Failure) {
                             graphicCard.turnToObverseUp();
                         } else {
-                            refreshAll(currentState);
+                            refreshAll(view);
                         }
                         subscribers.forEach(subscriber -> subscriber.update(
-                                currentState.flatItems().stream().allMatch(MemoryGameState.FlatItem::obverseUp) ? CurrentGameState.Ended : CurrentGameState.Running));
+                                view.flatItems().stream()
+                                        .allMatch(MemoryGameView.FlatItem::obverseUp) ? CurrentGameState.Ended : CurrentGameState.Running));
                     });
         }
     }
@@ -186,7 +186,7 @@ public class CardsPanel extends JPanel {
             setIcon(currentIcon(true));
         }
 
-        void refresh(MemoryGameState.FlatItem flatItem) {
+        void refresh(MemoryGameView.FlatItem flatItem) {
             setIcon(currentIcon(flatItem.obverseUp()));
         }
 

@@ -11,7 +11,9 @@ import pl.csanecki.memory.engine.state.MemoryGameCurrentState;
 import java.util.Collection;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.csanecki.memory.engine.GuessResult.*;
 
 class MemoryGameTest {

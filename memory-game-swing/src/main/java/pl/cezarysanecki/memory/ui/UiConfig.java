@@ -8,8 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class UiConfig {

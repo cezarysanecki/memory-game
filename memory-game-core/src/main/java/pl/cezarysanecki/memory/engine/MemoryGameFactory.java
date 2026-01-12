@@ -3,7 +3,7 @@ package pl.cezarysanecki.memory.engine;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
-import pl.cezarysanecki.memory.engine.api.MemoryGameState;
+import pl.cezarysanecki.memory.engine.db.MemoryGameEntity;
 
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 class MemoryGameFactory {
 
-    static MemoryGameState create(int numberOfCards, int cardsInGroup) {
+    static MemoryGameEntity create(int numberOfCards, int cardsInGroup) {
         if (numberOfCards % cardsInGroup != 0) {
             throw new IllegalArgumentException("number of cards must be dividable by cards in group");
         }
@@ -20,21 +20,21 @@ class MemoryGameFactory {
             throw new IllegalArgumentException("arguments must be positive");
         }
 
-        Set<MemoryGameState.FlatItem> flatItemsGroups = IntStream.range(0, numberOfCards)
-                .mapToObj(flatItemId -> new MemoryGameState.FlatItem(
+        Set<MemoryGameEntity.FlatItem> flatItemsGroups = IntStream.range(0, numberOfCards)
+                .mapToObj(flatItemId -> new MemoryGameEntity.FlatItem(
                                 FlatItemId.of(flatItemId),
                                 FlatItemsGroupId.of(flatItemId % (numberOfCards / cardsInGroup)),
                                 false
                         )
                 ).collect(Collectors.toUnmodifiableSet());
 
-        return new MemoryGameState(MemoryGameId.create(), flatItemsGroups);
+        return new MemoryGameEntity(MemoryGameId.create(), flatItemsGroups);
     }
 
-    static MemoryGame restore(MemoryGameState memoryGameState) {
-        Set<FlatItemsGroup> flatItemsGroups = memoryGameState.flatItems().stream()
+    static MemoryGame restore(MemoryGameEntity memoryGameEntity) {
+        Set<FlatItemsGroup> flatItemsGroups = memoryGameEntity.flatItems().stream()
                 .collect(Collectors.groupingBy(
-                        MemoryGameState.FlatItem::assignedGroupId
+                        MemoryGameEntity.FlatItem::assignedGroupId
                 ))
                 .entrySet()
                 .stream()
