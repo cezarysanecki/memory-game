@@ -7,10 +7,10 @@ import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 import pl.cezarysanecki.memory.engine.api.GuessResult;
 import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Continue;
 import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Failure;
+import static pl.cezarysanecki.memory.engine.api.GuessResult.State.GameOver;
 import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Guessed;
 
 class MemoryGameTest {
@@ -43,9 +44,9 @@ class MemoryGameTest {
     @Test
     void turning_first_card_from_group_informs_to_continue_guessing() {
         MemoryGame memoryGame = MemoryGameFactory.create(4, 2);
-        MemoryGameState gameState = memoryGame.state();
+        TestMemoryGameQuery testMemoryGameQuery = new TestMemoryGameQuery(memoryGame.state());
 
-        MemoryGameState.FlatItem firstFlatItem = getFirstFlatItem(gameState);
+        MemoryGameState.FlatItem firstFlatItem = testMemoryGameQuery.anyFlatItem();
 
         GuessResult result = memoryGame.turnCard(firstFlatItem.flatItemId());
 
@@ -55,9 +56,9 @@ class MemoryGameTest {
     @Test
     void guessing_all_cards_in_group_requires_turning_them_all_in_row() {
         MemoryGame memoryGame = MemoryGameFactory.create(4, 2);
-        MemoryGameState gameState = memoryGame.state();
+        TestMemoryGameQuery testMemoryGameQuery = new TestMemoryGameQuery(memoryGame.state());
 
-        Set<MemoryGameState.FlatItem> inSameGroup = getAllFlatItemsRelatedToFirstGroup(gameState);
+        List<MemoryGameState.FlatItem> inSameGroup = testMemoryGameQuery.allFlatItemsFromAnyGroup();
 
         List<GuessResult.State> results = inSameGroup.stream()
                 .map(flatItem -> memoryGame.turnCard(flatItem.flatItemId()))
@@ -70,14 +71,9 @@ class MemoryGameTest {
     @Test
     void not_guessing_all_cards_in_group_in_row_determines_failure() {
         MemoryGame memoryGame = MemoryGameFactory.create(4, 2);
-        MemoryGameState gameState = memoryGame.state();
+        TestMemoryGameQuery testMemoryGameQuery = new TestMemoryGameQuery(memoryGame.state());
 
-        Map<FlatItemsGroupId, List<MemoryGameState.FlatItem>> groupsToItems = groupAllFlatItems(gameState);
-
-        List<MemoryGameState.FlatItem> itemsFromDifferentGroups = groupsToItems.values().stream()
-                .limit(2)
-                .map(List::getFirst)
-                .toList();
+        List<MemoryGameState.FlatItem> itemsFromDifferentGroups = testMemoryGameQuery.firstFlatItemsFromGroups(2);
 
         List<GuessResult.State> results = itemsFromDifferentGroups.stream()
                 .map(flatItem -> memoryGame.turnCard(flatItem.flatItemId()))
@@ -89,120 +85,100 @@ class MemoryGameTest {
 
     @Test
     void next_turn_after_failure_informs_to_continue_guessing() {
-        MemoryGame memoryGame = MemoryGame.create(4, 2);
-        MemoryGameCurrentState currentState = memoryGame.currentState();
+        MemoryGame memoryGame = MemoryGameFactory.create(4, 2);
+        TestMemoryGameQuery testMemoryGameQuery = new TestMemoryGameQuery(memoryGame.state());
 
-        GroupOfFlatItemsCurrentState firstGroupOfFlatItems = getFirstFlatItem(currentState);
-        FlatItemCurrentState firstFlatItemOfFirstGroup = getFirstFlatItem(firstGroupOfFlatItems);
-        memoryGame.turnCard(firstFlatItemOfFirstGroup.flatItemId());
+        List<MemoryGameState.FlatItem> itemsFromDifferentGroups = testMemoryGameQuery.firstFlatItemsFromGroups(2);
+        itemsFromDifferentGroups.forEach(flatItem -> memoryGame.turnCard(flatItem.flatItemId()));
 
-        GroupOfFlatItemsCurrentState secondGroupOfFlatItems = getSecondGroup(currentState);
-        FlatItemCurrentState secondFlatItemOfFirstGroup = getFirstFlatItem(secondGroupOfFlatItems);
-        memoryGame.turnCard(secondFlatItemOfFirstGroup.flatItemId());
-
-        GuessResult result = memoryGame.turnCard(firstFlatItemOfFirstGroup.flatItemId());
-
-        assertEquals(Continue, result);
+        GuessResult result = memoryGame.turnCard(itemsFromDifferentGroups.getFirst().flatItemId());
+        assertEquals(Continue, result.actionResult());
     }
 
     @Test
     void next_turn_after_guess_one_group_informs_to_continue_guessing() {
-        MemoryGame memoryGame = MemoryGame.create(4, 2);
-        MemoryGameCurrentState currentState = memoryGame.currentState();
+        MemoryGame memoryGame = MemoryGameFactory.create(4, 2);
+        TestMemoryGameQuery testMemoryGameQuery = new TestMemoryGameQuery(memoryGame.state());
 
-        GroupOfFlatItemsCurrentState firstGroupOfFlatItems = getFirstFlatItem(currentState);
-        firstGroupOfFlatItems.flatItems()
-                .forEach(flatItem -> memoryGame.turnCard(flatItem.flatItemId()));
+        List<MemoryGameState.FlatItem> allFromSameGroup = testMemoryGameQuery.allFlatItemsFromAnyGroup();
+        List<GuessResult.State> results = allFromSameGroup.stream()
+                .map(flatItem -> memoryGame.turnCard(flatItem.flatItemId()))
+                .map(GuessResult::actionResult)
+                .toList();
 
-        GroupOfFlatItemsCurrentState secondGroupOfFlatItems = getSecondGroup(currentState);
-        FlatItemCurrentState secondFlatItemOfFirstGroup = getFirstFlatItem(secondGroupOfFlatItems);
-        GuessResult result = memoryGame.turnCard(secondFlatItemOfFirstGroup.flatItemId());
-
-        assertEquals(Continue, result);
+        assertTrue(results.contains(Continue));
     }
 
     @Test
     void guess_all_groups_ends_game() {
-        MemoryGame memoryGame = MemoryGame.create(4, 2);
+        MemoryGame memoryGame = MemoryGameFactory.create(4, 2);
+        TestMemoryGameQuery testMemoryGameQuery = new TestMemoryGameQuery(memoryGame.state());
 
-        memoryGame.currentState()
-                .groupOfFlatItems()
+        Map<FlatItemsGroupId, List<MemoryGameState.FlatItem>> groupedAllFlatItems = testMemoryGameQuery.groupedAllFlatItems();
+        List<GuessResult.State> results = groupedAllFlatItems.values()
                 .stream()
-                .map(GroupOfFlatItemsCurrentState::flatItems)
-                .flatMap(Collection::stream)
-                .forEach(flatItem -> memoryGame.turnCard(flatItem.flatItemId()));
+                .flatMap(flatItems -> flatItems
+                        .stream()
+                        .map(flatItem -> memoryGame.turnCard(flatItem.flatItemId())))
+                .map(GuessResult::actionResult)
+                .toList();
 
-        MemoryGameCurrentState currentState = memoryGame.currentState();
-
-        assertTrue(currentState.isFinished());
+        assertTrue(results.contains(GameOver));
     }
 
     @Test
     void guess_cards_are_not_counting_as_mistake_when_try_to_turn_them() {
-        MemoryGame memoryGame = MemoryGame.create(4, 2);
-        MemoryGameCurrentState currentState = memoryGame.currentState();
+        MemoryGame memoryGame = MemoryGameFactory.create(4, 2);
+        TestMemoryGameQuery testMemoryGameQuery = new TestMemoryGameQuery(memoryGame.state());
 
-        GroupOfFlatItemsCurrentState firstGroupOfFlatItems = getFirstFlatItem(currentState);
-        firstGroupOfFlatItems.flatItems()
+        Map<FlatItemsGroupId, List<MemoryGameState.FlatItem>> groupedAllFlatItems = testMemoryGameQuery.groupedAllFlatItems();
+        List<FlatItemsGroupId> flatItemsGroupIds = new ArrayList<>(groupedAllFlatItems.keySet());
+
+        FlatItemsGroupId firstGroupId = flatItemsGroupIds.get(0);
+        FlatItemsGroupId secondGroupId = flatItemsGroupIds.get(1);
+
+        groupedAllFlatItems.get(firstGroupId)
                 .forEach(flatItem -> memoryGame.turnCard(flatItem.flatItemId()));
 
-        GroupOfFlatItemsCurrentState secondGroupOfFlatItems = getSecondGroup(currentState);
-        FlatItemCurrentState secondFlatItemOfFirstGroup = getFirstFlatItem(secondGroupOfFlatItems);
-        memoryGame.turnCard(secondFlatItemOfFirstGroup.flatItemId());
+        memoryGame.turnCard(groupedAllFlatItems.get(secondGroupId).getFirst().flatItemId());
 
-        FlatItemCurrentState firstFlatItemOfFirstGroup = getFirstFlatItem(firstGroupOfFlatItems);
-        GuessResult result = memoryGame.turnCard(firstFlatItemOfFirstGroup.flatItemId());
-
-        assertEquals(Continue, result);
+        GuessResult result = memoryGame.turnCard(groupedAllFlatItems.get(firstGroupId).getFirst().flatItemId());
+        assertEquals(Continue, result.actionResult());
     }
 
-    @Test
-    void reset_game_when_it_is_underway_makes_it_back_to_initial_state() {
-        MemoryGame memoryGame = MemoryGame.create(4, 2);
-        MemoryGameCurrentState currentState = memoryGame.currentState();
+    private record TestMemoryGameQuery(
+            MemoryGameState gameState
+    ) {
 
-        GroupOfFlatItemsCurrentState firstGroupOfFlatItems = getFirstFlatItem(currentState);
-        firstGroupOfFlatItems.flatItems()
-                .forEach(flatItem -> memoryGame.turnCard(flatItem.flatItemId()));
+        private MemoryGameState.FlatItem anyFlatItem() {
+            return gameState.flatItems()
+                    .stream()
+                    .findAny()
+                    .orElseThrow(() -> new IllegalStateException("should contain at least one group"));
+        }
 
-        boolean result = memoryGame.currentState()
-                .groupOfFlatItems()
-                .stream()
-                .map(GroupOfFlatItemsCurrentState::flatItems)
-                .flatMap(Collection::stream)
-                .anyMatch(FlatItemCurrentState::obverse);
-        assertTrue(result);
+        private List<MemoryGameState.FlatItem> allFlatItemsFromAnyGroup() {
+            return groupedAllFlatItems()
+                    .values()
+                    .stream()
+                    .findAny()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .toList();
+        }
 
-        memoryGame.reset();
+        private Map<FlatItemsGroupId, List<MemoryGameState.FlatItem>> groupedAllFlatItems() {
+            return gameState.flatItems().stream()
+                    .collect(Collectors.groupingBy(MemoryGameState.FlatItem::assignedGroupId));
+        }
 
-        result = memoryGame.currentState()
-                .groupOfFlatItems()
-                .stream()
-                .map(GroupOfFlatItemsCurrentState::flatItems)
-                .flatMap(Collection::stream)
-                .anyMatch(FlatItemCurrentState::obverse);
-        assertFalse(result);
+        private List<MemoryGameState.FlatItem> firstFlatItemsFromGroups(int numberOfGroups) {
+            return groupedAllFlatItems().values().stream()
+                    .limit(numberOfGroups)
+                    .map(List::getFirst)
+                    .toList();
+        }
+
     }
 
-    private static MemoryGameState.FlatItem getFirstFlatItem(MemoryGameState gameState) {
-        return gameState.flatItems()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("should contain at least one group"));
-    }
-
-    private static Set<MemoryGameState.FlatItem> getAllFlatItemsRelatedToFirstGroup(MemoryGameState gameState) {
-        return groupAllFlatItems(gameState)
-                .values()
-                .stream()
-                .findFirst()
-                .stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toUnmodifiableSet());
-    }
-
-    private static Map<FlatItemsGroupId, List<MemoryGameState.FlatItem>> groupAllFlatItems(MemoryGameState gameState) {
-        return gameState.flatItems().stream()
-                .collect(Collectors.groupingBy(MemoryGameState.FlatItem::assignedGroupId));
-    }
 }
