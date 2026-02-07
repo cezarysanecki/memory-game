@@ -44,9 +44,10 @@ record FlatItemsGroup(
 
     static FlatItemsGroup restore(
             FlatItemsGroupId flatItemsGroupId,
-            Collection<FlatItemEvent> events
+            Collection<FlatItemGroupEvent> events
     ) {
         Set<FlatItem> restoredItems = events.stream()
+                .flatMap(event -> event.events().stream())
                 .collect(Collectors.groupingBy(FlatItemEvent::flatItemId))
                 .entrySet()
                 .stream()
@@ -56,16 +57,20 @@ record FlatItemsGroup(
         return new FlatItemsGroup(flatItemsGroupId, restoredItems);
     }
 
-    Collection<FlatItemEvent> turnAllToReverseUp() {
-        return flatItems.stream().map(FlatItem::turnReverseUp).flatMap(Optional::stream).toList();
+    FlatItemGroupEvent turnAllToReverseUp() {
+        Collection<FlatItemEvent> events = flatItems.stream()
+                .map(FlatItem::turnReverseUp)
+                .flatMap(Optional::stream)
+                .toList();
+        return new FlatItemGroupEvent(flatItemsGroupId, events);
     }
 
-    Optional<FlatItemEvent> turnToObverse(FlatItemId flatItemId) {
+    FlatItemGroupEvent turnToObverse(FlatItemId flatItemId) {
         FlatItem flatItem = flatItems.stream()
                 .filter(item -> item.getFlatItemId().equals(flatItemId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("flat item " + flatItemId + " does not belong to group"));
-        return flatItem.turnObverseUp();
+        return new FlatItemGroupEvent(flatItemsGroupId, flatItem.turnObverseUp().stream().toList());
     }
 
     boolean contains(FlatItemId flatItemId) {

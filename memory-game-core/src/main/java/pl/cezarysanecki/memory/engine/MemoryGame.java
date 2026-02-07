@@ -5,6 +5,7 @@ import pl.cezarysanecki.memory.engine.api.GuessResult;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +36,17 @@ class MemoryGame {
         this.groups = groups;
         this.guessed = guessed;
         this.current = current;
+    }
+
+    static MemoryGame restore(MemoryGameId memoryGameId, Collection<MemoryGameEvent> events) {
+        Set<FlatItemsGroup> groups = events.stream()
+                .flatMap(event -> event.events().stream())
+                .collect(Collectors.groupingBy(FlatItemGroupEvent::flatItemsGroupId))
+                .entrySet().stream()
+                .map(entry -> FlatItemsGroup.restore(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toSet());
+
+        return new MemoryGame(memoryGameId, groups);
     }
 
     GuessResult turnCard(FlatItemId flatItemId) {
