@@ -1,8 +1,14 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.FlatItemEvent.TurnedObverseUp;
+import pl.cezarysanecki.memory.engine.FlatItemEvent.TurnedReverseUp;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
+
+import static java.util.Comparator.comparing;
 
 final class FlatItem {
 
@@ -30,16 +36,34 @@ final class FlatItem {
         return new FlatItem(flatItemId, Side.Reverse);
     }
 
-    void flip() {
-        side = side == Side.Obverse ? Side.Reverse : Side.Obverse;
+    static FlatItem restore(FlatItemId flatItemId, Collection<FlatItemEvent> events) {
+        if (events.isEmpty()) {
+            throw new IllegalArgumentException("events collection cannot be empty");
+        }
+        if (!events.stream().allMatch(event -> event.flatItemId().equals(flatItemId))) {
+            throw new IllegalArgumentException("all events must have the same flat item id");
+        }
+        FlatItem flatItem = reverseUp(flatItemId);
+        events.stream().sorted(comparing(FlatItemEvent::when)).forEach(flatItem::apply);
+        return flatItem;
     }
 
-    void turnObverseUp() {
-        side = Side.Obverse;
+    FlatItemEvent flip() {
+        return side == Side.Obverse ? new TurnedReverseUp(flatItemId) : new TurnedObverseUp(flatItemId);
     }
 
-    void turnReverseUp() {
-        side = Side.Reverse;
+    Optional<FlatItemEvent> turnObverseUp() {
+        if (side == Side.Obverse) {
+            return Optional.empty();
+        }
+        return Optional.of(new TurnedObverseUp(flatItemId));
+    }
+
+    Optional<FlatItemEvent> turnReverseUp() {
+        if (side == Side.Reverse) {
+            return Optional.empty();
+        }
+        return Optional.of(new TurnedReverseUp(flatItemId));
     }
 
     boolean isObverseUp() {
@@ -52,6 +76,14 @@ final class FlatItem {
 
     FlatItemId getFlatItemId() {
         return flatItemId;
+    }
+
+    private void apply(FlatItemEvent event) {
+        if (event instanceof TurnedObverseUp) {
+            turnObverseUp();
+        } else if (event instanceof TurnedReverseUp) {
+            turnReverseUp();
+        }
     }
 
     @Override

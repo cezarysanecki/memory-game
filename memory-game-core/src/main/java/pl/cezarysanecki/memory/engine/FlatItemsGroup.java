@@ -3,7 +3,9 @@ package pl.cezarysanecki.memory.engine;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -40,16 +42,30 @@ record FlatItemsGroup(
         );
     }
 
-    void turnAllToReverseUp() {
-        flatItems.forEach(FlatItem::turnReverseUp);
+    static FlatItemsGroup restore(
+            FlatItemsGroupId flatItemsGroupId,
+            Collection<FlatItemEvent> events
+    ) {
+        Set<FlatItem> restoredItems = events.stream()
+                .collect(Collectors.groupingBy(FlatItemEvent::flatItemId))
+                .entrySet()
+                .stream()
+                .map(entry -> FlatItem.restore(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toUnmodifiableSet());
+
+        return new FlatItemsGroup(flatItemsGroupId, restoredItems);
     }
 
-    void turnToObverse(FlatItemId flatItemId) {
+    Collection<FlatItemEvent> turnAllToReverseUp() {
+        return flatItems.stream().map(FlatItem::turnReverseUp).flatMap(Optional::stream).toList();
+    }
+
+    Optional<FlatItemEvent> turnToObverse(FlatItemId flatItemId) {
         FlatItem flatItem = flatItems.stream()
                 .filter(item -> item.getFlatItemId().equals(flatItemId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("flat item " + flatItemId + " does not belong to group"));
-        flatItem.turnObverseUp();
+        return flatItem.turnObverseUp();
     }
 
     boolean contains(FlatItemId flatItemId) {
