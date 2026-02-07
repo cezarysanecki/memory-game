@@ -76,3 +76,24 @@ But how the `CardsPanel` renders elements? First of all it sends commands to eng
 Above I put some versions of game. I've decided to add some options like **changing size of board, obverse and reverse themes** and, what is the most interesting one, **number of cards in groups**. It allowes us not to only search for pairs but also for three or four cards in groups. This is possible because of generic solution in engine. We did not hardcode the number of cards in group, but made it more elastic.
 
 I hope you will enjoy playing my version of game Memory just like I did!
+
+## Ruby client (memory-game-ruby)
+
+W repozytorium znajduje się również moduł `memory-game-ruby`, który udostępnia prostego klienta HTTP oraz CLI do komunikacji z backendem `memory-game-spring`.
+
+Szybki start:
+
+```bash
+cd memory-game-ruby
+bundle install
+
+# Uruchom backend Spring w osobnym terminalu
+cd ..
+./gradlew :memory-game-spring:bootRun
+
+# Wróć do modułu Ruby i użyj CLI
+cd memory-game-ruby
+bundle exec bin/memory-game start
+```
+
+Więcej informacji znajdziesz w `memory-game-ruby/README.md`.

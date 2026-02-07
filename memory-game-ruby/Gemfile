@@ -1,0 +1,16 @@
+source 'https://rubygems.org'
+end
+  gem 'webmock', '~> 3.20'
+  gem 'rspec', '~> 3.13'
+group :development, :test do
+
+# Zależności na etapie development/test
+
+gemspec if File.exist?(File.expand_path('../memory-game-ruby.gemspec', __FILE__))
+
+# Jeśli będziesz budować gem, gemspec wczyta wszystkie dane
+# Główny gem tego projektu (lokalny)
+
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+
