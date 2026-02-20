@@ -1,5 +1,7 @@
-package pl.cezarysanecki.memory.engine;
+package pl.cezarysanecki.memory.infrastructure;
 
+import pl.cezarysanecki.memory.engine.FlatItemEvent;
+import pl.cezarysanecki.memory.engine.MemoryGameEvent;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 import pl.cezarysanecki.memory.engine.db.MemoryGameEventStore;
@@ -13,13 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Comparator.comparing;
 
-class InMemoryMemoryGameEventStore implements MemoryGameEventStore {
+public class InMemoryMemoryGameEventStore implements MemoryGameEventStore {
 
     private final MemoryGameReadModel memoryGameReadModel;
 
     private static final Map<MemoryGameId, List<MemoryGameEvent>> DATABASE = new ConcurrentHashMap<>();
 
-    InMemoryMemoryGameEventStore(MemoryGameReadModel memoryGameReadModel) {
+    public InMemoryMemoryGameEventStore(MemoryGameReadModel memoryGameReadModel) {
         this.memoryGameReadModel = memoryGameReadModel;
     }
 

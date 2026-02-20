@@ -1,4 +1,4 @@
-package pl.cezarysanecki.memory.engine;
+package pl.cezarysanecki.memory.infrastructure;
 
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameState;
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-class InMemoryMemoryGameReadModel implements MemoryGameReadModel {
+public class InMemoryMemoryGameReadModel implements MemoryGameReadModel {
 
     private static final Map<MemoryGameId, MemoryGameState> DATABASE = new ConcurrentHashMap<>();
 

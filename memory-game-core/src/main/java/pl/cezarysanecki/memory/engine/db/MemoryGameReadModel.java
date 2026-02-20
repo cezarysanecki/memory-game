@@ -13,7 +13,7 @@ public interface MemoryGameReadModel {
 
     default MemoryGameState load(MemoryGameId memoryGameId) {
         return find(memoryGameId)
-                .orElseThrow(() -> new IllegalStateException("Memory game with id " + memoryGameId + " not found"));
+                .orElseThrow(() -> new IllegalStateException("Memory game with value " + memoryGameId + " not found"));
     }
 
 }

@@ -6,6 +6,7 @@ import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameState;
+import pl.cezarysanecki.memory.infrastructure.MemoryGameAppFactory;
 import pl.cezarysanecki.memory.ui.UiConfig;
 
 import javax.swing.ImageIcon;
@@ -36,7 +37,7 @@ public class CardsPanel extends JPanel {
 
     private final Collection<CardsPanelSubscriber> subscribers = new ArrayList<>();
 
-    private final MemoryGameApp memoryGameApp = MemoryGameApp.inMemory();
+    private final MemoryGameApp memoryGameApp = MemoryGameAppFactory.inMemory();
 
     private UiConfig uiConfig;
     private MemoryGameId currentGameId;

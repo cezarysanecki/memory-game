@@ -22,12 +22,6 @@ public class MemoryGameApp {
         this.memoryGameReadModel = memoryGameReadModel;
     }
 
-    public static MemoryGameApp inMemory() {
-        InMemoryMemoryGameReadModel memoryGameReadModel = new InMemoryMemoryGameReadModel();
-        InMemoryMemoryGameEventStore memoryGameEventStore = new InMemoryMemoryGameEventStore(memoryGameReadModel);
-        return new MemoryGameApp(memoryGameEventStore, memoryGameReadModel);
-    }
-
     public MemoryGameState start(int numberOfCards, int cardsInGroup) {
         MemoryGameEvent event = MemoryGame.createNewOne(numberOfCards, cardsInGroup);
 

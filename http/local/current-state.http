@@ -1,4 +1,4 @@
-@memoryGameId = b1f14975-92c4-4794-9bbf-1511c5f0e0ff
+@memoryGameId = 60628017-12c4-4c3f-a239-1e2ee5d4793f
 
 GET http://localhost:8080/memory-game/{{memoryGameId}}
 Accept: application/json

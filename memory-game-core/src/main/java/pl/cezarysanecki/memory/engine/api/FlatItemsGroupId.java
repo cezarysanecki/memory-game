@@ -3,7 +3,7 @@ package pl.cezarysanecki.memory.engine.api;
 import java.util.Objects;
 import java.util.UUID;
 
-public record FlatItemsGroupId(UUID id) {
+public record FlatItemsGroupId(UUID value) {
 
     public static FlatItemsGroupId create() {
         return new FlatItemsGroupId(UUID.randomUUID());
@@ -14,11 +14,11 @@ public record FlatItemsGroupId(UUID id) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FlatItemsGroupId that = (FlatItemsGroupId) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(value, that.value);
     }
 
     @Override
     public String toString() {
-        return String.valueOf(id);
+        return String.valueOf(value);
     }
 }
