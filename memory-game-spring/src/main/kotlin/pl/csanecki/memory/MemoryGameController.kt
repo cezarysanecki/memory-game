@@ -2,14 +2,17 @@ package pl.csanecki.memory
 
 import org.springframework.web.bind.annotation.*
 import pl.cezarysanecki.memory.engine.MemoryGameApp
+import pl.cezarysanecki.memory.engine.MemoryGameEvent
 import pl.cezarysanecki.memory.engine.api.FlatItemId
 import pl.cezarysanecki.memory.engine.api.MemoryGameId
+import pl.cezarysanecki.memory.engine.api.MemoryGameState
+import pl.cezarysanecki.memory.engine.db.MemoryGameEventStore
 import java.util.*
 
 @RestController
 @RequestMapping("/memory-game")
 class MemoryGameController(
-    private val memoryGameApp: MemoryGameApp
+    private val memoryGameApp: MemoryGameApp,
 ) {
 
     @PostMapping
@@ -21,14 +24,46 @@ class MemoryGameController(
     @PostMapping("/{memoryGameId}/turn-card/{cardId}")
     fun turnCard(
         @PathVariable memoryGameId: String,
-        @PathVariable cardId: Int,
+        @PathVariable cardId: String,
     ): TurningCardResponse {
         val memoryGameIdValue = MemoryGameId(UUID.fromString(memoryGameId))
-        val guessResult = memoryGameApp.turnCard(memoryGameIdValue, FlatItemId.of(cardId))
-        return TurningCardResponse(
-            result = guessResult.actionResult.name,
-            state = guessResult.state.toResponse()
-        )
+
+        val turnResult = memoryGameApp.turnCard(memoryGameIdValue, FlatItemId(UUID.fromString(cardId)))
+        val gameState = memoryGameApp.getState(memoryGameIdValue)
+
+        return turnResult.map {
+            when (it) {
+                is MemoryGameEvent.Initialized -> TurningCardResponse(
+                    result = "Ongoing",
+                    state = gameState.toResponse()
+                )
+
+                is MemoryGameEvent.Continued -> TurningCardResponse(
+                    result = "Ongoing",
+                    state = gameState.toResponse()
+                )
+
+                is MemoryGameEvent.Finished -> TurningCardResponse(
+                    result = "Finished",
+                    state = gameState.toResponse()
+                )
+
+                is MemoryGameEvent.Guessed -> TurningCardResponse(
+                    result = "Guessed",
+                    state = gameState.toResponse()
+                )
+
+                is MemoryGameEvent.Missed -> TurningCardResponse(
+                    result = "Missed",
+                    state = gameState.toResponse()
+                )
+            }
+        }.orElseGet {
+            TurningCardResponse(
+                result = "Ongoing",
+                state = gameState.toResponse()
+            )
+        }
     }
 
     @GetMapping("/{memoryGameId}")

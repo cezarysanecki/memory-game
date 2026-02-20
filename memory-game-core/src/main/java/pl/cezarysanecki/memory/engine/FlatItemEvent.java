@@ -6,7 +6,7 @@ import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import java.time.Instant;
 import java.util.UUID;
 
-public interface FlatItemEvent extends DomainEvent {
+public sealed interface FlatItemEvent extends DomainEvent {
 
     FlatItemId flatItemId();
 

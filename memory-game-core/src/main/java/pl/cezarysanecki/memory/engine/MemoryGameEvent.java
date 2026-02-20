@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-public interface MemoryGameEvent extends DomainEvent {
+public sealed interface MemoryGameEvent extends DomainEvent {
 
     MemoryGameId memoryGameId();
 

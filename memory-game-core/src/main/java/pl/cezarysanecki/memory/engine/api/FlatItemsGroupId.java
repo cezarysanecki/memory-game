@@ -1,5 +1,6 @@
 package pl.cezarysanecki.memory.engine.api;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public record FlatItemsGroupId(UUID id) {
@@ -13,7 +14,7 @@ public record FlatItemsGroupId(UUID id) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FlatItemsGroupId that = (FlatItemsGroupId) o;
-        return id == that.id;
+        return Objects.equals(id, that.id);
     }
 
     @Override
