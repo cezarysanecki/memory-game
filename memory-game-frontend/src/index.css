@@ -1,0 +1,438 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#root {
+  width: 100%;
+}
+
+/* Start screen – wyśrodkowany */
+.app.centered {
+  text-align: center;
+  padding: 6rem 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Layout gry – plansza + panel boczny */
+.page-layout {
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem;
+  max-width: 1080px;
+  margin: 0 auto;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.game-area {
+  flex: 0 0 auto;
+  width: 460px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  background: linear-gradient(135deg, #e94560, #f5a623);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: #8b949e;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
+
+.error {
+  color: #f85149;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+/* --- Buttons --- */
+.btn {
+  background: #e94560;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:hover {
+  background: #c73652;
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: #21262d;
+  border: 1px solid #30363d;
+  margin-top: 1.5rem;
+}
+
+.btn-secondary:hover {
+  background: #30363d;
+}
+
+/* --- Stats bar --- */
+.stats {
+  font-size: 0.95rem;
+  color: #8b949e;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Message area --- */
+.message-area {
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.message {
+  font-size: 1.2rem;
+  font-weight: 700;
+  animation: pop 0.25s ease-out;
+}
+
+.message.guessed {
+  color: #3fb950;
+}
+
+.message.missed {
+  color: #f85149;
+}
+
+@keyframes pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* --- Game board: 4 kolumny, 3 rzędy dla 12 kart --- */
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Card flip (3D CSS) --- */
+.card-wrapper {
+  aspect-ratio: 3 / 4;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-wrapper.guessed {
+  cursor: default;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.card-wrapper.face-up .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Delikatny podgląd po najechaniu na zakrytą kartę */
+.card-wrapper:not(.face-up):hover .card-inner {
+  transform: rotateY(20deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  user-select: none;
+}
+
+/* Tył karty */
+.card-back {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  border: 2px solid #30363d;
+}
+
+/* Wzór na tylnej ścianie */
+.card-back::after {
+  content: '';
+  display: block;
+  width: 70%;
+  height: 70%;
+  border: 2px solid #21262d;
+  border-radius: 8px;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    #21262d 4px,
+    #21262d 5px
+  );
+  opacity: 0.6;
+}
+
+/* Przód karty – domyślny (w trakcie tury) */
+.card-front {
+  background: linear-gradient(135deg, #1c2128 0%, #21262d 100%);
+  border: 2px solid #388bfd;
+  transform: rotateY(180deg);
+}
+
+/* Karta zgadnięta – zielona ramka */
+.card-wrapper.guessed .card-front {
+  border-color: #3fb950;
+  background: linear-gradient(135deg, #0f1f12 0%, #162520 100%);
+}
+
+/* Karta w bieżącej turze – pomarańczowa ramka z pulsem */
+.card-wrapper.in-turn .card-front {
+  border-color: #f5a623;
+}
+
+/* Karta nietrafionych – czerwona ramka */
+.card-wrapper.missed-card .card-front {
+  border-color: #f85149;
+  background: linear-gradient(135deg, #2d0f0f 0%, #1f0a0a 100%);
+}
+
+/* ==============================
+   Audit Log – panel boczny
+   ============================== */
+
+.audit-panel {
+  flex: 1;
+  min-width: 260px;
+  max-width: 360px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 1rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  position: sticky;
+  top: 2rem;
+}
+
+.audit-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #21262d;
+  padding-bottom: 0.6rem;
+}
+
+.audit-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8b949e;
+}
+
+.audit-count {
+  background: #30363d;
+  color: #e6edf3;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+}
+
+.audit-empty {
+  color: #484f58;
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+}
+
+.audit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Główny event */
+.al-entry {
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0d1117;
+  border: 1px solid #21262d;
+}
+
+.al-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+}
+
+.al-entry-header:hover {
+  background: #161b22;
+}
+
+.al-index {
+  font-size: 0.7rem;
+  color: #484f58;
+  min-width: 1.6rem;
+  font-family: monospace;
+}
+
+.al-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  color: #0d1117;
+  white-space: nowrap;
+}
+
+.al-time {
+  font-size: 0.72rem;
+  color: #484f58;
+  font-family: monospace;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.al-toggle {
+  font-size: 0.7rem;
+  color: #8b949e;
+  margin-left: 0.2rem;
+}
+
+.al-toggle-main {
+  color: #8b949e;
+}
+
+/* Dzieci eventu głównego */
+.al-entry-children {
+  padding: 0.2rem 0.5rem 0.4rem 0.9rem;
+  border-top: 1px solid #21262d;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+/* Event grupy */
+.al-group-event {
+  font-size: 0.78rem;
+}
+
+.al-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.al-group-header:hover .al-group-type {
+  color: #e6edf3;
+}
+
+.al-tree-icon {
+  color: #30363d;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.al-group-type {
+  color: #8b949e;
+  font-weight: 600;
+  transition: color 0.1s;
+}
+
+.al-group-id {
+  color: #484f58;
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+/* Dzieci grupy – karty */
+.al-group-children {
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: 0.1rem;
+}
+
+.al-card-event {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.74rem;
+}
+
+.al-card-type {
+  color: #6e7681;
+  font-weight: 500;
+}
+
+.al-card-id {
+  color: #30363d;
+  font-family: monospace;
+  font-size: 0.68rem;
+}
+
+/* --- Ekran zakończenia gry --- */
+.finished-screen {
+  padding: 2rem 1rem;
+  animation: pop 0.4s ease-out;
+}
+
+.trophy {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.finished-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 0.5rem;
+}
+
+.finished-sub {
+  color: #8b949e;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
