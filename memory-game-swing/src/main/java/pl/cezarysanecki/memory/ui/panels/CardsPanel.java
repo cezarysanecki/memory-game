@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static pl.cezarysanecki.memory.ui.UiConfig.CARDS_PANEL_BACKGROUND_COLOR;
 
@@ -40,10 +41,6 @@ public class CardsPanel extends JPanel {
     private UiConfig uiConfig;
     private MemoryGameId currentGameId;
     private List<GraphicCard> graphicCards;
-    private final Map<FlatItemsGroupId, ImageIcon> groupIdToObserveImageIcon = new HashMap<>();
-
-    private int columns;
-    private int rows;
 
     public CardsPanel(UiConfig uiConfig) {
         prepareCardsPanel(uiConfig);
@@ -66,19 +63,17 @@ public class CardsPanel extends JPanel {
     }
 
     public void reset() {
-        MemoryGameState gameState = memoryGameApp.start(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
-        this.currentGameId = gameState.memoryGameId();
+        prepareCardsPanel(uiConfig);
 
-        refreshAll(gameState);
-
-        setGraphicCardsBounds(columns, rows, graphicCards);
         subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Idle));
     }
 
     private void prepareCardsPanel(UiConfig uiConfig) {
         MemoryGameState gameState = memoryGameApp.start(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
 
-        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, gameState);
+        removeAll();
+
+        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, gameState.flatItems());
         setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
 
         Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
@@ -87,8 +82,10 @@ public class CardsPanel extends JPanel {
         this.uiConfig = uiConfig;
         this.currentGameId = gameState.memoryGameId();
         this.graphicCards = graphicCards;
-        this.columns = uiConfig.columns;
-        this.rows = uiConfig.rows;
+
+        graphicCards.forEach(this::add);
+
+        repaint();
     }
 
     public void registerSubscriber(CardsPanelSubscriber subscriber) {
@@ -110,14 +107,16 @@ public class CardsPanel extends JPanel {
         return new Dimension(width, height);
     }
 
-    private List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameState gameState) {
+    private List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, Set<MemoryGameState.FlatItem> flatItems) {
         List<GraphicCard> graphicCards = new ArrayList<>();
-        for (MemoryGameState.FlatItem flatItem : gameState.flatItems()) {
+        Map<FlatItemsGroupId, ImageIcon> groupIdToObserveImageIcon = new HashMap<>();
+
+        for (MemoryGameState.FlatItem flatItem : flatItems) {
             FlatItemsGroupId flatItemsGroupId = flatItem.assignedGroupId();
 
             ImageIcon obverseImage = groupIdToObserveImageIcon.get(flatItemsGroupId);
             if (obverseImage == null) {
-                obverseImage = firstObverseIcon(uiConfig);
+                obverseImage = firstObverseIcon(uiConfig, groupIdToObserveImageIcon);
                 groupIdToObserveImageIcon.put(flatItemsGroupId, obverseImage);
             }
 
@@ -130,8 +129,7 @@ public class CardsPanel extends JPanel {
         return graphicCards;
     }
 
-    private ImageIcon firstObverseIcon(UiConfig uiConfig) {
-
+    private ImageIcon firstObverseIcon(UiConfig uiConfig, Map<FlatItemsGroupId, ImageIcon> groupIdToObserveImageIcon) {
         for (ImageIcon obverseImage : uiConfig.obverseImages) {
             if (!groupIdToObserveImageIcon.containsValue(obverseImage)) {
                 return obverseImage;
