@@ -2,7 +2,7 @@ package pl.cezarysanecki.memory.ui.panels;
 
 import pl.cezarysanecki.memory.engine.MemoryGameApp;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
-import pl.cezarysanecki.memory.engine.api.GuessResult;
+import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 import pl.cezarysanecki.memory.ui.UiConfig;
@@ -20,9 +20,11 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static pl.cezarysanecki.memory.ui.UiConfig.CARDS_PANEL_BACKGROUND_COLOR;
@@ -38,6 +40,7 @@ public class CardsPanel extends JPanel {
     private UiConfig uiConfig;
     private MemoryGameId currentGameId;
     private List<GraphicCard> graphicCards;
+    private final Map<FlatItemsGroupId, ImageIcon> groupIdToObserveImageIcon = new HashMap<>();
 
     private int columns;
     private int rows;
@@ -110,7 +113,14 @@ public class CardsPanel extends JPanel {
     private List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, MemoryGameState gameState) {
         List<GraphicCard> graphicCards = new ArrayList<>();
         for (MemoryGameState.FlatItem flatItem : gameState.flatItems()) {
-            ImageIcon obverseImage = uiConfig.obverseImages.get(flatItem.assignedGroupId().id());
+            FlatItemsGroupId flatItemsGroupId = flatItem.assignedGroupId();
+
+            ImageIcon obverseImage = groupIdToObserveImageIcon.get(flatItemsGroupId);
+            if (obverseImage == null) {
+                obverseImage = firstObverseIcon(uiConfig);
+                groupIdToObserveImageIcon.put(flatItemsGroupId, obverseImage);
+            }
+
             graphicCards.add(new GraphicCard(
                     flatItem.flatItemId(),
                     uiConfig.reverseImage,
@@ -118,6 +128,17 @@ public class CardsPanel extends JPanel {
                     flatItem.obverseUp()));
         }
         return graphicCards;
+    }
+
+    private ImageIcon firstObverseIcon(UiConfig uiConfig) {
+
+        for (ImageIcon obverseImage : uiConfig.obverseImages) {
+            if (!groupIdToObserveImageIcon.containsValue(obverseImage)) {
+                return obverseImage;
+            }
+        }
+
+        throw new IllegalStateException("Free obverse image not found");
     }
 
     private void setGraphicCardsBounds(int columns, int rows, List<GraphicCard> graphicCards) {
@@ -154,15 +175,13 @@ public class CardsPanel extends JPanel {
         public void mousePressed(MouseEvent event) {
             findCardByCoordinates(event.getPoint())
                     .ifPresent(graphicCard -> {
-                        GuessResult result = memoryGameApp.turnCard(currentGameId, graphicCard.flatItemId);
-                        if (result.actionResult() == GuessResult.State.Failure) {
-                            graphicCard.turnToObverseUp();
-                        } else {
-                            refreshAll(result.state());
+                        MemoryGameState state = memoryGameApp.turnCard(currentGameId, graphicCard.flatItemId);
+
+                        refreshAll(state);
+
+                        if (state.ended()) {
+                            subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Ended));
                         }
-                        subscribers.forEach(subscriber -> subscriber.update(
-                                result.state().flatItems().stream()
-                                        .allMatch(MemoryGameState.FlatItem::obverseUp) ? CurrentGameState.Ended : CurrentGameState.Running));
                     });
         }
     }

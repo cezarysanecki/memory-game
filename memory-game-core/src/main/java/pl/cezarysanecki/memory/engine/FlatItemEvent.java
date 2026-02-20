@@ -10,6 +10,12 @@ public interface FlatItemEvent extends DomainEvent {
 
     FlatItemId flatItemId();
 
+    record Initialized(UUID eventId, Instant when, FlatItemId flatItemId) implements FlatItemEvent {
+        public Initialized(FlatItemId flatItemId) {
+            this(UUID.randomUUID(), Instant.now(), flatItemId);
+        }
+    }
+
     record TurnedObverseUp(UUID eventId, Instant when, FlatItemId flatItemId) implements FlatItemEvent {
         public TurnedObverseUp(FlatItemId flatItemId) {
             this(UUID.randomUUID(), Instant.now(), flatItemId);

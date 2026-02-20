@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*
 import pl.cezarysanecki.memory.engine.MemoryGameApp
 import pl.cezarysanecki.memory.engine.api.FlatItemId
 import pl.cezarysanecki.memory.engine.api.MemoryGameId
-import pl.cezarysanecki.memory.engine.api.MemoryGameState
 import java.util.*
 
 @RestController

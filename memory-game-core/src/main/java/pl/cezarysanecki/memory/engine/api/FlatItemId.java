@@ -1,9 +1,11 @@
 package pl.cezarysanecki.memory.engine.api;
 
-public record FlatItemId(int id) {
+import java.util.UUID;
 
-    public static FlatItemId of(int id) {
-        return new FlatItemId(id);
+public record FlatItemId(UUID id) {
+
+    public static FlatItemId create() {
+        return new FlatItemId(UUID.randomUUID());
     }
 
     @Override

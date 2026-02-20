@@ -4,80 +4,129 @@ import org.junit.jupiter.api.Test;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static pl.cezarysanecki.memory.engine.FlatItem.Side.Obverse;
+import static pl.cezarysanecki.memory.engine.FlatItem.Side.Reverse;
 
 class FlatItemsGroupTest {
-
-    FlatItemsGroupId flatItemsGroupId = FlatItemsGroupId.of(0);
-
-    FlatItemId firstFlatItemId = FlatItemId.of(0);
-    FlatItemId secondFlatItemId = FlatItemId.of(1);
-
     @Test
-    void all_are_reverse_up() {
-        FlatItemsGroup flatItemsGroup = FlatItemsGroup.allReversed(
-                flatItemsGroupId,
-                Set.of(firstFlatItemId, secondFlatItemId));
+    void all_are_reverse_up_after_creation() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Reverse);
 
-        assertTrue(flatItemsGroup.isAllReverseUp());
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+
+        assertTrue(flatItemsGroup.flatItems().stream().allMatch(flatItem -> flatItem.side() == Reverse));
     }
 
     @Test
-    void all_are_not_obverse_up_and_reserve_up_when_one_of_items_is_obverse_up_from_all() {
-        FlatItemsGroup flatItemsGroup = FlatItemsGroup.allReversed(
-                flatItemsGroupId,
-                Set.of(firstFlatItemId, secondFlatItemId));
+    void all_are_obverse_up_after_creation() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Obverse);
 
-        flatItemsGroup.turnToObverse(firstFlatItemId);
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
 
-        assertFalse(flatItemsGroup.isAllReverseUp());
-        assertFalse(flatItemsGroup.isAllObverseUp());
+        assertTrue(flatItemsGroup.flatItems().stream().allMatch(flatItem -> flatItem.side() == Obverse));
     }
 
     @Test
-    void turning_all_items_make_them_be_obverse_up() {
-        FlatItemsGroup flatItemsGroup = FlatItemsGroup.allReversed(
-                flatItemsGroupId,
-                Set.of(firstFlatItemId, secondFlatItemId));
+    void can_turn_up_card_to_obverse_if_on_reverse_side() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Reverse);
+        List<FlatItemId> flatItemIds = extractFlatItemIds(List.of(event));
 
-        flatItemsGroup.turnToObverse(firstFlatItemId);
-        flatItemsGroup.turnToObverse(secondFlatItemId);
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpTo(flatItemIds.getFirst(), Obverse);
 
-        assertTrue(flatItemsGroup.isAllObverseUp());
+        assertInstanceOf(FlatItemsGroupEvent.FlatItemTurned.class, newEvent.get());
     }
 
     @Test
-    void turning_all_cards_to_be_reverse_up() {
-        FlatItemsGroup flatItemsGroup = FlatItemsGroup.allReversed(
-                flatItemsGroupId,
-                Set.of(firstFlatItemId, secondFlatItemId));
+    void can_turn_up_card_to_reverse_if_on_obverse_side() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Obverse);
+        List<FlatItemId> flatItemIds = extractFlatItemIds(List.of(event));
 
-        flatItemsGroup.turnToObverse(firstFlatItemId);
-        flatItemsGroup.turnAllToReverseUp();
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpTo(flatItemIds.getFirst(), Reverse);
 
-        assertTrue(flatItemsGroup.isAllReverseUp());
+        assertInstanceOf(FlatItemsGroupEvent.FlatItemTurned.class, newEvent.get());
     }
 
     @Test
-    void group_of_items_should_have_at_least_one_element() {
-        assertThrows(IllegalStateException.class,
-                () -> FlatItemsGroup.allReversed(flatItemsGroupId, Set.of()));
+    void do_nothing_when_turning_up_card_to_obverse_if_is_already_on_obverse() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Obverse);
+        List<FlatItemId> flatItemIds = extractFlatItemIds(List.of(event));
+
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpTo(flatItemIds.getFirst(), Obverse);
+
+        assertTrue(newEvent.isEmpty());
     }
 
     @Test
-    void cannot_turn_card_not_being_in_group() {
-        FlatItemId notConsideredFlatItem = FlatItemId.of(2);
+    void do_nothing_when_turning_up_card_to_reverse_if_is_already_on_reverse() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Reverse);
+        List<FlatItemId> flatItemIds = extractFlatItemIds(List.of(event));
 
-        FlatItemsGroup flatItemsGroup = FlatItemsGroup.allReversed(
-                flatItemsGroupId,
-                Set.of(firstFlatItemId, secondFlatItemId));
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpTo(flatItemIds.getFirst(), Reverse);
 
-        assertThrows(IllegalStateException.class,
-                () -> flatItemsGroup.turnToObverse(notConsideredFlatItem));
+        assertTrue(newEvent.isEmpty());
+    }
+
+    @Test
+    void turn_all_cards_to_obverse_if_on_reverse_side() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Reverse);
+
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpAllTo(Obverse);
+
+        assertInstanceOf(FlatItemsGroupEvent.AllTurnedObverse.class, newEvent.get());
+    }
+
+    @Test
+    void turn_all_cards_to_reverse_if_on_observe_side() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Obverse);
+
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpAllTo(Reverse);
+
+        assertInstanceOf(FlatItemsGroupEvent.AllTurnedReverse.class, newEvent.get());
+    }
+
+    @Test
+    void do_nothing_when_turning_up_all_cards_to_obverse_if_are_already_on_obverse() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Obverse);
+
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpAllTo(Obverse);
+
+        assertTrue(newEvent.isEmpty());
+    }
+
+    @Test
+    void do_nothing_when_turning_up_all_cards_to_reverse_if_are_already_on_reverse() {
+        FlatItemsGroupEvent event = FlatItemsGroup.create(4, Reverse);
+
+        FlatItemsGroup flatItemsGroup = FlatItemsGroup.restore(List.of(event));
+        Optional<FlatItemsGroupEvent> newEvent = flatItemsGroup.turnUpAllTo(Reverse);
+
+        assertTrue(newEvent.isEmpty());
+    }
+
+    List<FlatItemId> extractFlatItemIds(List<FlatItemsGroupEvent> events) {
+        return events.stream()
+                .map(FlatItemsGroupEvent::events)
+                .flatMap(Collection::stream)
+                .map(FlatItemEvent::flatItemId)
+                .collect(Collectors.toUnmodifiableSet())
+                .stream().toList();
     }
 
 }

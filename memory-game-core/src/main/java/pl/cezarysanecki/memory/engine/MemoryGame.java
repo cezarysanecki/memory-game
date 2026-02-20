@@ -1,106 +1,106 @@
 package pl.cezarysanecki.memory.engine;
 
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
-import pl.cezarysanecki.memory.engine.api.GuessResult;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
-import pl.cezarysanecki.memory.engine.api.MemoryGameState;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Continue;
-import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Failure;
-import static pl.cezarysanecki.memory.engine.api.GuessResult.State.GameOver;
-import static pl.cezarysanecki.memory.engine.api.GuessResult.State.Guessed;
+import static pl.cezarysanecki.memory.engine.FlatItem.Side.Obverse;
+import static pl.cezarysanecki.memory.engine.FlatItem.Side.Reverse;
 
-class MemoryGame {
+record MemoryGame(
+        MemoryGameId memoryGameId,
+        Set<FlatItemsGroup> groups,
+        Set<FlatItemsGroup> guessed,
+        FlatItemsGroup currentFlatGroupItem
+) {
 
-    private final MemoryGameId memoryGameId;
-    private final Set<FlatItemsGroup> groups;
-    private final Set<FlatItemsGroup> guessed;
-    private FlatItemsGroup current;
+    static MemoryGame restore(Collection<MemoryGameEvent> events) {
+        MemoryGameEvent.Initialized initializedEvent = events.stream()
+                .filter(event -> event instanceof MemoryGameEvent.Initialized)
+                .map(MemoryGameEvent.Initialized.class::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("cannot restore memory game without initialization event"));
 
-    MemoryGame(MemoryGameId memoryGameId, Set<FlatItemsGroup> groups) {
-        this(memoryGameId, groups, new HashSet<>(), null);
-    }
-
-    MemoryGame(
-            MemoryGameId memoryGameId,
-            Set<FlatItemsGroup> groups,
-            Set<FlatItemsGroup> guessed,
-            FlatItemsGroup current
-    ) {
-        this.memoryGameId = memoryGameId;
-        this.groups = groups;
-        this.guessed = guessed;
-        this.current = current;
-    }
-
-    static MemoryGame restore(MemoryGameId memoryGameId, Collection<MemoryGameEvent> events) {
-        Set<FlatItemsGroup> groups = events.stream()
+        Set<FlatItemsGroup> flatItemsGroups = events.stream()
                 .flatMap(event -> event.events().stream())
-                .collect(Collectors.groupingBy(FlatItemGroupEvent::flatItemsGroupId))
-                .entrySet().stream()
-                .map(entry -> FlatItemsGroup.restore(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.groupingBy(FlatItemsGroupEvent::flatItemsGroupId))
+                .values().stream()
+                .map(FlatItemsGroup::restore)
+                .collect(Collectors.toUnmodifiableSet());
 
-        return new MemoryGame(memoryGameId, groups);
+        Set<FlatItemsGroup> guessed = flatItemsGroups.stream()
+                .filter(flatItemsGroup -> flatItemsGroup.turnUpAllTo(Obverse).isEmpty())
+                .collect(Collectors.toUnmodifiableSet());
+
+        FlatItemsGroup currentFlatItemsGroup = flatItemsGroups.stream()
+                .filter(flatItemsGroup ->
+                        flatItemsGroup.turnUpAllTo(Obverse).isPresent() && flatItemsGroup.turnUpAllTo(Reverse).isPresent()
+                )
+                .findFirst()
+                .orElse(null);
+
+        return new MemoryGame(initializedEvent.memoryGameId(), flatItemsGroups, guessed, currentFlatItemsGroup);
     }
 
-    GuessResult turnCard(FlatItemId flatItemId) {
+    static MemoryGameEvent createNewOne(int numberOfCards, int cardsInGroup) {
+        if (numberOfCards <= 0 || cardsInGroup <= 0) {
+            throw new IllegalArgumentException("arguments must be positive");
+        }
+        if (numberOfCards % cardsInGroup != 0) {
+            throw new IllegalArgumentException("number of cards must be dividable by cards in group");
+        }
+
+        int numberOfGroups = numberOfCards / cardsInGroup;
+
+        List<FlatItemsGroupEvent> events = IntStream.range(0, numberOfGroups)
+                .mapToObj(anything -> FlatItemsGroup.create(cardsInGroup, Reverse))
+                .toList();
+
+        return new MemoryGameEvent.Initialized(MemoryGameId.create(), events);
+    }
+
+    Optional<MemoryGameEvent> turnCard(FlatItemId flatItemId) {
         if (isAllGuessed()) {
-            return new GuessResult(GameOver, state());
-        } else if (current == null) {
-            current = findBy(flatItemId);
-        } else if (!current.contains(flatItemId)) {
-            FlatItemsGroup different = findBy(flatItemId);
-            if (different.isAllObverseUp()) {
-                return new GuessResult(Continue, state());
-            }
-            current.turnAllToReverseUp();
-            current = null;
-            return new GuessResult(Failure, state());
+            return Optional.empty();
         }
 
-        current.turnToObverse(flatItemId);
+        return groups.stream()
+                .map(group -> group.turnUpTo(flatItemId, Obverse))
+                .flatMap(Optional::stream)
+                .findFirst()
+                .map(event -> {
+                    if (currentFlatGroupItem == null) {
+                        return new MemoryGameEvent.Continued(memoryGameId, List.of(event));
+                    }
+                    if (!currentFlatGroupItem.flatItemsGroupId().equals(event.flatItemsGroupId())) {
+                        return new MemoryGameEvent.Missed(memoryGameId, List.of(event));
+                    }
 
-        if (current.isAllObverseUp()) {
-            guessed.add(current);
-            current = null;
-            if (isAllGuessed()) {
-                return new GuessResult(GameOver, state());
-            }
-            return new GuessResult(Guessed, state());
-        }
-        return new GuessResult(Continue, state());
+
+                    if (event instanceof FlatItemsGroupEvent.AllTurnedObverse) {
+                        List<FlatItemsGroupEvent> events = groups.stream()
+                                .filter(group -> !group.flatItemsGroupId().equals(event.flatItemsGroupId()))
+                                .map(group -> group.turnUpAllTo(Obverse))
+                                .flatMap(Optional::stream)
+                                .toList();
+
+                        if (events.isEmpty()) {
+                            return new MemoryGameEvent.Finished(memoryGameId, List.of(event));
+                        }
+                        return new MemoryGameEvent.Guessed(memoryGameId, List.of(event));
+                    }
+                    return new MemoryGameEvent.Continued(memoryGameId, List.of(event));
+                });
     }
 
     private boolean isAllGuessed() {
         return guessed.containsAll(groups);
-    }
-
-    private FlatItemsGroup findBy(FlatItemId flatItemId) {
-        return groups.stream()
-                .filter(group -> group.contains(flatItemId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("cannot find group for flat item: " + flatItemId));
-    }
-
-    MemoryGameState state() {
-        return new MemoryGameState(
-                memoryGameId,
-                groups.stream()
-                        .flatMap(group -> group.flatItems().stream()
-                                .map(flatItem -> new MemoryGameState.FlatItem(
-                                        flatItem.getFlatItemId(),
-                                        group.flatItemsGroupId(),
-                                        flatItem.isObverseUp()
-                                ))
-                        )
-                        .collect(Collectors.toUnmodifiableSet())
-        );
     }
 
 }

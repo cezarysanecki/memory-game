@@ -1,10 +1,11 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.FlatItemEvent.Initialized;
 import pl.cezarysanecki.memory.engine.FlatItemEvent.TurnedObverseUp;
 import pl.cezarysanecki.memory.engine.FlatItemEvent.TurnedReverseUp;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -12,77 +13,65 @@ import static java.util.Comparator.comparing;
 
 final class FlatItem {
 
-    private enum Side {
-        Reverse, Obverse
-    }
-
     private final FlatItemId flatItemId;
     private Side side;
 
-    private FlatItem(FlatItemId flatItemId, Side side) {
+    FlatItem(FlatItemId flatItemId, Side side) {
         this.flatItemId = flatItemId;
         this.side = side;
     }
 
-    static FlatItem restore(FlatItemId flatItemId, boolean obverseUp) {
-        return new FlatItem(flatItemId, obverseUp ? Side.Obverse : Side.Reverse);
+    enum Side {
+        Reverse, Obverse
     }
 
-    static FlatItem obverseUp(FlatItemId flatItemId) {
-        return new FlatItem(flatItemId, Side.Obverse);
-    }
+    static FlatItem restore(List<FlatItemEvent> events) {
+        Initialized initializedEvent = events.stream()
+                .filter(event -> event instanceof Initialized)
+                .map(Initialized.class::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("cannot restore flat item without initialization event"));
 
-    static FlatItem reverseUp(FlatItemId flatItemId) {
-        return new FlatItem(flatItemId, Side.Reverse);
-    }
-
-    static FlatItem restore(FlatItemId flatItemId, Collection<FlatItemEvent> events) {
-        if (events.isEmpty()) {
-            throw new IllegalArgumentException("events collection cannot be empty");
-        }
-        if (!events.stream().allMatch(event -> event.flatItemId().equals(flatItemId))) {
-            throw new IllegalArgumentException("all events must have the same flat item id");
-        }
-        FlatItem flatItem = reverseUp(flatItemId);
+        FlatItem flatItem = new FlatItem(initializedEvent.flatItemId(), Side.Reverse);
         events.stream().sorted(comparing(FlatItemEvent::when)).forEach(flatItem::apply);
         return flatItem;
     }
 
+    static List<FlatItemEvent> create(Side side) {
+        FlatItemId flatItemId = FlatItemId.create();
+
+        final Initialized initialized = new Initialized(flatItemId);
+
+        return switch (side) {
+            case Obverse -> List.of(initialized, new TurnedObverseUp(flatItemId));
+            case Reverse -> List.of(initialized, new TurnedReverseUp(flatItemId));
+        };
+    }
+
     FlatItemEvent flip() {
-        return side == Side.Obverse ? new TurnedReverseUp(flatItemId) : new TurnedObverseUp(flatItemId);
+        return isUp(Side.Obverse) ? new TurnedReverseUp(flatItemId) : new TurnedObverseUp(flatItemId);
     }
 
-    Optional<FlatItemEvent> turnObverseUp() {
-        if (side == Side.Obverse) {
+    Optional<FlatItemEvent> turnUpTo(Side side) {
+        if (isUp(side)) {
             return Optional.empty();
         }
-        return Optional.of(new TurnedObverseUp(flatItemId));
+
+        return switch (side) {
+            case Obverse -> Optional.of(new TurnedObverseUp(flatItemId));
+            case Reverse -> Optional.of(new TurnedReverseUp(flatItemId));
+        };
     }
 
-    Optional<FlatItemEvent> turnReverseUp() {
-        if (side == Side.Reverse) {
-            return Optional.empty();
-        }
-        return Optional.of(new TurnedReverseUp(flatItemId));
-    }
-
-    boolean isObverseUp() {
-        return side == Side.Obverse;
-    }
-
-    boolean isReverseUp() {
-        return side == Side.Reverse;
-    }
-
-    FlatItemId getFlatItemId() {
-        return flatItemId;
+    private boolean isUp(Side side) {
+        return this.side == side;
     }
 
     private void apply(FlatItemEvent event) {
         if (event instanceof TurnedObverseUp) {
-            turnObverseUp();
+            this.side = Side.Obverse;
         } else if (event instanceof TurnedReverseUp) {
-            turnReverseUp();
+            this.side = Side.Reverse;
         }
     }
 
@@ -98,5 +87,21 @@ final class FlatItem {
     public int hashCode() {
         return Objects.hash(flatItemId);
     }
+
+    public FlatItemId flatItemId() {
+        return flatItemId;
+    }
+
+    public Side side() {
+        return side;
+    }
+
+    @Override
+    public String toString() {
+        return "FlatItem[" +
+                "flatItemId=" + flatItemId + ", " +
+                "side=" + side + ']';
+    }
+
 
 }

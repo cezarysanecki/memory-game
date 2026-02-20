@@ -1,14 +1,18 @@
 package pl.cezarysanecki.memory.engine;
 
+import pl.cezarysanecki.memory.engine.FlatItemsGroupEvent.AllTurnedObverse;
+import pl.cezarysanecki.memory.engine.FlatItemsGroupEvent.AllTurnedReverse;
+import pl.cezarysanecki.memory.engine.FlatItemsGroupEvent.FlatItemTurned;
+import pl.cezarysanecki.memory.engine.FlatItemsGroupEvent.Initialized;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 record FlatItemsGroup(
         FlatItemsGroupId flatItemsGroupId,
@@ -21,71 +25,75 @@ record FlatItemsGroup(
         }
     }
 
-    static FlatItemsGroup create(
-            FlatItemsGroupId flatItemsGroupId,
-            Set<FlatItemId> flatItemIds,
-            Function<FlatItemId, FlatItem> creator
-    ) {
-        return new FlatItemsGroup(
-                flatItemsGroupId,
-                flatItemIds.stream()
-                        .map(creator)
-                        .collect(Collectors.toUnmodifiableSet())
-        );
-    }
-
-    static FlatItemsGroup allReversed(FlatItemsGroupId flatItemsGroupId, Set<FlatItemId> flatItemIds) {
-        return create(
-                flatItemsGroupId,
-                flatItemIds,
-                FlatItem::reverseUp
-        );
-    }
-
     static FlatItemsGroup restore(
-            FlatItemsGroupId flatItemsGroupId,
-            Collection<FlatItemGroupEvent> events
+            List<FlatItemsGroupEvent> events
     ) {
+        FlatItemsGroupEvent.Initialized initializedEvent = events.stream()
+                .filter(event -> event instanceof FlatItemsGroupEvent.Initialized)
+                .map(FlatItemsGroupEvent.Initialized.class::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("cannot restore flat item group without initialization event"));
+
         Set<FlatItem> restoredItems = events.stream()
                 .flatMap(event -> event.events().stream())
                 .collect(Collectors.groupingBy(FlatItemEvent::flatItemId))
-                .entrySet()
+                .values()
                 .stream()
-                .map(entry -> FlatItem.restore(entry.getKey(), entry.getValue()))
+                .map(FlatItem::restore)
                 .collect(Collectors.toUnmodifiableSet());
 
-        return new FlatItemsGroup(flatItemsGroupId, restoredItems);
+        return new FlatItemsGroup(initializedEvent.flatItemsGroupId(), restoredItems);
     }
 
-    FlatItemGroupEvent turnAllToReverseUp() {
-        Collection<FlatItemEvent> events = flatItems.stream()
-                .map(FlatItem::turnReverseUp)
+    static FlatItemsGroupEvent create(int numberOfFlatItems, FlatItem.Side side) {
+        if (numberOfFlatItems <= 0) {
+            throw new IllegalArgumentException("number of flat items must be positive");
+        }
+
+        List<FlatItemEvent> flatItemEvents = IntStream.range(0, numberOfFlatItems)
+                .mapToObj(initialFlatItem -> FlatItem.create(side))
+                .flatMap(List::stream)
+                .toList();
+
+        return new Initialized(FlatItemsGroupId.create(), flatItemEvents);
+    }
+
+    Optional<FlatItemsGroupEvent> turnUpAllTo(FlatItem.Side side) {
+        List<FlatItemEvent> events = flatItems.stream()
+                .map(flatItem -> flatItem.turnUpTo(side))
                 .flatMap(Optional::stream)
                 .toList();
-        return new FlatItemGroupEvent(flatItemsGroupId, events);
+        if (events.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return switch (side) {
+            case Obverse -> Optional.of(new AllTurnedObverse(flatItemsGroupId, events));
+            case Reverse -> Optional.of(new AllTurnedReverse(flatItemsGroupId, events));
+        };
     }
 
-    FlatItemGroupEvent turnToObverse(FlatItemId flatItemId) {
-        FlatItem flatItem = flatItems.stream()
-                .filter(item -> item.getFlatItemId().equals(flatItemId))
+    Optional<FlatItemsGroupEvent> turnUpTo(FlatItemId flatItemId, FlatItem.Side side) {
+        return flatItems.stream()
+                .map(flatItem -> flatItem.turnUpTo(side))
+                .flatMap(Optional::stream)
+                .filter(event -> event.flatItemId().equals(flatItemId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("flat item " + flatItemId + " does not belong to group"));
-        return new FlatItemGroupEvent(flatItemsGroupId, flatItem.turnObverseUp().stream().toList());
-    }
+                .map(event -> {
+                    List<FlatItemEvent> events = flatItems.stream()
+                            .filter(flatItem -> !flatItem.flatItemId().equals(flatItemId))
+                            .map(flatItem -> flatItem.turnUpTo(side))
+                            .flatMap(Optional::stream)
+                            .toList();
 
-    boolean contains(FlatItemId flatItemId) {
-        return flatItems.stream()
-                .anyMatch(flatItem -> flatItem.getFlatItemId().equals(flatItemId));
-    }
-
-    boolean isAllReverseUp() {
-        return flatItems.stream()
-                .allMatch(FlatItem::isReverseUp);
-    }
-
-    boolean isAllObverseUp() {
-        return flatItems.stream()
-                .allMatch(FlatItem::isObverseUp);
+                    if (events.isEmpty()) {
+                        return switch (side) {
+                            case Obverse -> new AllTurnedObverse(flatItemsGroupId, List.of(event));
+                            case Reverse -> new AllTurnedReverse(flatItemsGroupId, List.of(event));
+                        };
+                    }
+                    return new FlatItemTurned(flatItemsGroupId, List.of(event));
+                });
     }
 
     @Override

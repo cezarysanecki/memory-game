@@ -1,45 +1,52 @@
 package pl.cezarysanecki.memory.engine;
 
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
-import pl.cezarysanecki.memory.engine.api.GuessResult;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameState;
-import pl.cezarysanecki.memory.engine.db.MemoryGameRepository;
+import pl.cezarysanecki.memory.engine.db.MemoryGameEventStore;
+import pl.cezarysanecki.memory.engine.db.MemoryGameReadModel;
+
+import java.util.List;
 
 public class MemoryGameApp {
 
-    private final MemoryGameRepository memoryGameRepository;
+    private final MemoryGameEventStore memoryGameEventStore;
+    private final MemoryGameReadModel memoryGameReadModel;
 
-    public MemoryGameApp(MemoryGameRepository memoryGameRepository) {
-        this.memoryGameRepository = memoryGameRepository;
+    public MemoryGameApp(
+            MemoryGameEventStore memoryGameEventStore,
+            MemoryGameReadModel memoryGameReadModel
+    ) {
+        this.memoryGameEventStore = memoryGameEventStore;
+        this.memoryGameReadModel = memoryGameReadModel;
     }
 
     public static MemoryGameApp inMemory() {
-        return new MemoryGameApp(new InMemoryMemoryGameRepository());
+        InMemoryMemoryGameReadModel memoryGameReadModel = new InMemoryMemoryGameReadModel();
+        InMemoryMemoryGameEventStore memoryGameEventStore = new InMemoryMemoryGameEventStore(memoryGameReadModel);
+        return new MemoryGameApp(memoryGameEventStore, memoryGameReadModel);
     }
 
     public MemoryGameState start(int numberOfCards, int cardsInGroup) {
-        MemoryGame memoryGame = MemoryGameFactory.create(numberOfCards, cardsInGroup);
+        MemoryGameEvent event = MemoryGame.createNewOne(numberOfCards, cardsInGroup);
 
-        MemoryGameState gameState = memoryGame.state();
-        memoryGameRepository.save(gameState);
+        memoryGameEventStore.store(event);
 
-        return gameState;
+        return memoryGameReadModel.load(event.memoryGameId());
     }
 
-    public GuessResult turnCard(MemoryGameId memoryGameId, FlatItemId flatItemId) {
-        MemoryGameState gameState = memoryGameRepository.load(memoryGameId);
-        MemoryGame game = MemoryGameFactory.restore(gameState);
+    public MemoryGameState turnCard(MemoryGameId memoryGameId, FlatItemId flatItemId) {
+        List<MemoryGameEvent> events = memoryGameEventStore.load(memoryGameId);
+        MemoryGame game = MemoryGame.restore(events);
 
-        GuessResult guessResult = game.turnCard(flatItemId);
+        game.turnCard(flatItemId)
+                .ifPresent(memoryGameEventStore::store);
 
-        memoryGameRepository.save(guessResult.state());
-
-        return guessResult;
+        return memoryGameReadModel.load(memoryGameId);
     }
 
     public MemoryGameState getState(MemoryGameId memoryGameId) {
-        return memoryGameRepository.load(memoryGameId);
+        return memoryGameReadModel.load(memoryGameId);
     }
 
 }
