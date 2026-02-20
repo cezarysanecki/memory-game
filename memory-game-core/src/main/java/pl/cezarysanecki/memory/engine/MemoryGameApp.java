@@ -7,6 +7,7 @@ import pl.cezarysanecki.memory.engine.db.MemoryGameEventStore;
 import pl.cezarysanecki.memory.engine.db.MemoryGameReadModel;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MemoryGameApp {
 
@@ -35,14 +36,14 @@ public class MemoryGameApp {
         return memoryGameReadModel.load(event.memoryGameId());
     }
 
-    public MemoryGameState turnCard(MemoryGameId memoryGameId, FlatItemId flatItemId) {
+    public Optional<MemoryGameEvent> turnCard(MemoryGameId memoryGameId, FlatItemId flatItemId) {
         List<MemoryGameEvent> events = memoryGameEventStore.load(memoryGameId);
         MemoryGame game = MemoryGame.restore(events);
 
-        game.turnCard(flatItemId)
-                .ifPresent(memoryGameEventStore::store);
+        Optional<MemoryGameEvent> event = game.turnCard(flatItemId);
+        event.ifPresent(memoryGameEventStore::store);
 
-        return memoryGameReadModel.load(memoryGameId);
+        return event;
     }
 
     public MemoryGameState getState(MemoryGameId memoryGameId) {

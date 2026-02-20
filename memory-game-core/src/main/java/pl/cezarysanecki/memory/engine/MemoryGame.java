@@ -79,7 +79,9 @@ record MemoryGame(
                         return new MemoryGameEvent.Continued(memoryGameId, List.of(event));
                     }
                     if (!currentFlatGroupItem.flatItemsGroupId().equals(event.flatItemsGroupId())) {
-                        return new MemoryGameEvent.Missed(memoryGameId, List.of(event));
+                        Optional<FlatItemsGroupEvent> revertingEvent = currentFlatGroupItem.turnUpAllTo(Reverse);
+
+                        return new MemoryGameEvent.Missed(memoryGameId, revertingEvent.stream().toList());
                     }
 
 

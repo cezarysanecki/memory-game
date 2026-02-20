@@ -1,6 +1,7 @@
 package pl.cezarysanecki.memory.ui.panels;
 
 import pl.cezarysanecki.memory.engine.MemoryGameApp;
+import pl.cezarysanecki.memory.engine.MemoryGameEvent;
 import pl.cezarysanecki.memory.engine.api.FlatItemId;
 import pl.cezarysanecki.memory.engine.api.FlatItemsGroupId;
 import pl.cezarysanecki.memory.engine.api.MemoryGameId;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -175,13 +175,16 @@ public class CardsPanel extends JPanel {
         public void mousePressed(MouseEvent event) {
             findCardByCoordinates(event.getPoint())
                     .ifPresent(graphicCard -> {
-                        MemoryGameState state = memoryGameApp.turnCard(currentGameId, graphicCard.flatItemId);
+                        Optional<MemoryGameEvent> result = memoryGameApp.turnCard(currentGameId, graphicCard.flatItemId);
+                        MemoryGameState state = memoryGameApp.getState(currentGameId);
 
-                        refreshAll(state);
+                        result.filter(gameEvent -> gameEvent instanceof MemoryGameEvent.Missed)
+                                .ifPresentOrElse(
+                                        gameEvent -> graphicCard.turnToObverseUp(),
+                                        () -> refreshAll(state)
+                                );
 
-                        if (state.ended()) {
-                            subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Ended));
-                        }
+                        subscribers.forEach(subscriber -> subscriber.update(state.ended() ? CurrentGameState.Ended : CurrentGameState.Running));
                     });
         }
     }
