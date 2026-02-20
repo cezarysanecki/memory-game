@@ -56,34 +56,30 @@ public class CardsPanel extends JPanel {
     public void adjustTo(UiConfig uiConfig) {
         prepareCardsPanel(uiConfig);
 
-        removeAll();
-        graphicCards.forEach(this::add);
-
-        repaint();
-    }
-
-    public void reset() {
-        prepareCardsPanel(uiConfig);
-
         subscribers.forEach(subscriber -> subscriber.update(CurrentGameState.Idle));
     }
 
-    private void prepareCardsPanel(UiConfig uiConfig) {
-        MemoryGameState gameState = memoryGameApp.start(uiConfig.countNumbersOfCards(), uiConfig.numberOfCardsInGroup);
+    public void reset() {
+        adjustTo(uiConfig);
+    }
 
+    private void prepareCardsPanel(UiConfig uiConfig) {
         removeAll();
 
-        List<GraphicCard> graphicCards = prepareGraphicCards(uiConfig, gameState.flatItems());
-        setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
-
-        Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
-        setSize(panelDimension);
+        MemoryGameState gameState = memoryGameApp.start(
+                uiConfig.countNumbersOfCards(),
+                uiConfig.numberOfCardsInGroup
+        );
 
         this.uiConfig = uiConfig;
         this.currentGameId = gameState.memoryGameId();
-        this.graphicCards = graphicCards;
+        this.graphicCards = prepareGraphicCards(uiConfig, gameState.flatItems());
 
-        graphicCards.forEach(this::add);
+        setGraphicCardsBounds(uiConfig.columns, uiConfig.rows, graphicCards);
+        Dimension panelDimension = resolvePanelDimension(uiConfig, graphicCards);
+        setSize(panelDimension);
+
+        this.graphicCards.forEach(this::add);
 
         repaint();
     }
@@ -108,25 +104,27 @@ public class CardsPanel extends JPanel {
     }
 
     private List<GraphicCard> prepareGraphicCards(UiConfig uiConfig, Set<MemoryGameState.FlatItem> flatItems) {
-        List<GraphicCard> graphicCards = new ArrayList<>();
         Map<FlatItemsGroupId, ImageIcon> groupIdToObserveImageIcon = new HashMap<>();
 
-        for (MemoryGameState.FlatItem flatItem : flatItems) {
-            FlatItemsGroupId flatItemsGroupId = flatItem.assignedGroupId();
+        return flatItems.stream()
+                .map(flatItem -> {
+                    FlatItemsGroupId flatItemsGroupId = flatItem.assignedGroupId();
+                    FlatItemId flatItemId = flatItem.flatItemId();
+                    boolean obverseUp = flatItem.obverseUp();
 
-            ImageIcon obverseImage = groupIdToObserveImageIcon.get(flatItemsGroupId);
-            if (obverseImage == null) {
-                obverseImage = firstObverseIcon(uiConfig, groupIdToObserveImageIcon);
-                groupIdToObserveImageIcon.put(flatItemsGroupId, obverseImage);
-            }
+                    ImageIcon obverseImage = groupIdToObserveImageIcon.get(flatItemsGroupId);
+                    if (obverseImage == null) {
+                        obverseImage = firstObverseIcon(uiConfig, groupIdToObserveImageIcon);
+                        groupIdToObserveImageIcon.put(flatItemsGroupId, obverseImage);
+                    }
 
-            graphicCards.add(new GraphicCard(
-                    flatItem.flatItemId(),
-                    uiConfig.reverseImage,
-                    obverseImage,
-                    flatItem.obverseUp()));
-        }
-        return graphicCards;
+                    return new GraphicCard(
+                            flatItemId,
+                            uiConfig.reverseImage,
+                            obverseImage,
+                            obverseUp);
+                })
+                .toList();
     }
 
     private ImageIcon firstObverseIcon(UiConfig uiConfig, Map<FlatItemsGroupId, ImageIcon> groupIdToObserveImageIcon) {
